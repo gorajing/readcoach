@@ -9,13 +9,16 @@ Schema v1 tables (SQLite):
     learners     (child_id TEXT PK)
     sessions     (session_id TEXT PK, child_id TEXT, started_at TEXT)
     observations (id INTEGER PK AUTOINCREMENT, child_id TEXT, skill TEXT,
-                  correct INTEGER, confidence REAL, session_id TEXT, ts TEXT)
+                  correct INTEGER, confidence REAL, session_id TEXT, ts TEXT,
+                  miscue_class TEXT NULL)
     mastery      (child_id TEXT, skill TEXT, p_mastery REAL,
                   PRIMARY KEY (child_id, skill))
     reviews      (child_id TEXT, skill TEXT, card_json TEXT,
                   PRIMARY KEY (child_id, skill))
     session_metrics (session_id TEXT PK, child_id TEXT, n_words_read INTEGER,
                      n_hesitations INTEGER, duration_s REAL, ts TEXT)
+    served_log   (id INTEGER PK AUTOINCREMENT, child_id TEXT, skill TEXT,
+                  ts TEXT, reason TEXT)
 
 FSRS rating mapping (documented, not buried):
     correct=True  → fsrs.Rating.Good
@@ -87,6 +90,7 @@ class LearnerStoreProtocol(Protocol):
         confidence: float,
         session_id: str,
         ts: datetime,
+        miscue_class: str | None = None,
     ) -> None: ...
 
     def record_session_metrics(
@@ -108,6 +112,23 @@ class LearnerStoreProtocol(Protocol):
     def engagement_trend(
         self, child_id: str
     ) -> list[tuple[datetime, float, float]]: ...
+
+    def get_last_k_observations(
+        self,
+        child_id: str,
+        skill: str,
+        k: int = 5,
+    ) -> list[dict]: ...
+
+    def record_served(
+        self,
+        child_id: str,
+        skill: str,
+        ts: datetime,
+        reason: str,
+    ) -> None: ...
+
+    def get_served_log(self, child_id: str) -> list[dict]: ...
 
 
 # ---------------------------------------------------------------------------
@@ -164,13 +185,14 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 CREATE TABLE IF NOT EXISTS observations (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    child_id   TEXT    NOT NULL REFERENCES learners(child_id),
-    skill      TEXT    NOT NULL,
-    correct    INTEGER NOT NULL,
-    confidence REAL    NOT NULL,
-    session_id TEXT    NOT NULL,
-    ts         TEXT    NOT NULL
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    child_id     TEXT    NOT NULL REFERENCES learners(child_id),
+    skill        TEXT    NOT NULL,
+    correct      INTEGER NOT NULL,
+    confidence   REAL    NOT NULL,
+    session_id   TEXT    NOT NULL,
+    ts           TEXT    NOT NULL,
+    miscue_class TEXT    NULL
 );
 
 CREATE TABLE IF NOT EXISTS mastery (
@@ -194,6 +216,14 @@ CREATE TABLE IF NOT EXISTS session_metrics (
     n_hesitations INTEGER NOT NULL,
     duration_s   REAL    NOT NULL,
     ts           TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS served_log (
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    child_id TEXT    NOT NULL REFERENCES learners(child_id),
+    skill    TEXT    NOT NULL,
+    ts       TEXT    NOT NULL,
+    reason   TEXT    NOT NULL
 );
 """
 
@@ -340,8 +370,13 @@ class SqliteLearnerStore:
         confidence: float,
         session_id: str,
         ts: datetime,
+        miscue_class: str | None = None,
     ) -> None:
-        """Record one observation; update BKT mastery and FSRS card atomically."""
+        """Record one observation; update BKT mastery and FSRS card atomically.
+
+        miscue_class: optional tag (e.g. "substitution", "omission", "hesitation")
+            used by the planner's prerequisite-edge gate.  None = generic.
+        """
         # Validate confidence early — bkt_update would raise, but we want the
         # rollback to fire cleanly if it's caught by session_scope.
         if not (0.0 <= confidence <= 1.0):
@@ -351,13 +386,14 @@ class SqliteLearnerStore:
             self._ensure_learner(conn, child_id)
             self._ensure_session(conn, child_id, session_id)
 
-            # Write raw observation
+            # Write raw observation (miscue_class may be NULL)
             conn.execute(
                 """INSERT INTO observations
-                   (child_id, skill, correct, confidence, session_id, ts)
-                   VALUES (?, ?, ?, ?, ?, ?)""",
+                   (child_id, skill, correct, confidence, session_id, ts,
+                    miscue_class)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
                 (child_id, skill, int(correct), confidence, session_id,
-                 ts.isoformat()),
+                 ts.isoformat(), miscue_class),
             )
 
             # BKT update
@@ -438,6 +474,63 @@ class SqliteLearnerStore:
             result.append((ts, wcpm, hr))
         return result
 
+    def get_last_k_observations(
+        self,
+        child_id: str,
+        skill: str,
+        k: int = 5,
+    ) -> list[dict]:
+        """Return the last k observations for a child/skill pair, newest first.
+
+        Each dict has keys: correct (bool), miscue_class (str | None), ts (str).
+        """
+        rows = self._conn.execute(
+            """SELECT correct, miscue_class, ts
+               FROM observations
+               WHERE child_id=? AND skill=?
+               ORDER BY id DESC
+               LIMIT ?""",
+            (child_id, skill, k),
+        ).fetchall()
+        return [
+            {
+                "correct": bool(row["correct"]),
+                "miscue_class": row["miscue_class"],
+                "ts": row["ts"],
+            }
+            for row in rows
+        ]
+
+    def record_served(
+        self,
+        child_id: str,
+        skill: str,
+        ts: datetime,
+        reason: str,
+    ) -> None:
+        """Persist a served-item record (skill, ts, reason) to the served_log table."""
+        with _session_scope(self._conn) as conn:
+            self._ensure_learner(conn, child_id)
+            conn.execute(
+                """INSERT INTO served_log (child_id, skill, ts, reason)
+                   VALUES (?, ?, ?, ?)""",
+                (child_id, skill, ts.isoformat(), reason),
+            )
+
+    def get_served_log(self, child_id: str) -> list[dict]:
+        """Return all served_log entries for a child, ordered by ts asc."""
+        rows = self._conn.execute(
+            """SELECT skill, ts, reason
+               FROM served_log
+               WHERE child_id=?
+               ORDER BY id ASC""",
+            (child_id,),
+        ).fetchall()
+        return [
+            {"skill": row["skill"], "ts": row["ts"], "reason": row["reason"]}
+            for row in rows
+        ]
+
 
 # ---------------------------------------------------------------------------
 # In-memory backend
@@ -452,6 +545,23 @@ class _SessionMetricRow:
     n_hesitations: int
     duration_s: float
     ts: datetime
+
+
+@dataclass
+class _ObservationRow:
+    child_id: str
+    skill: str
+    correct: bool
+    miscue_class: str | None
+    ts: str  # ISO string, matches SQLite storage
+
+
+@dataclass
+class _ServedRow:
+    child_id: str
+    skill: str
+    ts: str  # ISO string
+    reason: str
 
 
 class InMemoryLearnerStore:
@@ -469,6 +579,10 @@ class InMemoryLearnerStore:
         self._cards: dict[str, dict[str, Card]] = {}
         # list of _SessionMetricRow
         self._metrics: list[_SessionMetricRow] = []
+        # list of _ObservationRow (append-only, ordered by insertion)
+        self._observations: list[_ObservationRow] = []
+        # list of _ServedRow
+        self._served: list[_ServedRow] = []
 
     def _get_mastery(self, child_id: str, skill: str) -> float:
         return self._mastery.get(child_id, {}).get(skill, DEFAULT_BKT_PARAMS.L0)
@@ -490,8 +604,12 @@ class InMemoryLearnerStore:
         confidence: float,
         session_id: str,
         ts: datetime,
+        miscue_class: str | None = None,
     ) -> None:
-        """Record one observation — BKT + FSRS update, no partial state on error."""
+        """Record one observation — BKT + FSRS update, no partial state on error.
+
+        miscue_class: optional tag used by the planner's prerequisite-edge gate.
+        """
         # Validate first; if anything below raises the _mastery dict is not touched
         # because Python assignment is atomic at the dict-entry level.
         # We deliberately compute both updates before writing either, mimicking
@@ -508,6 +626,15 @@ class InMemoryLearnerStore:
         # Atomically (in CPython GIL sense) write both
         self._set_mastery(child_id, skill, new_p)
         self._set_card(child_id, skill, updated_card)
+        self._observations.append(
+            _ObservationRow(
+                child_id=child_id,
+                skill=skill,
+                correct=correct,
+                miscue_class=miscue_class,
+                ts=ts.isoformat(),
+            )
+        )
 
     def record_session_metrics(
         self,
@@ -556,6 +683,49 @@ class InMemoryLearnerStore:
             (r.ts, _wcpm(r.n_words_read, r.duration_s),
              _hrate(r.n_hesitations, r.n_words_read))
             for r in rows
+        ]
+
+    def get_last_k_observations(
+        self,
+        child_id: str,
+        skill: str,
+        k: int = 5,
+    ) -> list[dict]:
+        """Return the last k observations for a child/skill pair, newest first."""
+        matching = [
+            o for o in self._observations
+            if o.child_id == child_id and o.skill == skill
+        ]
+        # Return newest first (last inserted = most recent)
+        recent = matching[-k:] if len(matching) > k else matching
+        recent = list(reversed(recent))
+        return [
+            {
+                "correct": o.correct,
+                "miscue_class": o.miscue_class,
+                "ts": o.ts,
+            }
+            for o in recent
+        ]
+
+    def record_served(
+        self,
+        child_id: str,
+        skill: str,
+        ts: datetime,
+        reason: str,
+    ) -> None:
+        """Persist a served-item record (skill, ts, reason)."""
+        self._served.append(
+            _ServedRow(child_id=child_id, skill=skill, ts=ts.isoformat(), reason=reason)
+        )
+
+    def get_served_log(self, child_id: str) -> list[dict]:
+        """Return all served entries for a child, ordered by insertion."""
+        return [
+            {"skill": r.skill, "ts": r.ts, "reason": r.reason}
+            for r in self._served
+            if r.child_id == child_id
         ]
 
     def close(self) -> None:

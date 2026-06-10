@@ -1,0 +1,181 @@
+# ReadCoach phonics scope-and-sequence — 15 nodes across 4 instructional bands.
+#
+# PREREQUISITE EDGE SEMANTICS
+# ───────────────────────────
+# Each prerequisite entry carries:
+#   skill:       the required upstream skill id
+#   mastery_min: minimum BKT posterior (default 0.80 = MASTERY_THRESHOLD)
+#   classes:     miscue classes that BLOCK advancement when present in the
+#                last-k (k=5) observations for the prerequisite skill.
+#
+# A dependent skill is UNLOCKED only when ALL prerequisites satisfy:
+#   (a) mastery[prereq.skill] >= prereq.mastery_min  AND
+#   (b) no incorrect observation tagged with one of prereq.classes exists
+#       in the last-k (k=5) observations for that skill.
+#
+# Absent miscue_class on an observation == "generic" (does not trigger any
+# class-keyed gate).
+#
+# Most edges use classes: [substitution, omission] — the canonical reading
+# errors that indicate the phoneme hasn't consolidated.  Fluency-ish
+# transitions (e.g. digraph → blend) add "hesitation" because accuracy may
+# be high but slow decoding still signals partial automaticity.
+# A few late-stage edges drop omission (multisyllable suffixes: dropping a
+# suffix is a distinct error type; omission alone doesn't predict failure
+# on the next node).
+
+nodes:
+
+  # ── Band 1: CVC and high-frequency sight words ─────────────────────────
+
+  - id: cvc_short_a
+    band: 1
+    label: "CVC short-a"
+    description: "Short vowel /a/ in consonant-vowel-consonant words (cat, hat, map)."
+    prerequisites: []
+
+  - id: cvc_short_i_u
+    band: 1
+    label: "CVC short-i and short-u"
+    description: "Short vowels /i/ and /u/ in CVC words (sit, cup, big)."
+    prerequisites:
+      - skill: cvc_short_a
+        mastery_min: 0.80
+        # substitution: swapping short vowels (e.g. cat→cut) is the dominant error here;
+        # omission: skipping the vowel entirely.  Both must be clear before /i/ and /u/.
+        classes: [substitution, omission]
+
+  - id: cvc_short_e_o
+    band: 1
+    label: "CVC short-e and short-o"
+    description: "Short vowels /e/ and /o/ in CVC words (bed, hop, net)."
+    prerequisites:
+      - skill: cvc_short_i_u
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  - id: sight_words_1
+    band: 1
+    label: "Sight words set 1"
+    description: "High-frequency irregular words: the, a, is, in, it, to, I, of, and, was."
+    prerequisites:
+      - skill: cvc_short_a
+        mastery_min: 0.80
+        # Only substitution gates here: omissions on short-a CVC don't predict
+        # failure on wholly visual/memory-based sight words.
+        classes: [substitution]
+
+  # ── Band 2: Digraphs and blends ─────────────────────────────────────────
+
+  - id: digraph_sh_ch
+    band: 2
+    label: "Digraphs sh and ch"
+    description: "Two-letter graphemes /ʃ/ (ship) and /tʃ/ (chip)."
+    prerequisites:
+      - skill: cvc_short_e_o
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  - id: digraph_th_wh
+    band: 2
+    label: "Digraphs th and wh"
+    description: "Voiced and unvoiced /θ/ (the, thin) and /w/ in wh-words (when)."
+    prerequisites:
+      - skill: digraph_sh_ch
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  - id: blends_initial
+    band: 2
+    label: "Initial consonant blends"
+    description: "Two-consonant clusters at word onset: bl, cr, st, tr, pl, gr."
+    prerequisites:
+      - skill: digraph_th_wh
+        mastery_min: 0.80
+        # Hesitation added: digraph automaticity is needed before blends; slow
+        # digraph decoding (hesitation) predicts cluster confusion even when
+        # accuracy is high.
+        classes: [substitution, omission, hesitation]
+
+  - id: blends_final
+    band: 2
+    label: "Final consonant blends"
+    description: "Two-consonant clusters at word end: nd, st, lk, mp, nt."
+    prerequisites:
+      - skill: blends_initial
+        mastery_min: 0.80
+        classes: [substitution, omission, hesitation]
+
+  # ── Band 3: Silent-e and vowel teams ────────────────────────────────────
+
+  - id: silent_e
+    band: 3
+    label: "Silent-e (CVCe) pattern"
+    description: "Long-vowel CVCe words: make, like, home, cute."
+    prerequisites:
+      - skill: blends_final
+        mastery_min: 0.80
+        classes: [substitution, omission]
+      - skill: sight_words_1
+        mastery_min: 0.80
+        classes: [substitution]
+
+  - id: vowel_team_ai_ay
+    band: 3
+    label: "Vowel teams ai and ay"
+    description: "Long /eɪ/ spelled ai (rain) and ay (play)."
+    prerequisites:
+      - skill: silent_e
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  - id: vowel_team_ea_ee
+    band: 3
+    label: "Vowel teams ea and ee"
+    description: "Long /iː/ spelled ea (eat) and ee (feet)."
+    prerequisites:
+      - skill: vowel_team_ai_ay
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  - id: vowel_team_oa_ow
+    band: 3
+    label: "Vowel teams oa and ow"
+    description: "Long /oʊ/ spelled oa (boat) and ow (snow)."
+    prerequisites:
+      - skill: vowel_team_ea_ee
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  # ── Band 4: R-controlled vowels and multisyllabic words ─────────────────
+
+  - id: r_controlled_ar_or
+    band: 4
+    label: "R-controlled ar and or"
+    description: "R-colored vowels /ɑr/ (car) and /ɔr/ (for)."
+    prerequisites:
+      - skill: vowel_team_oa_ow
+        mastery_min: 0.80
+        classes: [substitution, omission]
+
+  - id: r_controlled_er_ir_ur
+    band: 4
+    label: "R-controlled er, ir, ur"
+    description: "Three spellings of /ɜr/: her, bird, turn."
+    prerequisites:
+      - skill: r_controlled_ar_or
+        mastery_min: 0.80
+        # Hesitation added: the three-spelling merge is confusable even when
+        # accurate; slow decoding on ar/or predicts er/ir/ur confusion.
+        classes: [substitution, omission, hesitation]
+
+  - id: multisyllable_suffixes
+    band: 4
+    label: "Multisyllabic words with common suffixes"
+    description: "Two-syllable words using -ing, -ed, -er, -est, -ful, -ly (jumping, faster)."
+    prerequisites:
+      - skill: r_controlled_er_ir_ur
+        mastery_min: 0.80
+        # Omission dropped: omitting a suffix is a distinct morphological error
+        # that doesn't predict generalised multisyllabic decoding difficulty.
+        classes: [substitution, hesitation]
