@@ -224,18 +224,28 @@ class TestFixturesCacheMissAbort:
     """Monkeypatch transcribe to raise CacheMiss → run_benchmark aborts with exit 1."""
 
     def test_cache_miss_causes_sys_exit_1(self, tmp_path):
-        """When transcribe raises CacheMiss in --fixtures mode, main() exits with code 1."""
+        """When transcribe raises CacheMiss in --fixtures mode, main() exits with code 1.
+
+        We mock _load_gold_rows (returns one synthetic row), Path.exists for the clip
+        (returns True so the loop advances past the FileNotFoundError guard), and
+        transcribe to raise CacheMiss — simulating a cache miss in the sweep loop.
+        """
         from readcoach.asr import CacheMiss
+        import scripts.run_benchmark as rb
 
-        # Patch transcribe to always raise CacheMiss
-        with patch("readcoach.asr.transcribe", side_effect=CacheMiss("mock cache miss")):
-            # We need to also patch the import inside run_benchmark
-            import importlib
-            import scripts.run_benchmark as rb
+        fake_rows = [
+            {
+                "utt_id": "p01-clean",
+                "target_text": "the cat sat on the mat",
+                "gold": [],
+            }
+        ]
 
-            # Reload to get a fresh module state
-            importlib.reload(rb)
-
+        with (
+            patch.object(rb, "_load_gold_rows", return_value=fake_rows),
+            patch("pathlib.Path.exists", return_value=True),
+            patch("readcoach.asr.transcribe", side_effect=CacheMiss("mock cache miss")),
+        ):
             with pytest.raises(SystemExit) as exc_info:
                 rb.main([
                     "--fixtures",
@@ -244,28 +254,22 @@ class TestFixturesCacheMissAbort:
                 ])
             assert exc_info.value.code == 1
 
-    def test_cache_miss_in_transcribe_within_fixtures_main(self, tmp_path):
-        """Direct simulation: patch transcribe at the call site inside run_benchmark."""
-        from readcoach.asr import CacheMiss
+    def test_cache_miss_in_transcribe_unit(self):
+        """Direct unit: transcribe with cache_only=True and no cache entry raises CacheMiss."""
+        from readcoach.asr import CacheMiss, transcribe
 
-        # Simulate what happens: transcribe called with cache_only=True raises CacheMiss.
-        # We patch the function at its import location in run_benchmark's namespace.
+        # Patch _read_cache to return None (simulates no cache entry)
         with patch("readcoach.asr._read_cache", return_value=None):
-            # _read_cache returns None → would fall through to CacheMiss raise
-            # (since cache_only=True means it won't load model, will raise CacheMiss)
-            from readcoach.asr import transcribe
-            try:
-                result = transcribe(
-                    "/nonexistent/file.wav",
-                    target_text=None,
-                    bias="none",
-                    backend="faster-whisper-small",
-                    cache_only=True,
-                )
-                # If we got here without error, something is wrong
-                # But we can't proceed - there's no file
-            except (CacheMiss, FileNotFoundError):
-                pass  # Expected — CacheMiss from cache_only=True OR file not found
+            # Also patch Path.read_bytes so the key-computation doesn't need a real file
+            with patch("pathlib.Path.read_bytes", return_value=b"fake-audio"):
+                with pytest.raises(CacheMiss):
+                    transcribe(
+                        "/nonexistent/file.wav",
+                        target_text=None,
+                        bias="none",
+                        backend="faster-whisper-small",
+                        cache_only=True,
+                    )
 
 
 # ---------------------------------------------------------------------------
