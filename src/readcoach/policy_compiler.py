@@ -290,11 +290,24 @@ def _build_never_coaches_mid_page(rule: Rule) -> Callable[[SessionTrace], list[F
     def check(trace: SessionTrace) -> list[Finding]:
         out: list[Finding] = []
         for t in trace.turns:
-            if (not t.at_page_end) and t.action_move in coaching:
+            if t.at_page_end:
+                continue
+            # Named coaching move is coaching regardless of emitter.
+            if t.action_move in coaching:
                 out.append(_finding(
                     rule, t.turn_index,
                     f"coaching move {t.action_move!r} fired mid-page "
                     f"(coaching is page-end only)",
+                ))
+            # When no action taxonomy exists for the emitter (action_move is
+            # None), utterance presence counts as coaching: any substantive
+            # speech during the reading flow interrupts productive struggle.
+            elif t.action_move is None and t.utterance and t.utterance.strip():
+                out.append(_finding(
+                    rule, t.turn_index,
+                    "substantive utterance on a mid-page turn with no action move "
+                    "(utterance presence counts as coaching when no action taxonomy exists; "
+                    "coaching is page-end only)",
                 ))
         return out
 

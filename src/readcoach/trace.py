@@ -49,7 +49,7 @@ class TurnRecord:
     turn_index: int
     at_page_end: bool
     miscue_type: str | None
-    action_move: str
+    action_move: str | None
     hint_level: str | None
     served_reason: str | None
     utterance: str | None

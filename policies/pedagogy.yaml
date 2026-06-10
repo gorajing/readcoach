@@ -69,7 +69,10 @@ rules:
       type: never_coaches_mid_page
       params:
         # Coaching moves are page-end-only.  Seeing any of these on a turn that
-        # is NOT at_page_end is a violation.
+        # is NOT at_page_end is a violation.  Additionally, when a turn has no
+        # action taxonomy (action_move is None, e.g. a free-text emitter), a
+        # substantive (non-empty) utterance on a mid-page turn counts as coaching
+        # — utterance presence counts as coaching when no action taxonomy exists.
         coaching_moves:
           - ENCOURAGE
           - COMPREHENSION_PROMPT
