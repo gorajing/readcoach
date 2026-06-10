@@ -553,8 +553,10 @@ def cmd_rate(
         utt_id = entry["utt_id"]
         gold_entry = gold_map.get(utt_id)
         if gold_entry is None:
-            print(f"WARNING: utt_id {utt_id!r} not found in gold. Skipping.")
-            continue
+            raise RuntimeError(
+                f"Queue/gold desync: utt_id {utt_id!r} not found in gold. "
+                f"The queue and gold file are out of sync. Re-initialize the queue with --init."
+            )
 
         target_text = gold_entry["target_text"]
         gold_miscues = gold_entry["gold"]

@@ -31,18 +31,9 @@ def _load_bv():
     return mod
 
 
-try:
-    bv = _load_bv()
-    _IMPORT_OK = True
-except Exception as exc:
-    _IMPORT_OK = False
-    _IMPORT_ERR = str(exc)
-
-
-pytestmark = pytest.mark.skipif(
-    not _IMPORT_OK,
-    reason=f"blind_verify import failed: {_IMPORT_ERR if not _IMPORT_OK else ''}",
-)
+# Import must be unconditional — any ImportError/SyntaxError propagates and fails
+# collection loudly (no silent skips)
+bv = _load_bv()
 
 GOLD_PATH = pathlib.Path(__file__).parent.parent / "data" / "benchmark" / "gold.jsonl"
 
