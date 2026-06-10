@@ -5,6 +5,7 @@ Network tests require the real faster-whisper model and are marked accordingly.
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import sys
 import hashlib
@@ -17,6 +18,40 @@ import pytest
 # ---------------------------------------------------------------------------
 FIXTURE_WAV = Path(__file__).parent / "fixtures" / "asr" / "cat_passage.wav"
 CACHE_DIR = Path(__file__).parent.parent / "evals" / "golden" / "asr_cache"
+
+
+# ---------------------------------------------------------------------------
+# Helper: evict a cache entry for the duration of a test
+# ---------------------------------------------------------------------------
+
+@contextlib.contextmanager
+def _evicted_cache_entry(cache_file: Path, tmp_path: Path):
+    """Context manager that removes *cache_file* before the body and restores it after.
+
+    Backup/restore semantics (leave-no-trace):
+    - If a committed cache entry exists it is moved aside, restored in finally.
+    - If no entry existed before but the body created one, it is unlinked in finally.
+    - Either way the cache is left byte-identical to its pre-test state.
+
+    This ensures each call to transcribe() inside the body exercises the real
+    model path rather than silently returning a committed-cache hit.
+    """
+    backup = tmp_path / (cache_file.name + ".bak")
+    had_cache = cache_file.exists()
+
+    if had_cache:
+        cache_file.rename(backup)
+
+    try:
+        yield
+    finally:
+        if had_cache:
+            # Restore the committed entry (overwrite whatever transcribe wrote).
+            backup.rename(cache_file)
+        else:
+            # No prior entry — unlink any entry the body may have created.
+            if cache_file.exists():
+                cache_file.unlink()
 
 
 # ===========================================================================
@@ -144,7 +179,7 @@ class TestCacheMissBehavior:
                 "the lazy-import contract is broken"
             )
         finally:
-            if was_present and saved is not None:
+            if was_present:
                 sys.modules[fw_key] = saved
 
 
@@ -192,14 +227,8 @@ class TestRealTranscription:
             str(FIXTURE_WAV), target_text=None, bias="none", backend="faster-whisper-small"
         )
         cache_file = CACHE_DIR / f"{key}.json"
-        backup = tmp_path / f"{key}.json.bak"
 
-        # Move cache aside to force a real transcription
-        had_cache = cache_file.exists()
-        if had_cache:
-            cache_file.rename(backup)
-
-        try:
+        with _evicted_cache_entry(cache_file, tmp_path):
             result = asr_mod.transcribe(str(FIXTURE_WAV), bias="none")
 
             # words populated
@@ -221,6 +250,7 @@ class TestRealTranscription:
             assert result.rtf is not None and result.rtf > 0, (
                 f"Expected rtf > 0, got: {result.rtf}"
             )
+            print(f"\n  bias=none  rtf={result.rtf:.4f}")
 
             # cache file was created after real transcription
             assert cache_file.exists(), f"Cache file not created: {cache_file}"
@@ -230,37 +260,57 @@ class TestRealTranscription:
             assert result2.text == result.text
             assert len(result2.words) == len(result.words)
 
-        finally:
-            # Restore committed cache entry (overwrite whatever transcribe wrote,
-            # so committed cache stays canonical).
-            if had_cache:
-                backup.rename(cache_file)
-
-    def test_transcribe_fixture_bias_strong(self):
-        """bias=strong exercises the hotwords path + inline assert."""
+    def test_transcribe_fixture_bias_strong(self, tmp_path):
+        """bias=strong exercises the hotwords path + RuntimeError guard."""
         assert FIXTURE_WAV.exists(), f"Fixture missing: {FIXTURE_WAV}"
 
-        from readcoach.asr import transcribe
+        import readcoach.asr as asr_mod
 
-        result = transcribe(
+        key = asr_mod._cache_key(
             str(FIXTURE_WAV),
             target_text="the cat sat on the mat",
             bias="strong",
+            backend="faster-whisper-small",
         )
-        assert len(result.words) > 0, "Expected non-empty words list"
+        cache_file = CACHE_DIR / f"{key}.json"
 
-    def test_transcribe_fixture_bias_prompt(self):
+        with _evicted_cache_entry(cache_file, tmp_path):
+            result = asr_mod.transcribe(
+                str(FIXTURE_WAV),
+                target_text="the cat sat on the mat",
+                bias="strong",
+            )
+            assert len(result.words) > 0, "Expected non-empty words list"
+            assert result.rtf is not None and result.rtf > 0, (
+                f"Expected rtf > 0 (real transcription), got: {result.rtf}"
+            )
+            print(f"\n  bias=strong rtf={result.rtf:.4f}")
+
+    def test_transcribe_fixture_bias_prompt(self, tmp_path):
         """bias=prompt uses initial_prompt."""
         assert FIXTURE_WAV.exists(), f"Fixture missing: {FIXTURE_WAV}"
 
-        from readcoach.asr import transcribe
+        import readcoach.asr as asr_mod
 
-        result = transcribe(
+        key = asr_mod._cache_key(
             str(FIXTURE_WAV),
             target_text="the cat sat on the mat",
             bias="prompt",
+            backend="faster-whisper-small",
         )
-        assert len(result.words) > 0
+        cache_file = CACHE_DIR / f"{key}.json"
+
+        with _evicted_cache_entry(cache_file, tmp_path):
+            result = asr_mod.transcribe(
+                str(FIXTURE_WAV),
+                target_text="the cat sat on the mat",
+                bias="prompt",
+            )
+            assert len(result.words) > 0
+            assert result.rtf is not None and result.rtf > 0, (
+                f"Expected rtf > 0 (real transcription), got: {result.rtf}"
+            )
+            print(f"\n  bias=prompt rtf={result.rtf:.4f}")
 
 
 # ===========================================================================

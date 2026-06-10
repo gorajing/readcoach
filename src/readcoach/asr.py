@@ -274,11 +274,13 @@ def transcribe(
         transcribe_kwargs["initial_prompt"] = target_text
     elif bias == "strong":
         transcribe_kwargs["initial_prompt"] = target_text
-        # Inline assert: verify the installed faster-whisper version supports hotwords.
-        assert "hotwords" in inspect.signature(model.transcribe).parameters, (
-            "faster-whisper model.transcribe() does not have a 'hotwords' parameter; "
-            "upgrade to faster-whisper>=1.1 or check the installed version."
-        )
+        # Guard: verify the installed faster-whisper version supports hotwords.
+        # RuntimeError (not assert) so the check is never stripped under python -O.
+        if "hotwords" not in inspect.signature(model.transcribe).parameters:
+            raise RuntimeError(
+                "faster-whisper model.transcribe() does not have a 'hotwords' parameter; "
+                "upgrade to faster-whisper>=1.1 or check the installed version."
+            )
         transcribe_kwargs["hotwords"] = target_text
 
     t0 = time.monotonic()
