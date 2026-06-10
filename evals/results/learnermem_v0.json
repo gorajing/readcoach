@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "eval": "learnermem",
+    "version": "v0",
+    "scope": "deterministic state probes over the learner store + planner (no LLM, no network, no randomness); LLM-utterance consistency is the named v1 extension point",
+    "lineage": [
+      "PersonaMem (arXiv:2504.14225)",
+      "MemoryArena-style long-horizon consistency evals"
+    ],
+    "novelty": "first-in-domain: memory-consistency probing applied to a tutor's learner-model + planner (not LLM-judged dialogue)",
+    "session_boundary": "SQLite close + reopen on the same db per probe",
+    "constants": {
+      "mastery_threshold": 0.8,
+      "mastery_completed": 0.95,
+      "overpersonalization_floor": 0.8
+    },
+    "git_commit": "18f13a5cc6758afeb37c8f3a2f2e40966a2aca17",
+    "date": "2026-06-10"
+  },
+  "consistency_score": 1.0,
+  "n_passed": 6,
+  "n_total": 6,
+  "probes": {
+    "P1": {
+      "description": "struggled-fact persistence: a silent-e substitution struggle planted in session 1 keeps the silent-e-gated successor LOCKED in session 2 (mastery gate passes, class gate fires)",
+      "passed": true,
+      "evidence": "silent_e mastery=0.9042 >= 0.8 (mastery gate PASS); last-5 substitution blockers=1 (class gate FIRES); vowel_team_ai_ay unlocked=False; planner served='cvc_short_a'"
+    },
+    "P2": {
+      "description": "mastery continuity: every session-1 mastery value reappears bit-exact in session 2 (no drift on reopen)",
+      "passed": true,
+      "evidence": "all 2 session-1 mastery values reappear bit-exact in session 2 (max |delta| < 1e-12): cvc_short_a=0.743789, cvc_short_i_u=0.983261"
+    },
+    "P3": {
+      "description": "due-review consistency: a skill failed in session 1 is due for review BEFORE a skill passed in session 1",
+      "passed": true,
+      "evidence": "cvc_short_e_o (failed S1) due=2026-06-10T09:20:00+00:00 < sight_words_1 (passed S1) due=2026-06-12T09:00:02+00:00"
+    },
+    "P4": {
+      "description": "completed-skill memory: a skill completed (>=0.95) in session 1 is never served as 'new' in session 2 (served-log + planner agree)",
+      "passed": true,
+      "evidence": "cvc_short_a mastery=0.9833 >= 0.95; served as 'new' in S1 log=True; S2 re-serves as 'new'=0 (planner+served-log agree it stays completed)"
+    },
+    "P5": {
+      "description": "cross-skill inference guard: struggles planted only on skill A do not alter skill B's mastery or B's gating (memory is skill-scoped)",
+      "passed": true,
+      "evidence": "failures planted only on cvc_short_a; cvc_short_e_o mastery 0.946205 -> 0.946205 (unchanged=True); cvc_short_e_o unlocked True -> True (unchanged=True)"
+    },
+    "P6": {
+      "description": "over-personalization guard: one generic (untagged) failure on a mastered root skill keeps it >= threshold (servable) and unlock status unchanged",
+      "passed": true,
+      "evidence": "one generic failure on cvc_short_a: mastery=0.9042 >= floor 0.8 (True); own unlock status True (unchanged=True); completed-status retained=False"
+    }
+  },
+  "findings": [
+    "[P6] OVER-PERSONALIZATION SENSITIVITY: one generic (untagged) failure on cvc_short_a dropped mastery to 0.9042, BELOW MASTERY_COMPLETED (0.95) \u2014 the skill loses 'completed' status from a single data point. It stays >= 0.8 (servable/unlocked), so the promised invariant holds, but one bad observation un-completes a mastered skill. Mitigation belongs in the completion hysteresis (require N consecutive sub-threshold obs before un-completing), tracked as a v1 planner item."
+  ]
+}
