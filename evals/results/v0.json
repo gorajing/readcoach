@@ -1,0 +1,209 @@
+{
+  "metadata": {
+    "commit": "65bec863bf6bc3d4a4a107242a5bfebdc2f9c5f6",
+    "date": "2026-06-10",
+    "golden_path": "/Users/jinchoi/Code/readcoach/evals/golden/benchmark.lock",
+    "golden_sha256": "886366474ffbf0d709a773f05a929d9b3e8de3887d96f62dea6e1380ee2e7688",
+    "weave": "disabled:WEAVE_DISABLED"
+  },
+  "metrics": {
+    "by_bias": {
+      "none": {
+        "fp_per_100_correct_words": 7.1021957169964764,
+        "hesitation": {
+          "f1": 0.25641025641025644,
+          "fn": 27,
+          "fp": 2,
+          "n_gold": 32,
+          "n_pred": 7,
+          "precision": 0.7142857142857143,
+          "recall": 0.15625,
+          "tp": 5
+        },
+        "insertion": {
+          "f1": 0.5846153846153846,
+          "fn": 5,
+          "fp": 22,
+          "n_gold": 24,
+          "n_pred": 41,
+          "precision": 0.4634146341463415,
+          "recall": 0.7916666666666666,
+          "tp": 19
+        },
+        "omission": {
+          "f1": 0.6984126984126983,
+          "fn": 2,
+          "fp": 17,
+          "n_gold": 24,
+          "n_pred": 39,
+          "precision": 0.5641025641025641,
+          "recall": 0.9166666666666666,
+          "tp": 22
+        },
+        "self_correction": {
+          "f1": 0.48484848484848486,
+          "fn": 16,
+          "fp": 1,
+          "n_gold": 24,
+          "n_pred": 9,
+          "precision": 0.8888888888888888,
+          "recall": 0.3333333333333333,
+          "tp": 8
+        },
+        "substitution": {
+          "f1": 0.12307692307692307,
+          "fn": 8,
+          "fp": 220,
+          "n_gold": 24,
+          "n_pred": 236,
+          "precision": 0.06779661016949153,
+          "recall": 0.6666666666666666,
+          "tp": 16
+        }
+      },
+      "prompt": {
+        "fp_per_100_correct_words": 0.7047980482515587,
+        "hesitation": {
+          "f1": 0.05263157894736842,
+          "fn": 31,
+          "fp": 5,
+          "n_gold": 32,
+          "n_pred": 6,
+          "precision": 0.16666666666666666,
+          "recall": 0.03125,
+          "tp": 1
+        },
+        "insertion": {
+          "f1": 0.5777777777777778,
+          "fn": 11,
+          "fp": 8,
+          "n_gold": 24,
+          "n_pred": 21,
+          "precision": 0.6190476190476191,
+          "recall": 0.5416666666666666,
+          "tp": 13
+        },
+        "omission": {
+          "f1": 0.4390243902439025,
+          "fn": 15,
+          "fp": 8,
+          "n_gold": 24,
+          "n_pred": 17,
+          "precision": 0.5294117647058824,
+          "recall": 0.375,
+          "tp": 9
+        },
+        "self_correction": {
+          "f1": 0.07999999999999999,
+          "fn": 23,
+          "fp": 0,
+          "n_gold": 24,
+          "n_pred": 1,
+          "precision": 1.0,
+          "recall": 0.041666666666666664,
+          "tp": 1
+        },
+        "substitution": {
+          "f1": 0.24242424242424243,
+          "fn": 20,
+          "fp": 5,
+          "n_gold": 24,
+          "n_pred": 9,
+          "precision": 0.4444444444444444,
+          "recall": 0.16666666666666666,
+          "tp": 4
+        }
+      },
+      "strong": {
+        "fp_per_100_correct_words": 0.5421523448088913,
+        "hesitation": {
+          "f1": 0.05555555555555555,
+          "fn": 31,
+          "fp": 3,
+          "n_gold": 32,
+          "n_pred": 4,
+          "precision": 0.25,
+          "recall": 0.03125,
+          "tp": 1
+        },
+        "insertion": {
+          "f1": 0.611111111111111,
+          "fn": 13,
+          "fp": 1,
+          "n_gold": 24,
+          "n_pred": 12,
+          "precision": 0.9166666666666666,
+          "recall": 0.4583333333333333,
+          "tp": 11
+        },
+        "omission": {
+          "f1": 0.30434782608695654,
+          "fn": 17,
+          "fp": 15,
+          "n_gold": 24,
+          "n_pred": 22,
+          "precision": 0.3181818181818182,
+          "recall": 0.2916666666666667,
+          "tp": 7
+        },
+        "self_correction": {
+          "f1": 0.07999999999999999,
+          "fn": 23,
+          "fp": 0,
+          "n_gold": 24,
+          "n_pred": 1,
+          "precision": 1.0,
+          "recall": 0.041666666666666664,
+          "tp": 1
+        },
+        "substitution": {
+          "f1": 0.14814814814814814,
+          "fn": 22,
+          "fp": 1,
+          "n_gold": 24,
+          "n_pred": 3,
+          "precision": 0.6666666666666666,
+          "recall": 0.08333333333333333,
+          "tp": 2
+        }
+      }
+    },
+    "invariants": {
+      "violations": 0
+    },
+    "latency": {
+      "decision_ms_p50": null,
+      "decision_ms_p95": null,
+      "rtf_offline_proxy": null
+    },
+    "miscue": {
+      "fp_per_100_correct_words": 7.1021957169964764,
+      "hesitation": {
+        "f1": 0.25641025641025644,
+        "precision": 0.7142857142857143,
+        "recall": 0.15625
+      },
+      "insertion": {
+        "f1": 0.5846153846153846,
+        "precision": 0.4634146341463415,
+        "recall": 0.7916666666666666
+      },
+      "omission": {
+        "f1": 0.6984126984126983,
+        "precision": 0.5641025641025641,
+        "recall": 0.9166666666666666
+      },
+      "self_correction": {
+        "f1": 0.48484848484848486,
+        "precision": 0.8888888888888888,
+        "recall": 0.3333333333333333
+      },
+      "substitution": {
+        "f1": 0.12307692307692307,
+        "precision": 0.06779661016949153,
+        "recall": 0.6666666666666666
+      }
+    }
+  },
+  "version": "v0"
+}
