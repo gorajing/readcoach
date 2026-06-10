@@ -468,3 +468,75 @@ def test_gold_vs_gold_adjacent_same_class_no_double_match():
     assert out["substitution"]["precision"] == pytest.approx(1.0)
     assert out["substitution"]["recall"] == pytest.approx(1.0)
     assert math.isclose(out["substitution"]["f1"], 1.0)
+
+
+# ===========================================================================
+# score() — index validation (Finding I-1)
+# ===========================================================================
+# EMPIRICAL FINDING (probed 2026-06-10 against jiwer 4.0.0):
+# detect() legitimately produces index == n_target_words for two cases:
+#   1. Trailing insertion: "the cat sat dog" over "the cat sat" →
+#      insertion at index 3 (n_target_words = 3).
+#   2. Trailing filler: " um" appended after last word, stripped pre-alignment,
+#      becomes hesitation at index 3 (n_target_words = 3).
+# Both are therefore LEGAL and must NOT raise.  The validation must:
+#   - allow index == n_target_words for any class (both insertion and hesitation
+#     legitimately reach it for trailing cases; forbidding by class would be
+#     brittle and exceed the empirical output space).
+#   - reject index > n_target_words (nothing detect() produces lands there).
+#   - reject index < 0 (negative indices are always a caller bug).
+#   - reject n_target_words <= 0 (degenerate; correct_words count would be wrong).
+
+def test_score_gold_index_above_n_target_words_raises():
+    """A gold omission at index 8 with n_target_words=3 is out-of-range; score()
+    must raise ValueError naming the offending miscue.  This is the exact scenario
+    from Finding I-1 that previously skewed fp_per_100_correct_words silently."""
+    gold = [Miscue("omission", "foo", None, 8)]
+    pred = [Miscue("insertion", None, "bar", 1)]
+    with pytest.raises(ValueError, match="omission.*index 8"):
+        score(pred, gold, n_target_words=3)
+
+
+def test_score_predicted_negative_index_raises():
+    """A predicted miscue with a negative index is always a caller bug."""
+    gold = [Miscue("substitution", "cat", "bat", 1)]
+    pred = [Miscue("substitution", "cat", "bat", -1)]
+    with pytest.raises(ValueError, match="substitution.*index -1"):
+        score(pred, gold, n_target_words=5)
+
+
+def test_score_n_target_words_zero_raises():
+    """n_target_words <= 0 is degenerate — correct_words count would be nonsensical."""
+    gold: list[Miscue] = []
+    pred: list[Miscue] = []
+    with pytest.raises(ValueError, match="n_target_words"):
+        score(pred, gold, n_target_words=0)
+
+
+def test_score_n_target_words_negative_raises():
+    """Negative n_target_words is also invalid."""
+    with pytest.raises(ValueError, match="n_target_words"):
+        score([], [], n_target_words=-5)
+
+
+def test_score_index_equal_n_target_words_is_legal_for_insertion():
+    """Trailing insertion: detect() produces index == n_target_words (3) for a word
+    appended after the last target word.  score() must NOT raise for this case."""
+    # Empirically: detect("the cat sat dog", "the cat sat") yields
+    # Miscue(insertion, index=3) with n_target_words=3.
+    gold: list[Miscue] = []
+    pred = [Miscue("insertion", None, "dog", 3)]
+    # Must not raise:
+    out = score(pred, gold, n_target_words=3)
+    assert out["insertion"]["n_pred"] == 1
+
+
+def test_score_index_equal_n_target_words_is_legal_for_hesitation():
+    """Trailing filler: detect() produces hesitation at index == n_target_words (3)
+    for a filler word spoken after the last target word.  score() must NOT raise."""
+    # Empirically: detect(words + trailing 'um', "the cat sat") yields
+    # Miscue(hesitation, index=3) with n_target_words=3.
+    gold = [Miscue("hesitation", None, "um", 3)]
+    pred = [Miscue("hesitation", None, "um", 3)]
+    out = score(pred, gold, n_target_words=3)
+    assert out["hesitation"]["precision"] == pytest.approx(1.0)

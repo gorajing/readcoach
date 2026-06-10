@@ -416,6 +416,13 @@ def _timing_hesitations(
     (via the equal/substitute chunk covering it).  Words with no aligned target
     position (pure insertions) are skipped — a gap before an inserted word is
     already covered by the insertion/repeat signal.
+
+    **Limitation — untimed words are silently skipped.**  The gap check requires
+    both ``prev.end`` and ``cur.start`` to be non-None (``Word`` fields may be
+    None when ASR returns partial timings).  A long pause that spans a word with
+    no timing information is therefore invisible: the hesitation will be missed and
+    recall degrades silently on partial-timing ASR output.  This is an accepted
+    limitation until full per-word timing is guaranteed.
     """
     # Map hyp index -> target index (only for equal & substitute alignments,
     # which place a hypothesis word at a definite target slot).
@@ -537,6 +544,38 @@ def detect(
 # Scoring
 # ---------------------------------------------------------------------------
 
+def _validate_score_inputs(
+    predicted: list[Miscue],
+    gold: list[Miscue],
+    n_target_words: int,
+) -> None:
+    """Raise ValueError on any out-of-range index or non-positive n_target_words.
+
+    Legal index range: 0 <= index <= n_target_words.  The upper bound is INCLUSIVE
+    because detect() legitimately produces index == n_target_words for two trailing
+    cases (empirically verified, 2026-06-10, jiwer 4.0.0):
+      - Trailing insertion: "the cat sat dog" / "the cat sat" → insertion index 3
+        with n_target_words=3.
+      - Trailing filler: a filler word after the last target word → hesitation
+        index 3 with n_target_words=3.
+    Nothing detect() produces has index > n_target_words, so values above that
+    bound are always a caller/data bug (e.g. Finding I-1: gold omission index 8
+    with n_target_words=3 silently skewed fp_per_100_correct_words).
+    """
+    if n_target_words <= 0:
+        raise ValueError(
+            f"n_target_words must be a positive integer; got {n_target_words}"
+        )
+    for label, lst in (("gold", gold), ("predicted", predicted)):
+        for m in lst:
+            if m.index < 0 or m.index > n_target_words:
+                raise ValueError(
+                    f"Invalid {label} miscue: {m.type} at index {m.index} is "
+                    f"outside the legal range [0, {n_target_words}] for "
+                    f"n_target_words={n_target_words}"
+                )
+
+
 def score(
     predicted: list[Miscue],
     gold: list[Miscue],
@@ -557,7 +596,14 @@ def score(
     A class absent from BOTH gold and predicted reports precision/recall/f1 =
     ``None`` (never a fabricated 1.0).  ``n_gold`` / ``n_pred`` are always real
     counts.
+
+    Raises ``ValueError`` if any miscue index is outside ``[0, n_target_words]``
+    or if ``n_target_words <= 0``.  The upper bound is inclusive because
+    ``detect()`` legitimately emits index == n_target_words for trailing insertions
+    and trailing filler hesitations (end-of-passage position).
     """
+    _validate_score_inputs(predicted, gold, n_target_words)
+
     result: dict = {}
     total_fp = 0
 
