@@ -72,9 +72,83 @@ Real-child audio comparison not yet available. The TTS benchmark establishes the
 
 ## Prediction 4 — Soft-evidence break-even
 
-**Status: pending (experiment not yet run)**
+**Source run:** `uv run python scripts/break_even.py --seed 2026`
+**Date:** 2026-06-10
+**Setup:** n=500 students × 25 opportunities × 3 BKT regimes (easy_skill, hard_skill,
+high_guess); paired naive (`conf=1.0`) vs soft (`conf=a`) updates on identical
+observed-label streams; symmetric bit-flip channel P(observed==true)=a.
 
-Requires the BKT learner model and detector-reliability sweep (T3 scope).
+**Verbatim prediction:**
+
+> Confidence-weighted (virtual-evidence) BKT updates will beat naive Bernoulli updates on mastery RMSE once detector reliability degrades. The break-even point is expected somewhere in the detector F1 = 0.6–0.85 range; above that range the two methods converge.
+
+**Observed (Δ = RMSE_naive − RMSE_soft; >0 ⇒ soft wins; 95% paired student bootstrap, 500 resamples, seed=2026):**
+
+| channel accuracy a | RMSE naive | RMSE soft | Δ (naive−soft) | Δ 95% CI | converged? |
+|------|------------|-----------|----------------|----------|------------|
+| 0.55 | 0.5049 | 0.3944 | +0.1105 | [+0.1032, +0.1185] | no |
+| 0.60 | 0.4690 | 0.3898 | +0.0791 | [+0.0728, +0.0858] | no |
+| 0.65 | 0.4341 | 0.3823 | +0.0518 | [+0.0456, +0.0579] | no |
+| 0.70 | 0.4019 | 0.3596 | +0.0423 | [+0.0377, +0.0470] | no |
+| 0.75 | 0.3685 | 0.3446 | +0.0238 | [+0.0202, +0.0272] | no |
+| 0.80 | 0.3479 | 0.3332 | +0.0147 | [+0.0116, +0.0174] | no |
+| 0.85 | 0.3217 | 0.3130 | +0.0087 | [+0.0069, +0.0105] | no |
+| 0.90 | 0.2954 | 0.2917 | +0.0037 | [+0.0027, +0.0049] | **yes** |
+| 0.95 | 0.2785 | 0.2780 | +0.0005 | [−0.0001, +0.0011] | yes |
+| 0.99 | 0.2703 | 0.2703 | +0.0000 | [−0.0001, +0.0001] | yes |
+
+**Break-even (smallest a with |Δ| < 0.005): a = 0.90.**
+
+**Axis note (important for reading the prediction honestly).** The prediction is phrased
+in *detector-F1* space; the experiment's primary, assumption-light axis is *channel
+accuracy a* (per-opportunity P(observed label == true correctness)), because for an
+imbalanced miscue-detection task F1 ↔ per-word label accuracy is only a loose mapping.
+To anchor the prediction in reality we convert each measured operating point to an
+*effective per-word channel accuracy* a_eff = (1−d)·(1−fp_rate) + d·pooled_recall, using
+the benchmark's real miscue density d = 0.0335 (128 gold word-level events / 3 817 target
+words) and pooled recall over {substitution, omission, insertion}:
+
+| measured bias | fp/100 correct words | pooled recall | a_eff |
+|---------------|----------------------|---------------|-------|
+| none | 7.10 | 0.792 | 0.9244 |
+| prompt | 0.70 | 0.361 | 0.9718 |
+| strong | 0.54 | 0.278 | 0.9705 |
+
+**Verdict: CONFIRMED (direction + convergence) / PARTIAL (break-even location).**
+
+The directional claim holds cleanly: soft-evidence updates beat naive on mastery RMSE at
+every degraded operating point, the advantage Δ rises monotonically as the channel worsens
+(from +0.0000 at a=0.99 to +0.1105 at a=0.55, every below-break-even CI strictly above 0),
+and the two methods converge above the break-even exactly as predicted. The break-even
+itself lands at channel accuracy **a = 0.90** — slightly *above* the predicted band's upper
+edge of 0.85 when the two axes are read as if interchangeable, which is why this is PARTIAL
+rather than CONFIRMED: the F1↔a mapping is loose, so a numeric match was never guaranteed,
+and the data put convergence a touch higher than the pre-registered 0.6–0.85 window. The
+honest reality check is the a_eff anchors: this benchmark's *measured* operating points sit
+at a_eff ≈ 0.92–0.97, i.e. at or just above the a=0.90 break-even, in the converged regime.
+On the benchmark as it stands, soft evidence buys little (the sparse one-miscue-per-clip
+density keeps the channel clean); its payoff is real and growing precisely where this
+prediction said it would be — at lower reliability than the current TTS benchmark exhibits,
+the regime a denser real-child read (Prediction 3) is expected to enter.
+
+The selection-regret proxy (oracle − policy true mastery achieved at the horizon) is
+positive at every a and shrinks as the channel improves (naive 0.782 → 0.352, soft 0.900 →
+0.339 from a=0.55 to a=0.99), confirming noise degrades adaptive item selection too.
+
+Detection latency reveals an honest trade-off that runs *against* soft on this metric: at
+low a, soft's mean |latency error| is **larger** than naive's (14.4 vs 7.8 opportunities at
+a=0.55) and its never-detected rate is higher (0.537 vs 0.291), converging only by a≈0.95.
+This is the price of soft's calibration win: by discounting each noisy observation, soft's
+P(L) climbs toward the 0.95 detection threshold more slowly, so it declares mastery later
+and more often fails to cross the threshold within the 25-opportunity horizon. Naive's hard
+updates over-trust the (noisy) evidence and cross 0.95 sooner — which looks like lower
+latency but is the same over-confidence that inflates its RMSE. The two metrics tell a
+consistent story: soft trades a slower, more conservative mastery declaration for a more
+accurate mastery *estimate*. Never-detected and never-mastered rates (the latter ≈0.09 at
+a=0.55, the irreducible floor from students who never truly master in-horizon) are reported
+per grid point in the JSON, not hidden.
+
+**Status: resolved.**
 
 ---
 

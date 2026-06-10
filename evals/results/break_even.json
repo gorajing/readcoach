@@ -1,0 +1,339 @@
+{
+  "metadata": {
+    "experiment": "break-even: soft-evidence vs naive BKT under a noisy channel",
+    "lineage": "Beck & Sison, Project LISTEN (2004-06); virtual evidence: Pearl (1988)",
+    "prediction": "pre-registered #4 (docs/predictions.md)",
+    "seed": 2026,
+    "n_students": 500,
+    "n_opportunities": 25,
+    "n_regimes": 3,
+    "regimes": {
+      "easy_skill": {
+        "s": 0.08,
+        "g": 0.15,
+        "t": 0.15,
+        "L0": 0.4
+      },
+      "hard_skill": {
+        "s": 0.15,
+        "g": 0.25,
+        "t": 0.05,
+        "L0": 0.15
+      },
+      "high_guess": {
+        "s": 0.1,
+        "g": 0.35,
+        "t": 0.1,
+        "L0": 0.25
+      }
+    },
+    "channel": "symmetric bit-flip, P(observed==true)=a",
+    "updaters": "naive=bkt_update(conf=1.0); soft=bkt_update(conf=a) on the SAME observed stream",
+    "a_grid": [
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      0.99
+    ],
+    "n_boot": 500,
+    "converge_eps": 0.005,
+    "detect_threshold": 0.95,
+    "prereq_threshold": 0.8,
+    "miscue_density": 0.0335341891537857,
+    "a_eff_formula": "(1-d)*(1-fp_per_100/100) + d*pooled_recall over {substitution,omission,insertion}",
+    "a_eff_excluded_classes": [
+      "self_correction",
+      "hesitation"
+    ],
+    "date": "2026-06-10"
+  },
+  "break_even_a": 0.9,
+  "a_eff_anchors": [
+    {
+      "bias": "none",
+      "a_eff": 0.9243734171688062,
+      "fp_per_100_correct_words": 7.1021957169964764,
+      "pooled_recall": 0.7916666666666666,
+      "pooled_recall_classes": [
+        "substitution",
+        "omission",
+        "insertion"
+      ]
+    },
+    {
+      "bias": "prompt",
+      "a_eff": 0.9717637469798854,
+      "fp_per_100_correct_words": 0.7047980482515587,
+      "pooled_recall": 0.3611111111111111,
+      "pooled_recall_classes": [
+        "substitution",
+        "omission",
+        "insertion"
+      ]
+    },
+    {
+      "bias": "strong",
+      "a_eff": 0.9705411463336535,
+      "fp_per_100_correct_words": 0.5421523448088913,
+      "pooled_recall": 0.2777777777777778,
+      "pooled_recall_classes": [
+        "substitution",
+        "omission",
+        "insertion"
+      ]
+    }
+  ],
+  "grid": [
+    {
+      "a": 0.55,
+      "rmse_naive": 0.504858916105297,
+      "rmse_soft": 0.39438962049783005,
+      "delta_rmse": 0.11046929560746693,
+      "delta_ci95": [
+        0.10315700031625874,
+        0.1185372638546769
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 4.9503740201796935,
+        "mean_signed_error_soft": 14.214717741935484,
+        "mean_abs_error_naive": 7.778405067436196,
+        "mean_abs_error_soft": 14.367271505376344,
+        "never_detected_rate_naive": 0.29133333333333333,
+        "never_detected_rate_soft": 0.5373333333333333,
+        "never_mastered_rate": 0.092
+      },
+      "regret": {
+        "regret_naive": 0.782,
+        "regret_soft": 0.9
+      }
+    },
+    {
+      "a": 0.6,
+      "rmse_naive": 0.4689766407770456,
+      "rmse_soft": 0.3898379536363345,
+      "delta_rmse": 0.0791386871407111,
+      "delta_ci95": [
+        0.0727550109100609,
+        0.08580409111548411
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 5.646919100857573,
+        "mean_signed_error_soft": 13.989298429644021,
+        "mean_abs_error_naive": 7.671076610140166,
+        "mean_abs_error_soft": 14.09000136073404,
+        "never_detected_rate_naive": 0.25466666666666665,
+        "never_detected_rate_soft": 0.46266666666666667,
+        "never_mastered_rate": 0.09333333333333334
+      },
+      "regret": {
+        "regret_naive": 0.7166666666666665,
+        "regret_soft": 0.8139999999999997
+      }
+    },
+    {
+      "a": 0.65,
+      "rmse_naive": 0.4340926896144012,
+      "rmse_soft": 0.3823096268129326,
+      "delta_rmse": 0.05178306280146855,
+      "delta_ci95": [
+        0.045647002183342986,
+        0.05791046329328887
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 5.728123466674009,
+        "mean_signed_error_soft": 11.832166199813258,
+        "mean_abs_error_naive": 7.3238064678734895,
+        "mean_abs_error_soft": 12.066409897292251,
+        "never_detected_rate_naive": 0.22,
+        "never_detected_rate_soft": 0.372,
+        "never_mastered_rate": 0.106
+      },
+      "regret": {
+        "regret_naive": 0.6453333333333332,
+        "regret_soft": 0.7373333333333333
+      }
+    },
+    {
+      "a": 0.7,
+      "rmse_naive": 0.4019316957389222,
+      "rmse_soft": 0.3596106301635723,
+      "delta_rmse": 0.04232106557534987,
+      "delta_ci95": [
+        0.03767491264692373,
+        0.0470191189267481
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 5.587917796448624,
+        "mean_signed_error_soft": 10.399304673423691,
+        "mean_abs_error_naive": 7.030887710938956,
+        "mean_abs_error_soft": 10.672651860241984,
+        "never_detected_rate_naive": 0.18333333333333332,
+        "never_detected_rate_soft": 0.2826666666666667,
+        "never_mastered_rate": 0.08933333333333333
+      },
+      "regret": {
+        "regret_naive": 0.6406666666666666,
+        "regret_soft": 0.742
+      }
+    },
+    {
+      "a": 0.75,
+      "rmse_naive": 0.368462475295567,
+      "rmse_soft": 0.34463588681057505,
+      "delta_rmse": 0.023826588484991973,
+      "delta_ci95": [
+        0.020226341211760854,
+        0.027152873317589938
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 5.693197288112887,
+        "mean_signed_error_soft": 9.098585473805977,
+        "mean_abs_error_naive": 6.545822351555998,
+        "mean_abs_error_soft": 9.316948472806105,
+        "never_detected_rate_naive": 0.166,
+        "never_detected_rate_soft": 0.24066666666666667,
+        "never_mastered_rate": 0.11133333333333334
+      },
+      "regret": {
+        "regret_naive": 0.5033333333333334,
+        "regret_soft": 0.644
+      }
+    },
+    {
+      "a": 0.8,
+      "rmse_naive": 0.34789121533287837,
+      "rmse_soft": 0.33317053462317764,
+      "delta_rmse": 0.014720680709700729,
+      "delta_ci95": [
+        0.01161829028662133,
+        0.0174468266137862
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 5.446427752885957,
+        "mean_signed_error_soft": 7.863895660331239,
+        "mean_abs_error_naive": 6.167660917631014,
+        "mean_abs_error_soft": 8.050249056952785,
+        "never_detected_rate_naive": 0.16066666666666668,
+        "never_detected_rate_soft": 0.20666666666666667,
+        "never_mastered_rate": 0.09466666666666666
+      },
+      "regret": {
+        "regret_naive": 0.5033333333333333,
+        "regret_soft": 0.568
+      }
+    },
+    {
+      "a": 0.85,
+      "rmse_naive": 0.3217098857244177,
+      "rmse_soft": 0.31296027334149146,
+      "delta_rmse": 0.008749612382926264,
+      "delta_ci95": [
+        0.006921039247846643,
+        0.010494555178141336
+      ],
+      "converged": false,
+      "detection": {
+        "mean_signed_error_naive": 5.299525962891337,
+        "mean_signed_error_soft": 6.803598403598404,
+        "mean_abs_error_naive": 5.8843915160555165,
+        "mean_abs_error_soft": 7.035727285727286,
+        "never_detected_rate_naive": 0.158,
+        "never_detected_rate_soft": 0.18266666666666667,
+        "never_mastered_rate": 0.10266666666666667
+      },
+      "regret": {
+        "regret_naive": 0.48666666666666675,
+        "regret_soft": 0.5199999999999999
+      }
+    },
+    {
+      "a": 0.9,
+      "rmse_naive": 0.2953897191448265,
+      "rmse_soft": 0.2916634309468523,
+      "delta_rmse": 0.003726288197974159,
+      "delta_ci95": [
+        0.002668601863931752,
+        0.004863711916430382
+      ],
+      "converged": true,
+      "detection": {
+        "mean_signed_error_naive": 4.7304267575351915,
+        "mean_signed_error_soft": 5.578572366669732,
+        "mean_abs_error_naive": 5.277663786458967,
+        "mean_abs_error_soft": 5.888509973851871,
+        "never_detected_rate_naive": 0.13933333333333334,
+        "never_detected_rate_soft": 0.15266666666666667,
+        "never_mastered_rate": 0.09733333333333333
+      },
+      "regret": {
+        "regret_naive": 0.4180000000000001,
+        "regret_soft": 0.4460000000000001
+      }
+    },
+    {
+      "a": 0.95,
+      "rmse_naive": 0.278536962081243,
+      "rmse_soft": 0.27803486383153014,
+      "delta_rmse": 0.0005020982497128679,
+      "delta_ci95": [
+        -0.00013928422305968104,
+        0.0011218082789542963
+      ],
+      "converged": true,
+      "detection": {
+        "mean_signed_error_naive": 4.4974681506783085,
+        "mean_signed_error_soft": 4.758150029707719,
+        "mean_abs_error_naive": 4.814646714545474,
+        "mean_abs_error_soft": 5.043685529902166,
+        "never_detected_rate_naive": 0.156,
+        "never_detected_rate_soft": 0.158,
+        "never_mastered_rate": 0.10933333333333334
+      },
+      "regret": {
+        "regret_naive": 0.3759999999999999,
+        "regret_soft": 0.38066666666666676
+      }
+    },
+    {
+      "a": 0.99,
+      "rmse_naive": 0.27034195994910165,
+      "rmse_soft": 0.2703290186474061,
+      "delta_rmse": 1.294130169554597e-05,
+      "delta_ci95": [
+        -9.404019660755325e-05,
+        0.00011353204085679799
+      ],
+      "converged": true,
+      "detection": {
+        "mean_signed_error_naive": 4.412025988521386,
+        "mean_signed_error_soft": 4.4627842127842134,
+        "mean_abs_error_naive": 4.704562198043793,
+        "mean_abs_error_soft": 4.732019102801311,
+        "never_detected_rate_naive": 0.14533333333333334,
+        "never_detected_rate_soft": 0.146,
+        "never_mastered_rate": 0.10533333333333333
+      },
+      "regret": {
+        "regret_naive": 0.3519999999999999,
+        "regret_soft": 0.3386666666666666
+      }
+    }
+  ],
+  "volatile": {
+    "_note": "non-deterministic fields; excluded from reproducibility comparisons",
+    "git_commit": "cd90f81ef2030b3d6db5d377c10a84e15576cf6a",
+    "runtime_seconds": 0.13
+  }
+}
