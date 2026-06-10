@@ -1,4 +1,9 @@
 {
+  "tarball": {
+    "bytes": 29125775,
+    "name": "readcoach-benchmark-0.1.0.tar.gz",
+    "sha256": "d89a15431b788f136935ba8e4ef4c949dd279a599838a0e00706abb53eeacc48"
+  },
   "artifacts": {
     "data/benchmark/clips/p01-clean.wav": "af4fdac4d14d879b8a46fdb6b9296e762cdf583a13a30b701a91815b35880184",
     "data/benchmark/clips/p01-hesF35.wav": "ec3736c6027a499e35b48e50ebfec5ec9e26d55910961529f608b774fa706e7f",

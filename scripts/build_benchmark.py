@@ -376,6 +376,7 @@ def _verify() -> None:
 
     lock_data = json.loads(LOCK_FILE.read_text(encoding="utf-8"))
     artifacts: dict[str, str] = lock_data["artifacts"]
+    # "tarball" is a top-level key added by make_benchmark_tarball.py; ignored here.
 
     print(f"Verifying {len(artifacts)} artifacts against {LOCK_FILE} …")
     failures: list[str] = []
