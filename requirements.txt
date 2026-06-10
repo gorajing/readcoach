@@ -1,0 +1,34 @@
+# --- ASR (swappable backends) ---
+faster-whisper>=1.0      # default backend; CPU/GPU, fast
+# whisper.cpp / moonshine-ai used for the on-device stretch (installed separately)
+
+# --- alignment / phonetics ---
+jiwer>=3.0               # WER + word-level edit ops -> miscue alignment
+
+# --- learner model ---
+pyBKT>=1.4               # Bayesian Knowledge Tracing (per-skill mastery)
+fsrs>=4.0                # FSRS spaced repetition (review scheduling)
+
+# --- eval flywheel (mirrors the rezn-ai method) ---
+weave>=0.51              # W&B Weave: traces + eval comparison UI
+wandb>=0.17
+
+# --- tutor policy + LLM judge ---
+anthropic>=0.40
+
+# --- data ---
+datasets>=2.20           # HF datasets (speechocean762, etc.)
+huggingface_hub>=0.24
+soundfile>=0.12
+librosa>=0.10
+
+# --- state ---
+redis>=5.0
+
+# --- dashboard ---
+streamlit>=1.36
+
+# --- utils ---
+pydantic>=2.7
+numpy
+pandas

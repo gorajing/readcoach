@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Env / secrets
+.env
+*.key
+
+# Data + audio + artifacts (keep large files out of git)
+data/raw/
+data/cache/
+*.wav
+*.mp3
+*.flac
+wandb/
+.weave/
+artifacts/
+
+# OS
+.DS_Store
+
+# committed test fixtures are re-included
+!tests/fixtures/**
