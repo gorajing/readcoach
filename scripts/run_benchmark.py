@@ -346,10 +346,31 @@ def main(argv: list[str] | None = None) -> None:
     benchmark_version = json.loads(manifest_path.read_text(encoding="utf-8"))["benchmark_version"]
 
     # --- Imports (lazy — avoid model load just for --help) ---
-    from readcoach.asr import transcribe  # noqa: PLC0415
+    from readcoach.asr import CacheMiss, _CACHE_DIR, _deserialize_result, transcribe  # noqa: PLC0415,F401
     from readcoach.miscue import detect, match_counts  # noqa: PLC0415
 
     clips_dir = _PROJECT_ROOT / "data" / "benchmark" / "clips"
+
+    # --fixtures: load the committed asr_cache_manifest.json so we can look up
+    # ASR results by (utt_id, bias, backend) without reading audio files.
+    # *.wav files are excluded from git via .gitignore; the manifest provides the
+    # cache-key (hex filename) for each (utt_id × bias × backend) combination.
+    asr_cache_manifest: dict | None = None
+    if args.fixtures:
+        manifest_path = _PROJECT_ROOT / "evals" / "golden" / "asr_cache_manifest.json"
+        if not manifest_path.exists():
+            print(
+                f"ERROR: --fixtures requires evals/golden/asr_cache_manifest.json "
+                f"(not found at {manifest_path}).  "
+                "Regenerate it with scripts/build_cache_manifest.py.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        asr_cache_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        print(
+            f"  --fixtures: loaded manifest with {len(asr_cache_manifest)} entries",
+            file=sys.stderr,
+        )
 
     # accum[bias] = running per-class TP/FP/FN
     accum: dict[str, dict] = {b: _empty_accum() for b in biases}
@@ -359,7 +380,9 @@ def main(argv: list[str] | None = None) -> None:
         target_text = row["target_text"]
         clip_path = str(clips_dir / f"{utt_id}.wav")
 
-        if not Path(clip_path).exists():
+        # In non-fixtures mode, audio files must exist.  In --fixtures mode we
+        # use the params index and never touch the audio files.
+        if not args.fixtures and not Path(clip_path).exists():
             raise FileNotFoundError(
                 f"Clip missing for utt_id={utt_id!r}: expected {clip_path}"
             )
@@ -374,23 +397,45 @@ def main(argv: list[str] | None = None) -> None:
             # bakes the params, so this is also how the cache is keyed correctly.
             asr_target = None if bias == "none" else target_text
 
-            from readcoach.asr import CacheMiss  # noqa: PLC0415
-
-            try:
-                asr_result = transcribe(
-                    clip_path,
-                    target_text=asr_target,
-                    bias=bias,
-                    backend=args.backend,
-                    cache_only=args.fixtures,  # --fixtures: never load model
-                )
-            except CacheMiss as exc:
-                print(
-                    f"\nFATAL: CacheMiss in --fixtures mode — committed cache is "
-                    f"incomplete!\n  utt_id={utt_id!r}  bias={bias!r}\n  {exc}",
-                    file=sys.stderr,
-                )
-                sys.exit(1)
+            if args.fixtures:
+                # --fixtures: look up the cache key from the committed manifest,
+                # then read the cache file directly.  Never loads a model or audio.
+                manifest_key = f"{utt_id}|{bias}|{args.backend}"
+                cache_hex = asr_cache_manifest.get(manifest_key)  # type: ignore[union-attr]
+                if cache_hex is None:
+                    print(
+                        f"\nFATAL: CacheMiss in --fixtures mode — manifest has no entry "
+                        f"for key {manifest_key!r}.  The committed manifest is incomplete.",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+                cache_file = _CACHE_DIR / f"{cache_hex}.json"
+                if not cache_file.exists():
+                    print(
+                        f"\nFATAL: CacheMiss in --fixtures mode — cache file missing: "
+                        f"{cache_file}\n  key={manifest_key!r}",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
+                raw = json.loads(cache_file.read_text(encoding="utf-8"))
+                asr_result = _deserialize_result(raw)
+            else:
+                try:
+                    asr_result = transcribe(
+                        clip_path,
+                        target_text=asr_target,
+                        bias=bias,
+                        backend=args.backend,
+                    )
+                except CacheMiss as exc:
+                    # This branch only runs in non-fixtures mode; CacheMiss here means
+                    # the cache_only flag was somehow set externally — abort loudly.
+                    print(
+                        f"\nFATAL: unexpected CacheMiss (non-fixtures mode) — "
+                        f"utt_id={utt_id!r}  bias={bias!r}\n  {exc}",
+                        file=sys.stderr,
+                    )
+                    sys.exit(1)
 
             # detect() always gets target_text (the alignment reference is
             # independent of the ASR bias setting).

@@ -224,34 +224,42 @@ class TestFixturesCacheMissAbort:
     """Monkeypatch transcribe to raise CacheMiss → run_benchmark aborts with exit 1."""
 
     def test_cache_miss_causes_sys_exit_1(self, tmp_path):
-        """When transcribe raises CacheMiss in --fixtures mode, main() exits with code 1.
+        """When the manifest has no entry for a clip/bias, main() exits with code 1.
 
-        We mock _load_gold_rows (returns one synthetic row), Path.exists for the clip
-        (returns True so the loop advances past the FileNotFoundError guard), and
-        transcribe to raise CacheMiss — simulating a cache miss in the sweep loop.
+        We mock _load_gold_rows (synthetic row) and patch json.loads on the manifest
+        to return an empty dict — simulating a missing entry in the committed manifest.
         """
-        from readcoach.asr import CacheMiss
         import scripts.run_benchmark as rb
 
         fake_rows = [
             {
-                "utt_id": "p01-clean",
+                "utt_id": "p01-clean-nonexistent",
                 "target_text": "the cat sat on the mat",
                 "gold": [],
             }
         ]
 
+        # Use a real-looking but incomplete manifest (no entry for our utt_id)
+        empty_manifest = {}
+
         with (
             patch.object(rb, "_load_gold_rows", return_value=fake_rows),
-            patch("pathlib.Path.exists", return_value=True),
-            patch("readcoach.asr.transcribe", side_effect=CacheMiss("mock cache miss")),
         ):
-            with pytest.raises(SystemExit) as exc_info:
-                rb.main([
-                    "--fixtures",
-                    "--version", "test-cache-miss",
-                    "--results-dir", str(tmp_path),
-                ])
+            # Patch Path.read_text to return empty manifest JSON for the manifest file
+            orig_read_text = Path.read_text
+
+            def mock_read_text(self, *a, **kw):
+                if "asr_cache_manifest" in str(self):
+                    return "{}"
+                return orig_read_text(self, *a, **kw)
+
+            with patch.object(Path, "read_text", mock_read_text):
+                with pytest.raises(SystemExit) as exc_info:
+                    rb.main([
+                        "--fixtures",
+                        "--version", "test-cache-miss",
+                        "--results-dir", str(tmp_path),
+                    ])
             assert exc_info.value.code == 1
 
     def test_cache_miss_in_transcribe_unit(self):
