@@ -83,6 +83,26 @@ def _make_tarball(members: list[tuple[str, bytes]]) -> bytes:
     return buf.read()
 
 
+def _make_tarball_with_dirs(
+    dir_names: list[str],
+    file_members: list[tuple[str, bytes]],
+) -> bytes:
+    """Build an in-memory tar.gz with explicit directory entries followed by files."""
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as tar:
+        for name in dir_names:
+            info = tarfile.TarInfo(name=name)
+            info.type = tarfile.DIRTYPE
+            info.size = 0
+            tar.addfile(info)
+        for name, content in file_members:
+            info = tarfile.TarInfo(name=name)
+            info.size = len(content)
+            tar.addfile(info, io.BytesIO(content))
+    buf.seek(0)
+    return buf.read()
+
+
 class TestSafeExtract:
     def test_normal_extraction_succeeds(self, tmp_path: Path) -> None:
         data = b"clip content"
@@ -164,6 +184,101 @@ class TestSafeExtract:
         assert (dest / "gold.jsonl").read_bytes() == members[0][1]
         assert (dest / "manifest.json").read_bytes() == members[1][1]
         assert (dest / "clips" / "p01-clean.wav").read_bytes() == members[2][1]
+
+    def test_explicit_members_list_extracts_only_those(self, tmp_path: Path) -> None:
+        """safe_extract with an explicit members list extracts only those members."""
+        data_a = b"file A content"
+        data_b = b"file B content"
+        tarball_bytes = _make_tarball([("a.txt", data_a), ("b.txt", data_b)])
+        tarball_path = tmp_path / "partial.tar.gz"
+        tarball_path.write_bytes(tarball_bytes)
+
+        dest = tmp_path / "partial_out"
+        dest.mkdir()
+
+        with tarfile.open(tarball_path, "r:gz") as tar:
+            # Extract only the first member.
+            only_a = [m for m in tar.getmembers() if m.name == "a.txt"]
+            extracted = safe_extract(tar, dest, only_a)
+
+        assert len(extracted) == 1
+        assert (dest / "a.txt").read_bytes() == data_a
+        assert not (dest / "b.txt").exists()
+
+
+class TestSafeExtractRootDirEntry:
+    """safe_extract correctly handles tarballs with an explicit root-dir entry.
+
+    A real-world tarball may contain an explicit directory entry for the root
+    prefix (e.g. "readcoach-benchmark-0.1.0/") in addition to file entries.
+    After the fetch() loop remaps names and skips the root-dir entry from
+    members_to_extract, safe_extract must not create a spurious nested
+    directory.
+    """
+
+    def test_root_dir_entry_plus_nested_file(self, tmp_path: Path) -> None:
+        """Tarball with explicit root-dir entry + file → file lands at right
+        place, NO spurious nested directory inside dest."""
+        prefix = "readcoach-benchmark-0.1.0/"
+        file_content = b'{"n_items": 88}'
+
+        # Build tarball: explicit root-dir entry + one file under that prefix.
+        tarball_bytes = _make_tarball_with_dirs(
+            dir_names=[prefix.rstrip("/")],
+            file_members=[(prefix + "manifest.json", file_content)],
+        )
+        tarball_path = tmp_path / "rootdir.tar.gz"
+        tarball_path.write_bytes(tarball_bytes)
+
+        dest = tmp_path / "bench"
+        dest.mkdir()
+
+        # Simulate what fetch() does: remap names, skip root-dir entry.
+        with tarfile.open(tarball_path, "r:gz") as tar:
+            members_to_extract: list[tarfile.TarInfo] = []
+            for member in tar.getmembers():
+                if member.name == prefix.rstrip("/"):
+                    continue  # skip explicit root-dir entry
+                if member.name.startswith(prefix):
+                    remapped = member.name[len(prefix):]
+                    if remapped:
+                        member.name = remapped
+                        members_to_extract.append(member)
+
+            extracted = safe_extract(tar, dest, members_to_extract)
+
+        # The file must be extracted at the remapped location.
+        assert (dest / "manifest.json").read_bytes() == file_content
+
+        # No spurious nested directory (e.g. dest/readcoach-benchmark-0.1.0/).
+        spurious_dir = dest / "readcoach-benchmark-0.1.0"
+        assert not spurious_dir.exists(), (
+            f"Spurious nested directory created: {spurious_dir}"
+        )
+
+        # Exactly one file extracted.
+        assert len(extracted) == 1
+
+    def test_root_dir_entry_is_skipped_harmlessly(self, tmp_path: Path) -> None:
+        """Passing a curated members list that includes a dir entry → dir is
+        skipped, only files are counted in the returned list."""
+        data = b"clip bytes"
+        tarball_bytes = _make_tarball_with_dirs(
+            dir_names=["clips"],
+            file_members=[("clips/p01-clean.wav", data)],
+        )
+        tarball_path = tmp_path / "withdir.tar.gz"
+        tarball_path.write_bytes(tarball_bytes)
+
+        dest = tmp_path / "withdir_out"
+        dest.mkdir()
+
+        with tarfile.open(tarball_path, "r:gz") as tar:
+            # Pass ALL members (including the "clips" dir entry) explicitly.
+            extracted = safe_extract(tar, dest, tar.getmembers())
+
+        assert len(extracted) == 1
+        assert (dest / "clips" / "p01-clean.wav").read_bytes() == data
 
 
 # ---------------------------------------------------------------------------

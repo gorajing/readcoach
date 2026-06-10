@@ -75,11 +75,22 @@ def sha256_bytes(data: bytes) -> str:
 # Safe extraction helper (importable for unit tests)
 # ---------------------------------------------------------------------------
 
-def safe_extract(tar: tarfile.TarFile, dest: Path) -> list[Path]:
-    """Extract *tar* into *dest*, rejecting any member whose resolved path
-    escapes *dest*.
+def safe_extract(
+    tar: tarfile.TarFile,
+    dest: Path,
+    members: list[tarfile.TarInfo] | None = None,
+) -> list[Path]:
+    """Extract *members* from *tar* into *dest*, rejecting any member whose
+    resolved path escapes *dest*.
 
-    Returns the list of extracted absolute paths.
+    If *members* is ``None``, all members of *tar* are extracted (original
+    behaviour).  Pass an explicit list to extract only a curated subset (e.g.
+    after remapping names to strip a root prefix).
+
+    Directory entries are skipped — ``tarfile.extract`` creates parent
+    directories as needed, so explicit dir entries are never required.
+
+    Returns the list of extracted absolute file paths.
 
     Raises ``ValueError`` for any member that would escape the destination.
     This guards against tarbombs and directory-traversal payloads.
@@ -87,7 +98,13 @@ def safe_extract(tar: tarfile.TarFile, dest: Path) -> list[Path]:
     dest_resolved = dest.resolve()
     extracted: list[Path] = []
 
-    for member in tar.getmembers():
+    iter_members = members if members is not None else tar.getmembers()
+
+    for member in iter_members:
+        # Skip directory entries — parent dirs are created automatically.
+        if member.isdir():
+            continue
+
         # Compute what the resolved path would be.
         # Strip leading '/' or '..' components before joining.
         member_path = (dest / member.name).resolve()
@@ -292,7 +309,7 @@ def fetch(dest: Path = DEFAULT_DEST, force: bool = False) -> None:
                 member.name = remapped
                 members_to_extract.append(member)
 
-            safe_extract(tar, dest)
+            safe_extract(tar, dest, members_to_extract)
 
     # ------------------------------------------------------------------
     # Verify every extracted artifact against the lock.
