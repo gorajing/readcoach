@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "seed": 4101,
+    "policy_version": "1.0.0",
+    "n_items": 88,
+    "n_actions": 216,
+    "model": "decoding-class (sub/omit) miscues escalate consecutive_struggles with P=P_ESCALATE_BASE*(1-mastery); self-correction/hesitation/insertion never escalate; page-end carries a band-scaled comprehension-opportunity rate. See module docstring.",
+    "p_escalate_base": 0.9,
+    "p_reach_model": 0.35,
+    "wait_band": [
+      0.35,
+      0.5
+    ],
+    "git_commit": "73b71d4a066fa2854d259ddaab9a4be755f60e1b",
+    "date": "2026-06-10"
+  },
+  "wait_rate": 0.4351851851851852,
+  "move_distribution": {
+    "COMPREHENSION_PROMPT": 24,
+    "ENCOURAGE": 6,
+    "MODEL_THE_WORD": 13,
+    "NEXT_ITEM": 58,
+    "SCAFFOLDED_HINT": 21,
+    "WAIT": 94
+  },
+  "rule_distribution": {
+    "R-MID-MODEL": 13,
+    "R-MID-SCAFFOLD": 21,
+    "R-MID-SELF-CORRECTION": 24,
+    "R-MID-WAIT": 70,
+    "R-PE-COMPREHENSION": 24,
+    "R-PE-ENCOURAGE": 6,
+    "R-PE-NEXT-ITEM": 58
+  },
+  "hint_level_distribution": {
+    "bounce": 21
+  }
+}
