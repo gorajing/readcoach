@@ -17,14 +17,21 @@ the violation count; the run exits non-zero if ANY invariant is violated (the
 hand-scripted profiles are designed to be clean, so a non-zero count is a real
 regression in the policy/verbalizer, not in the script).
 
-Cannot run yet — verbalization needs a live ANTHROPIC_API_KEY.  ``main()`` builds
-the real ``TutorVerbalizer`` and FAILS LOUD at startup if the key is absent.  The
-machinery is covered end-to-end by ``tests/test_generate_turns.py`` with a stubbed
-verbalizer; this file is ready to run the moment a key lands.
+Transports
+----------
+``--transport api`` (default)
+    Uses ``TutorVerbalizer`` with the Anthropic SDK (forced tool-use).  Requires
+    ``ANTHROPIC_API_KEY``.  FAILS LOUD at startup if the key is absent.
 
-Usage (when a key exists)
--------------------------
-    uv run python scripts/generate_turns.py [--out-dir evals/results] [--prompt-version 1.0]
+``--transport claude-cli``
+    Uses ``ClaudeCliTransport`` (strict-JSON prompt via ``claude -p``).  No API
+    key required — uses the subscription CLI binary.  The model is pinned to
+    ``claude-sonnet-4-6``; transport/model metadata is stamped on every turn record.
+
+Usage
+-----
+    uv run python scripts/generate_turns.py --transport claude-cli
+    uv run python scripts/generate_turns.py --transport api [--out-dir evals/results] [--prompt-version 1.0]
 """
 from __future__ import annotations
 
@@ -37,7 +44,7 @@ from pathlib import Path
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
-from readcoach.llm_client import TutorVerbalizer  # noqa: E402
+from readcoach.llm_client import ClaudeCliTransport, TutorVerbalizer, cli_transport  # noqa: E402
 from readcoach.miscue import Miscue  # noqa: E402
 from readcoach.learner_model import LearnerState  # noqa: E402
 from readcoach.policy_compiler import audit, compile_rules, load_policies  # noqa: E402
@@ -226,11 +233,21 @@ def _turn_for_step(
     )
 
 
-def run(*, verbalizer, out_dir, prompt_version: str = "1.0") -> dict:  # noqa: ANN001
+def run(
+    *,
+    verbalizer,  # noqa: ANN001
+    out_dir,  # noqa: ANN001
+    prompt_version: str = "1.0",
+    transport_meta: dict | None = None,
+) -> dict:
     """Generate turns for all profiles; write jsonl + traces; audit; return summary.
 
     Returns ``{"violations": int, "n_turns": int, "traces": [paths]}``.  Pure of
     any live transport — ``verbalizer`` is injected.
+
+    ``transport_meta`` (optional) is stamped into every JSONL turn record for
+    provenance.  Pass ``verbalizer.transport_meta`` when using
+    ``ClaudeCliTransport``; omit for the SDK transport.
     """
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -242,6 +259,7 @@ def run(*, verbalizer, out_dir, prompt_version: str = "1.0") -> dict:  # noqa: A
     trace_paths: list[Path] = []
     total_violations = 0
     n_turns = 0
+    meta = transport_meta or {}
 
     for profile in profiles:
         records: list[TurnRecord] = []
@@ -254,10 +272,13 @@ def run(*, verbalizer, out_dir, prompt_version: str = "1.0") -> dict:  # noqa: A
                 prompt_version=prompt_version,
             )
             records.append(rec)
-            jsonl_lines.append(json.dumps(
-                {"profile": profile.name, **_record_to_dict(rec)},
-                sort_keys=True,
-            ))
+            turn_dict = {
+                "profile": profile.name,
+                "prompt_version": prompt_version,
+                **_record_to_dict(rec),
+                **meta,
+            }
+            jsonl_lines.append(json.dumps(turn_dict, sort_keys=True))
             n_turns += 1
 
         trace = SessionTrace(
@@ -301,25 +322,45 @@ def _record_to_dict(rec: TurnRecord) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# CLI — builds the REAL verbalizer (fails loud with no key) then runs.
+# CLI — builds the REAL verbalizer (fails loud with no key / binary) then runs.
 # ---------------------------------------------------------------------------
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Generate verbalized tutoring turns.")
     parser.add_argument("--out-dir", default=str(_DEFAULT_OUT))
     parser.add_argument("--prompt-version", default="1.0")
+    parser.add_argument(
+        "--transport",
+        choices=["api", "claude-cli"],
+        default="api",
+        help=(
+            "Transport to use for verbalization. "
+            "'api' uses the Anthropic SDK (requires ANTHROPIC_API_KEY). "
+            "'claude-cli' uses the subscription CLI binary (claude -p, no key needed)."
+        ),
+    )
     args = parser.parse_args(argv)
 
-    # Build the real verbalizer NOW so a missing key fails loud at startup, before
-    # any work — the default client factory raises a clear RuntimeError.
-    verbalizer = TutorVerbalizer()
-    # Force the no-key check up front (the factory is otherwise lazy).
-    verbalizer._client_or_build()  # noqa: SLF001 — deliberate eager fail-loud
+    transport_meta: dict | None = None
+
+    if args.transport == "claude-cli":
+        verbalizer = cli_transport()
+        transport_meta = ClaudeCliTransport.transport_meta
+        print(
+            f"transport: claude-cli (model={ClaudeCliTransport.transport_meta['model']})"
+        )
+    else:
+        # api mode — build the real TutorVerbalizer; FAIL LOUD if key is absent.
+        verbalizer = TutorVerbalizer()
+        # Force the no-key check up front (the factory is otherwise lazy).
+        verbalizer._client_or_build()  # noqa: SLF001 — deliberate eager fail-loud
+        print("transport: api (Anthropic SDK)")
 
     result = run(
         verbalizer=verbalizer,
         out_dir=args.out_dir,
         prompt_version=args.prompt_version,
+        transport_meta=transport_meta,
     )
 
     print(
