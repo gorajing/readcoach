@@ -37,9 +37,6 @@ dev = [
     "pytest-cov>=5.0",
     "ruff",
 ]
-fit = [
-    "pyBKT>=1.4,<1.4.2",
-]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
