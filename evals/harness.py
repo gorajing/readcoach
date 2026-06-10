@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import subprocess
 import tempfile
@@ -156,6 +157,20 @@ def evaluate(
 
     Atomic write via a temp file in the same directory then os.replace().
     """
+    # Validate version is a safe filename component — no path traversal.
+    if (
+        not version
+        or os.sep in version
+        or "/" in version
+        or "\\" in version
+        or version in (".", "..")
+        or Path(version).name != version
+    ):
+        raise ValueError(
+            f"version {version!r} is not a valid filename component. "
+            f"It must be non-empty, contain no path separators or traversal sequences."
+        )
+
     results_path = Path(results_dir)
     results_path.mkdir(parents=True, exist_ok=True)
 
@@ -222,10 +237,26 @@ def compare(
     0 — all gating rules pass
     1 — at least one gating regression / threshold breach (no invalids)
     2 — at least one invalid condition (missing path, non-numeric value,
-        None value under a needed rule, bogus direction) — OVERRIDES 1.
+        None value under a needed rule, bogus direction, non-finite value,
+        bool value) — OVERRIDES 1.
 
     report_only rules accumulate into ``report_only_breaches`` but never
     affect exit_code or passed.
+
+    Design notes
+    ------------
+    * An empty ``rules`` list is a vacuous pass (exit 0, passed=True) by design.
+      The caller is responsible for ensuring the rules list is non-empty when a
+      meaningful gate is required.
+    * Comparisons are EXACT — there is no float tolerance.  A 1e-15 regression
+      will gate.  Note that ``-0.0 == 0.0`` per IEEE 754, so negative zero does
+      not trigger a breach.
+    * ``bool`` values in a metrics path are a schema error (``True`` silently
+      becomes 1 in Python arithmetic, ``False`` becomes 0, masking bugs).  They
+      are therefore INVALID rather than numeric.
+    * ``NaN`` under any comparison rule yields ``False`` for every comparison
+      (``NaN < x``, ``NaN > x``, ``NaN == x`` are all False), which would
+      silently pass every rule.  NaN and ±Inf are therefore INVALID (exit 2).
     """
     invalids: list[str] = []
     regressions: list[str] = []
@@ -254,10 +285,24 @@ def compare(
             )
             continue
 
+        if isinstance(new_val, bool):
+            invalids.append(
+                f"INVALID: metric '{rule.metric}' in new report is bool ({new_val!r}) — "
+                f"bool in a metrics path is a schema error, not a number"
+            )
+            continue
+
         if not isinstance(new_val, (int, float)):
             invalids.append(
                 f"INVALID: metric '{rule.metric}' in new report is non-numeric "
                 f"({type(new_val).__name__})"
+            )
+            continue
+
+        if math.isnan(new_val) or math.isinf(new_val):
+            invalids.append(
+                f"INVALID: metric '{rule.metric}' in new report is non-finite "
+                f"({new_val!r})"
             )
             continue
 
@@ -280,10 +325,24 @@ def compare(
                 )
                 continue
 
+            if isinstance(prev_val, bool):
+                invalids.append(
+                    f"INVALID: metric '{rule.metric}' in prev report is bool ({prev_val!r}) — "
+                    f"bool in a metrics path is a schema error, not a number"
+                )
+                continue
+
             if not isinstance(prev_val, (int, float)):
                 invalids.append(
                     f"INVALID: metric '{rule.metric}' in prev report is non-numeric "
                     f"({type(prev_val).__name__})"
+                )
+                continue
+
+            if math.isnan(prev_val) or math.isinf(prev_val):
+                invalids.append(
+                    f"INVALID: metric '{rule.metric}' in prev report is non-finite "
+                    f"({prev_val!r})"
                 )
                 continue
 
@@ -333,12 +392,19 @@ def promote_failure(trace: dict, golden_path: str) -> str:
     Contract
     --------
     * ``trace`` must contain a stable ``trace_id``; raises KeyError if absent.
-    * Idempotent: if a line with the same trace_id already exists, do NOT
-      append again; return the trace_id either way.
+    * Idempotent (first-write-wins): if a line with the same trace_id already
+      exists, do NOT append again; return the trace_id either way.
+      Re-promoting the same trace_id with a different payload is a no-op —
+      the existing payload is kept unchanged.
     * Atomic: uses a temp-file + os.replace so a crash cannot leave a
       half-written line.  The approach: read all existing lines, check for
       the id, then write the full file (all old lines + new line) to a temp
       file in the same directory and atomically replace the original.
+    * Fail-loud on corruption: any existing line that is not valid JSON, or
+      that is a JSON object without a ``trace_id`` key, raises ValueError
+      naming the line number.  A corrupted golden must be fixed before
+      further promotions proceed — silently skipping corrupt lines would
+      hide data integrity problems.
 
     Returns
     -------
@@ -358,12 +424,24 @@ def promote_failure(trace: dict, golden_path: str) -> str:
             if raw:
                 existing_lines.append(raw)
 
-    # Check idempotency.
-    for raw in existing_lines:
+    # Validate every existing line — malformed golden must abort, not be papered over.
+    for line_idx, raw in enumerate(existing_lines, start=1):
         try:
             obj = json.loads(raw)
-        except json.JSONDecodeError:
-            continue
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"Corrupted golden file '{golden_path}': line {line_idx} is not valid JSON "
+                f"({exc}). Fix the file before promoting further traces."
+            ) from exc
+        if "trace_id" not in obj:
+            raise ValueError(
+                f"Corrupted golden file '{golden_path}': line {line_idx} has no 'trace_id' key. "
+                f"Fix the file before promoting further traces."
+            )
+
+    # Check idempotency.
+    for raw in existing_lines:
+        obj = json.loads(raw)  # already validated above
         if obj.get("trace_id") == trace_id:
             return trace_id
 
