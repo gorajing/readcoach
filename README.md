@@ -1,5 +1,7 @@
 # ReadCoach
 
+![CI](https://github.com/gorajing/readcoach/actions/workflows/ci.yml/badge.svg)
+
 **An eval-first agent harness for an AI reading tutor.**
 
 ReadCoach listens to a child read a passage aloud, detects *miscues* (the reading
