@@ -43,3 +43,7 @@ testpaths = ["tests"]
 # Add the project root so that the top-level `evals` package is importable
 # alongside the installed `readcoach` package (pytest 7+ pythonpath feature).
 pythonpath = ["."]
+markers = [
+    "network: hits the public internet (deselected by default)",
+]
+addopts = "-m 'not network'"
