@@ -52,25 +52,73 @@ Output JSON (--out, default evals/results/miscue-v0.json)
 
 Flags
 -----
---bias      subset of {none, prompt, strong}; may repeat; default all three
---limit N   process only the first N items (for smoke tests)
---out PATH  output JSON path (default: evals/results/miscue-v0.json)
---backend   ASR backend string (default: faster-whisper-small)
+--bias          subset of {none, prompt, strong}; may repeat; default all three
+--limit N       process only the first N items (for smoke tests)
+--out PATH      output JSON path (default: evals/results/miscue-v0.json)
+--backend       ASR backend string (default: faster-whisper-small)
+--fixtures      CI-hermetic mode: cache_only=True, WEAVE_DISABLED=1, passes
+                report through evaluate() into evals/results/<version>.json;
+                requires --version; aborts loudly on any CacheMiss.
+--version VER   version string for the EvalReport (required with --fixtures).
+--results-dir   results directory override for --fixtures mode
+                (default: evals/results).
+
+--fixtures mode output structure
+----------------------------------
+The metrics dict passed to evaluate() is shaped for gate.py:
+  {
+    "miscue": {
+      "substitution": {precision, recall, f1},
+      "omission": ..., "insertion": ..., "self_correction": ...,
+      "hesitation": ...,
+      "fp_per_100_correct_words": float
+    },
+    "by_bias": {
+      "none":   <same per-class structure>,
+      "prompt": ...,
+      "strong": ...,
+    },
+    "invariants": {
+      "violations": 0   # reserved; no tutor invariant checks exist yet
+    },
+    "latency": {
+      "decision_ms_p50": null,
+      "decision_ms_p95": null,
+      "rtf_offline_proxy": null
+    }
+  }
+
+The "miscue" block at top level uses the bias=none results (the raw-acoustic
+measurements that gate rules operate on).  All three biases are nested under
+"by_bias" for reference.
 
 Fail-loud contract
 ------------------
 Any missing clip, transcription error, or detect() error aborts the run with
 a non-zero exit code.  There is NO per-item try/except.  This makes failures
 visible immediately rather than silently skewing aggregate numbers.
+In --fixtures mode, a CacheMiss aborts with exit code 1 — it means the
+committed asr_cache is incomplete, which must be fixed, not papered over.
 """
 from __future__ import annotations
 
 import argparse
 import datetime
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Ensure the project root is on sys.path so that `evals` is importable when
+# this script is invoked directly (e.g. `uv run python scripts/run_benchmark.py`).
+# pytest adds the project root via pyproject.toml pythonpath=["."], but direct
+# invocation does not.
+# ---------------------------------------------------------------------------
+_SCRIPT_PROJECT_ROOT = Path(__file__).parent.parent
+if str(_SCRIPT_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_PROJECT_ROOT))
 
 # ---------------------------------------------------------------------------
 # Project root — all paths are absolute
@@ -80,6 +128,7 @@ _PROJECT_ROOT = Path(__file__).parent.parent
 _GOLD_JSONL = _PROJECT_ROOT / "data" / "benchmark" / "gold.jsonl"
 _LOCK_FILE = _PROJECT_ROOT / "evals" / "golden" / "benchmark.lock"
 _DEFAULT_OUT = _PROJECT_ROOT / "evals" / "results" / "miscue-v0.json"
+_DEFAULT_RESULTS_DIR = _PROJECT_ROOT / "evals" / "results"
 _ALL_BIASES = ("none", "prompt", "strong")
 
 
@@ -249,7 +298,40 @@ def main(argv: list[str] | None = None) -> None:
         default="faster-whisper-small",
         help="ASR backend identifier (default: faster-whisper-small).",
     )
+    parser.add_argument(
+        "--fixtures",
+        action="store_true",
+        default=False,
+        help=(
+            "CI-hermetic mode: cache_only=True, WEAVE_DISABLED=1. "
+            "Runs the full 88×3 sweep purely from committed asr_cache; aborts "
+            "loudly on any CacheMiss.  Passes report through evaluate() so it "
+            "lands as an immutable evals/results/<version>.json.  Requires --version."
+        ),
+    )
+    parser.add_argument(
+        "--version",
+        default=None,
+        help="Version string for the EvalReport (required with --fixtures).",
+    )
+    parser.add_argument(
+        "--results-dir",
+        type=Path,
+        default=_DEFAULT_RESULTS_DIR,
+        help=f"Results directory for --fixtures mode (default: {_DEFAULT_RESULTS_DIR}).",
+    )
     args = parser.parse_args(argv)
+
+    # --fixtures validation
+    if args.fixtures:
+        if not args.version:
+            print(
+                "ERROR: --fixtures requires --version (e.g. --version v0)",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        # Set WEAVE_DISABLED before any tracing import has an effect.
+        os.environ["WEAVE_DISABLED"] = "1"
 
     biases: tuple[str, ...] = tuple(args.biases) if args.biases else _ALL_BIASES
 
@@ -292,12 +374,23 @@ def main(argv: list[str] | None = None) -> None:
             # bakes the params, so this is also how the cache is keyed correctly.
             asr_target = None if bias == "none" else target_text
 
-            asr_result = transcribe(
-                clip_path,
-                target_text=asr_target,
-                bias=bias,
-                backend=args.backend,
-            )
+            from readcoach.asr import CacheMiss  # noqa: PLC0415
+
+            try:
+                asr_result = transcribe(
+                    clip_path,
+                    target_text=asr_target,
+                    bias=bias,
+                    backend=args.backend,
+                    cache_only=args.fixtures,  # --fixtures: never load model
+                )
+            except CacheMiss as exc:
+                print(
+                    f"\nFATAL: CacheMiss in --fixtures mode — committed cache is "
+                    f"incomplete!\n  utt_id={utt_id!r}  bias={bias!r}\n  {exc}",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
 
             # detect() always gets target_text (the alignment reference is
             # independent of the ASR bias setting).
@@ -306,8 +399,84 @@ def main(argv: list[str] | None = None) -> None:
             counts = match_counts(predicted, gold_miscues, n_target_words)
             _add_counts(accum[bias], counts)
 
-    # --- Finalize and write output ---
-    out_path: Path = args.out
+    # --- Finalize per-bias results ---
+    finalized: dict[str, dict] = {bias: _finalize(accum[bias]) for bias in biases}
+
+    if args.fixtures:
+        # --fixtures mode: pass through evaluate() so the report is immutable
+        # and versioned.  The metrics dict is structured for gate.py:
+        #   - "miscue" (top level) = bias=none metrics (gate rules operate here)
+        #   - "by_bias" = all three biases for reference
+        #   - "invariants.violations" = 0 (reserved; no tutor checks exist yet)
+        #   - "latency" = injected by evaluate() with None values
+        if "none" not in finalized:
+            print(
+                "ERROR: --fixtures requires bias=none to be in the run "
+                "(gate rules operate on bias=none metrics).  "
+                "Do not use --bias with --fixtures.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        none_result = finalized["none"]
+        metrics: dict = {
+            "miscue": {
+                "substitution": {
+                    "precision": none_result["substitution"]["precision"],
+                    "recall": none_result["substitution"]["recall"],
+                    "f1": none_result["substitution"]["f1"],
+                },
+                "omission": {
+                    "precision": none_result["omission"]["precision"],
+                    "recall": none_result["omission"]["recall"],
+                    "f1": none_result["omission"]["f1"],
+                },
+                "insertion": {
+                    "precision": none_result["insertion"]["precision"],
+                    "recall": none_result["insertion"]["recall"],
+                    "f1": none_result["insertion"]["f1"],
+                },
+                "self_correction": {
+                    "precision": none_result["self_correction"]["precision"],
+                    "recall": none_result["self_correction"]["recall"],
+                    "f1": none_result["self_correction"]["f1"],
+                },
+                "hesitation": {
+                    "precision": none_result["hesitation"]["precision"],
+                    "recall": none_result["hesitation"]["recall"],
+                    "f1": none_result["hesitation"]["f1"],
+                },
+                "fp_per_100_correct_words": none_result["fp_per_100_correct_words"],
+            },
+            "by_bias": finalized,
+            "invariants": {
+                # violations=0: no tutor invariant checks exist yet; metric path
+                # is reserved and gated from day one so CI enforces it immediately
+                # once real checks are added.
+                "violations": 0,
+            },
+            # latency block: evaluate() will inject it (see harness._inject_latency_block).
+            # Values remain None until the replay machinery exists (T3+).
+        }
+
+        from evals.harness import evaluate  # noqa: PLC0415
+
+        report = evaluate(
+            version=args.version,
+            golden_path=str(_LOCK_FILE),
+            metrics=metrics,
+            results_dir=str(args.results_dir),
+        )
+        out_path = args.results_dir / f"{args.version}.json"
+        print(
+            f"\n--fixtures run complete.  Report: {out_path}  "
+            f"(weave: {report.metadata.get('weave', 'unknown')})",
+            file=sys.stderr,
+        )
+        return
+
+    # --- Legacy / direct mode: write flat JSON to --out ---
+    out_path = args.out
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     output = {
@@ -321,7 +490,7 @@ def main(argv: list[str] | None = None) -> None:
             "biases_run": list(biases),
             "aggregation": "micro",
         },
-        "results": {bias: _finalize(accum[bias]) for bias in biases},
+        "results": finalized,
     }
 
     out_path.write_text(json.dumps(output, indent=2, ensure_ascii=False), encoding="utf-8")

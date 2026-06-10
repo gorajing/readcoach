@@ -476,6 +476,19 @@ def promote_failure(trace: dict, golden_path: str) -> str:
 # ---------------------------------------------------------------------------
 
 
+def load_report(path: str | Path) -> EvalReport:
+    """Load an EvalReport from a JSON file written by :func:`evaluate`.
+
+    Does NOT require the file to have been written through evaluate() — any
+    JSON object with ``version``, ``metrics``, and ``metadata`` keys is valid.
+    Raises FileNotFoundError if the path does not exist.
+    Raises KeyError / json.JSONDecodeError on malformed files.
+    """
+    p = Path(path)
+    data = json.loads(p.read_text(encoding="utf-8"))
+    return _dict_to_report(data)
+
+
 def validate_judge(hand_labeled_turns: list[dict]) -> dict[str, float]:
     """Report judge-vs-human agreement PER DIMENSION. A judge you haven't measured is
     theater (BEA 2025: judge F1 0.82 vs human 0.91, dimension-dependent)."""

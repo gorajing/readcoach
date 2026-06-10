@@ -16,3 +16,15 @@ jobs:
       - run: uv python install 3.12
       - run: uv sync
       - run: uv run pytest -q
+      - name: Benchmark fixtures sweep (cache-only, no model)
+        run: |
+          mkdir -p /tmp/ci-results
+          uv run python scripts/run_benchmark.py \
+            --fixtures \
+            --version ci-${{ github.sha }} \
+            --results-dir /tmp/ci-results
+      - name: Gate — compare against committed baseline
+        run: |
+          uv run python scripts/gate.py \
+            evals/results/v0.json \
+            /tmp/ci-results/ci-${{ github.sha }}.json
