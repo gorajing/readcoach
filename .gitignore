@@ -25,5 +25,10 @@ dist/
 # OS
 .DS_Store
 
+# Blind-verify session artifacts (queue, ratings, report are per-session; not committed)
+evals/results/blind_verify_queue.json
+evals/results/blind_verify_ratings.csv
+evals/results/blind_verify_report.json
+
 # committed test fixtures are re-included
 !tests/fixtures/**
