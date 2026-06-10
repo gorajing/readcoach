@@ -31,6 +31,23 @@ uv run pytest
 - `data/` — benchmark protocol and passages (see `data/README.md`)
 - `docs/ARCHITECTURE.md` — component responsibilities and interfaces
 
+## Judge validation
+
+The LLM judge (GPT-family via codex CLI) is validated against human labels before
+its verdicts are trusted to gate builds. Protocol: n=60 human-labeled turns across
+3 dimensions (guidance, actionability, icap) — below the 100+ community norm; the
+CIs reflect it. Each turn is labeled by a human rater using the same 1–5 rubric
+anchors in `docs/labeling_rubric.md`, producing a binary passing verdict per
+(turn, dimension) pair.
+
+Agreement is reported as Cohen's kappa per dimension (Landis & Koch 1977). Floor:
+**κ ≥ 0.4** (moderate agreement). Both κ ≥ 0.4 AND n ≥ 30 must hold for a dimension
+to be gate-eligible. Dimensions below floor are **excluded from gating and reported
+as untrusted** — this is a finding, not a failure.
+
+Numbers land when the labeling session runs:
+`uv run python scripts/validate_judge.py --labels evals/human_labels.csv --verdicts evals/results/judged_turns.jsonl`
+
 ## License
 
 MIT
