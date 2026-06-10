@@ -576,6 +576,66 @@ def _validate_score_inputs(
                 )
 
 
+def match_counts(
+    predicted: list[Miscue],
+    gold: list[Miscue],
+    n_target_words: int,
+) -> dict[str, dict[str, int]]:
+    """Per-class TP/FP/FN counts (+/-1 index tolerance) plus correct-word count.
+
+    A predicted miscue matches a gold miscue iff same class AND
+    ``|index_pred - index_gold| <= 1``.  Matching is greedy one-to-one within
+    each class: sorted by index, matched by smallest index distance first (ties
+    broken by lower pred index then lower gold index), so neither side is
+    double-counted.
+
+    Returns a dict with one key per miscue class (``_ALL_CLASSES``) plus
+    ``"_correct_words"``:
+
+    .. code-block:: python
+
+        {
+            "substitution":   {"tp": int, "fp": int, "fn": int},
+            "omission":       {"tp": int, "fp": int, "fn": int},
+            "insertion":      {"tp": int, "fp": int, "fn": int},
+            "self_correction":{"tp": int, "fp": int, "fn": int},
+            "hesitation":     {"tp": int, "fp": int, "fn": int},
+            "_correct_words": int,    # target words with no gold miscue at their index
+        }
+
+    ``_correct_words`` is the denominator for ``fp_per_100_correct_words`` at
+    corpus level (sum across items, then divide).  It is exposed here so the
+    benchmark runner can micro-aggregate without re-computing it.
+
+    Raises ``ValueError`` on the same conditions as :func:`score`.
+    """
+    _validate_score_inputs(predicted, gold, n_target_words)
+
+    out: dict[str, dict[str, int]] = {}
+
+    for cls in _ALL_CLASSES:
+        g = sorted([m for m in gold if m.type == cls], key=lambda m: m.index)
+        p = sorted([m for m in predicted if m.type == cls], key=lambda m: m.index)
+        n_gold, n_pred = len(g), len(p)
+
+        tp = _greedy_match_count(
+            [m.index for m in p],
+            [m.index for m in g],
+            tolerance=1,
+        )
+        fp = n_pred - tp
+        fn = n_gold - tp
+
+        out[cls] = {"tp": tp, "fp": fp, "fn": fn}
+
+    # Correctly-read words = target words with no gold miscue at their index.
+    gold_indices = {m.index for m in gold}
+    correct_words = sum(1 for idx in range(n_target_words) if idx not in gold_indices)
+    out["_correct_words"] = correct_words  # type: ignore[assignment]
+
+    return out  # type: ignore[return-value]
+
+
 def score(
     predicted: list[Miscue],
     gold: list[Miscue],
@@ -601,23 +661,20 @@ def score(
     or if ``n_target_words <= 0``.  The upper bound is inclusive because
     ``detect()`` legitimately emits index == n_target_words for trailing insertions
     and trailing filler hesitations (end-of-passage position).
+
+    Implemented via :func:`match_counts` — the two functions share the same
+    matching logic with no duplication.
     """
-    _validate_score_inputs(predicted, gold, n_target_words)
+    counts = match_counts(predicted, gold, n_target_words)
 
     result: dict = {}
     total_fp = 0
 
     for cls in _ALL_CLASSES:
-        g = sorted([m for m in gold if m.type == cls], key=lambda m: m.index)
-        p = sorted([m for m in predicted if m.type == cls], key=lambda m: m.index)
-        n_gold, n_pred = len(g), len(p)
-
-        tp = _greedy_match_count(
-            [m.index for m in p],
-            [m.index for m in g],
-            tolerance=1,
-        )
-        fp = n_pred - tp
+        c = counts[cls]
+        tp, fp, fn = c["tp"], c["fp"], c["fn"]
+        n_pred = tp + fp
+        n_gold = tp + fn
         total_fp += fp
 
         if n_gold == 0 and n_pred == 0:
@@ -638,9 +695,7 @@ def score(
             "n_pred": n_pred,
         }
 
-    # Correctly-read words = target words with no gold miscue at their index.
-    gold_indices = {m.index for m in gold}
-    correct_words = sum(1 for idx in range(n_target_words) if idx not in gold_indices)
+    correct_words = counts["_correct_words"]
     if correct_words > 0:
         fp_per_100 = total_fp / correct_words * 100
     else:
