@@ -573,3 +573,154 @@ class TestTwoSessionContinuity:
         s2.close()
 
         assert any(e["skill"] == "cvc_short_a" for e in log)
+
+
+# ---------------------------------------------------------------------------
+# P8 — Class gate bites INDEPENDENTLY of mastery gate
+# ---------------------------------------------------------------------------
+
+
+class TestClassGateBitesIndependentlyOfMastery:
+    """The novel mechanism: a prerequisite edge's CLASS gate can block
+    progression even when mastery is above the mastery_min threshold.
+
+    Protocol:
+      1. Drive skill_root to mastery >= 0.90 (enough correct obs).
+      2. Inject ONE substitution-tagged incorrect observation.
+      3. Guard assertion: mastery STILL >= 0.80 (MASTERY_THRESHOLD).
+         If this fails it means BKT params changed and the mastery gate
+         is now doing the blocking — the test must fail loudly rather than
+         silently pass while testing the wrong thing.
+      4. Assert that skill_dep is LOCKED (class gate fired independently).
+      5. Push 5 untagged/clean correct observations through skill_root
+         (flushing the k=5 window).
+      6. Assert skill_dep is UNLOCKED and mastery is unchanged-or-higher.
+    """
+
+    def _simple_curriculum(self, tmp_path):  # -> Curriculum
+        yml = tmp_path / "class_gate.yaml"
+        yml.write_text(
+            textwrap.dedent("""
+            nodes:
+              - id: skill_root
+                band: 1
+                label: "Root"
+                description: "root node"
+                prerequisites: []
+              - id: skill_dep
+                band: 2
+                label: "Dep"
+                description: "dependent node"
+                prerequisites:
+                  - skill: skill_root
+                    mastery_min: 0.80
+                    classes: [substitution]
+            """)
+        )
+        return load_curriculum(yml)
+
+    @pytest.mark.parametrize(
+        "store_factory",
+        [
+            pytest.param(lambda tp: InMemoryLearnerStore(), id="inmemory"),
+            pytest.param(
+                lambda tp: SqliteLearnerStore(str(tp / "cg.db")), id="sqlite"
+            ),
+        ],
+    )
+    def test_class_gate_bites_independently_of_mastery(
+        self, tmp_path, store_factory
+    ):
+        """Class gate blocks skill_dep even when mastery is above MASTERY_THRESHOLD."""
+        from datetime import timedelta
+
+        c = self._simple_curriculum(tmp_path)
+        store = store_factory(tmp_path)
+        child = "child_cg"
+
+        # Step 1: drive skill_root to mastery >= 0.98 with correct observations.
+        # BKT with default params (L0=0.3, s=0.1, g=0.3, t=0.1) reaches ~0.98
+        # after 4 correct obs from cold start.  We target 0.98 so that ONE
+        # failure only drops mastery to ~0.90 (still >= MASTERY_THRESHOLD=0.80),
+        # ensuring the class gate — not the mastery gate — is the active blocker.
+        _mastery_to(store, child, "skill_root", 0.98)
+        m_before_fail = store.get_state(child).mastery.get("skill_root", 0.0)
+        assert m_before_fail >= 0.98, (
+            f"Test setup: expected mastery >= 0.98, got {m_before_fail:.4f}"
+        )
+
+        # Step 2: inject ONE substitution-tagged incorrect observation.
+        fail_ts = _NOW + timedelta(hours=1)
+        store.record_observation(
+            child_id=child,
+            skill="skill_root",
+            correct=False,
+            confidence=1.0,
+            session_id="test",
+            ts=fail_ts,
+            miscue_class="substitution",
+        )
+
+        # Step 3 (guard assertion): mastery must STILL be >= MASTERY_THRESHOLD.
+        # If BKT params change such that a single failure from >= 0.90 pushes
+        # mastery below 0.80, this assertion will fail loudly, alerting the
+        # developer that the mastery gate is now the active blocker, not the
+        # class gate.  Fix: either adjust the starting mastery target or
+        # update DEFAULT_BKT_PARAMS documentation.
+        m_after_fail = store.get_state(child).mastery.get("skill_root", 0.0)
+        assert m_after_fail >= MASTERY_THRESHOLD, (
+            f"GUARD FAILED: mastery dropped to {m_after_fail:.4f} after one failure "
+            f"from {m_before_fail:.4f} — the MASTERY gate is now the active blocker, "
+            f"not the CLASS gate.  Drive skill_root to a higher mastery before "
+            f"injecting the failure (try >= 0.98; one failure from 0.98 → ~0.90 "
+            f"with default BKT params)."
+        )
+
+        # Verify the substitution is in the last-5 window.
+        recent = store.get_last_k_observations(child, "skill_root", k=5)
+        sub_in_window = any(
+            not o["correct"] and o["miscue_class"] == "substitution"
+            for o in recent
+        )
+        assert sub_in_window, "Test setup: substitution obs not found in last-5 window"
+
+        # Step 4: assert skill_dep is LOCKED — class gate fires independently.
+        unlocked_ids = unlocked(c, child, store)
+        assert "skill_dep" not in unlocked_ids, (
+            f"CLASS GATE FAILED: skill_dep is unlocked even though the last-5 "
+            f"window for skill_root contains a substitution error.  "
+            f"mastery={m_after_fail:.4f} (>= {MASTERY_THRESHOLD} so mastery gate "
+            f"passed), but the class gate should block."
+        )
+
+        # Step 5: flush with 5 clean (untagged) correct observations.
+        # After this the substitution falls outside the k=5 window.
+        flush_base = fail_ts + timedelta(hours=1)
+        for i in range(5):
+            store.record_observation(
+                child_id=child,
+                skill="skill_root",
+                correct=True,
+                confidence=1.0,
+                session_id="test",
+                ts=flush_base + timedelta(seconds=i),
+                miscue_class=None,  # untagged / generic
+            )
+
+        # Step 6: assert skill_dep UNLOCKS and mastery is unchanged-or-higher.
+        m_after_flush = store.get_state(child).mastery.get("skill_root", 0.0)
+        assert m_after_flush >= m_after_fail, (
+            f"Mastery decreased after clean observations: "
+            f"before={m_after_fail:.4f}, after={m_after_flush:.4f}"
+        )
+        unlocked_after_flush = unlocked(c, child, store)
+        assert "skill_dep" in unlocked_after_flush, (
+            f"skill_dep should be UNLOCKED after 5 clean observations flush the "
+            f"substitution out of the k=5 window.  "
+            f"mastery={m_after_flush:.4f}, last-5 after flush: "
+            f"{store.get_last_k_observations(child, 'skill_root', k=5)}"
+        )
+
+        # Cleanup (SQLite store)
+        if hasattr(store, "close"):
+            store.close()

@@ -6,10 +6,11 @@ so it runs in-process and cleans up automatically.
 Observable claims tested:
   (a) Mastery carried over from session 1 survives store close/reopen.
   (b) FSRS due-reviews are present in session 2 (at far-future cutoff).
-  (c) Planner in session 2 does NOT serve the gated successor when session 1
-      ended with unresolved substitution miscues on the prerequisite.
-  (d) A completed skill (mastery >= MASTERY_COMPLETED) is never served
-      with reason='new' in session 2.
+  (c) CLASS gate bites independently of the mastery gate: session 2 mastery
+      on cvc_short_a is >= 0.80 (mastery gate PASSES) AND cvc_short_i_u is
+      LOCKED (class gate fires because last-5 window contains a substitution).
+  (d) A completed skill (cvc_short_i_u, mastery >= MASTERY_COMPLETED from
+      session 1) is never served with reason='new' in session 2.
   (e) served_log persists across close/reopen.
 """
 from __future__ import annotations
@@ -17,11 +18,10 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-import pytest
-
 from readcoach.learner_store import SqliteLearnerStore
 from readcoach.planner import (
     MASTERY_COMPLETED,
+    MASTERY_THRESHOLD,
     load_curriculum,
     next_item,
     unlocked,
@@ -71,31 +71,40 @@ def _mastery_to(store, skill, target, session_id="s1"):
 
 
 # ---------------------------------------------------------------------------
-# Shared session-1 setup — writes cvc_short_a mastery + substitution failure
-# -----------------------------------------------------------------------
+# Shared session-1 setup (mirrors scripts/two_session_demo.py staging)
+# ---------------------------------------------------------------------------
 
 
 def _build_session1(db_path: str) -> dict:
-    """Run session 1 and return state snapshot for assertions in session 2."""
+    """Run session 1 and return a mastery snapshot for session-2 assertions.
+
+    Staging mirrors two_session_demo.py:
+      1. Drive cvc_short_a to >= 0.98 (one failure from there → ~0.90,
+         still >= MASTERY_THRESHOLD=0.80 so mastery gate passes in S2).
+      2. Complete cvc_short_i_u (mastery >= MASTERY_COMPLETED=0.95) while
+         cvc_short_a is still clean — makes claim (d) non-vacuous.
+      3. Inject ONE substitution-tagged failure on cvc_short_a at the END of
+         the session so it sits in the k=5 window when session 2 opens.
+    """
     s1 = SqliteLearnerStore(db_path)
 
-    # Build mastery on cvc_short_a
-    _mastery_to(s1, "cvc_short_a", 0.85, session_id="s1")
+    # Step 1: build cvc_short_a mastery to >= 0.98
+    _mastery_to(s1, "cvc_short_a", 0.98, session_id="s1")
 
-    # End session with substitution-tagged failures (these stay in k=5 window)
-    for i in range(2):
-        s1.record_observation(
-            child_id=_CHILD,
-            skill="cvc_short_a",
-            correct=False,
-            confidence=1.0,
-            session_id="s1",
-            ts=_BASE_TS + timedelta(minutes=10 + i),
-            miscue_class="substitution",
-        )
+    # Step 2: complete cvc_short_i_u while cvc_short_a is clean
+    _mastery_to(s1, "cvc_short_i_u", MASTERY_COMPLETED, session_id="s1")
+    s1.record_served(_CHILD, "cvc_short_i_u", _BASE_TS + timedelta(minutes=5), "new")
 
-    # Record a served entry for cvc_short_a
-    s1.record_served(_CHILD, "cvc_short_a", _BASE_TS, "new")
+    # Step 3: ONE substitution failure on cvc_short_a (stays in k=5 window)
+    s1.record_observation(
+        child_id=_CHILD,
+        skill="cvc_short_a",
+        correct=False,
+        confidence=1.0,
+        session_id="s1",
+        ts=_BASE_TS + timedelta(minutes=10),
+        miscue_class="substitution",
+    )
 
     snapshot = s1.get_state(_CHILD).mastery.copy()
     s1.close()
@@ -143,48 +152,68 @@ class TestDueReviewsInSession2:
 
 
 # ---------------------------------------------------------------------------
-# Claim (c) — substitution gate blocks gated successor in session 2
+# Claim (c) — CLASS gate blocks cvc_short_i_u INDEPENDENTLY of mastery gate
 # ---------------------------------------------------------------------------
 
 
-class TestSubstitutionGateBlocksSuccessor:
-    def test_gated_skill_not_in_unlocked(self, tmp_path):
-        """After session 1 ends with substitution errors on cvc_short_a,
-        session 2 does not have cvc_short_i_u in the unlocked set."""
+class TestClassGateBlocksSuccessorWithMasteryAboveThreshold:
+    """The novel mechanism tested here: in session 2, cvc_short_a mastery is
+    above MASTERY_THRESHOLD (mastery gate passes) AND cvc_short_i_u is still
+    LOCKED because the last-5 window contains a substitution error (class gate
+    fires independently).
+
+    The guard assertion ensures the test fails loudly if BKT params change
+    such that the mastery gate becomes the active blocker instead.
+    """
+
+    def test_mastery_above_threshold_AND_gated_skill_locked(self, tmp_path):
         db_path = str(tmp_path / "demo.db")
-        _build_session1(db_path)
+        snapshot = _build_session1(db_path)
 
         curriculum = load_curriculum(CURRICULUM_PATH)
         s2 = SqliteLearnerStore(db_path)
 
-        # Check that the last-5 observations still contain a substitution error
+        # Guard assertion: mastery on cvc_short_a must be >= MASTERY_THRESHOLD.
+        # If this fails, the test setup (staging in _build_session1) must be
+        # revised — the mastery gate is the active blocker, not the class gate.
+        m_a_s2 = snapshot.get("cvc_short_a", 0.0)
+        assert m_a_s2 >= MASTERY_THRESHOLD, (
+            f"GUARD FAILED: cvc_short_a mastery is {m_a_s2:.4f} < "
+            f"{MASTERY_THRESHOLD} (MASTERY_THRESHOLD).  The mastery gate would "
+            f"be the active blocker, not the class gate.  Update _build_session1 "
+            f"to drive cvc_short_a to >= 0.98 before injecting the failure."
+        )
+
+        # Verify the substitution error is in the last-5 window
         recent = s2.get_last_k_observations(_CHILD, "cvc_short_a", k=5)
         wrong_sub = [
             o for o in recent
             if not o["correct"] and o["miscue_class"] == "substitution"
         ]
+        assert wrong_sub, (
+            "Test setup: no substitution error in last-5 window for cvc_short_a. "
+            "Check _build_session1 staging."
+        )
 
-        if wrong_sub:
-            # Gate is active: successor must not be unlocked
-            unlocked_s2 = unlocked(curriculum, _CHILD, s2)
-            assert "cvc_short_i_u" not in unlocked_s2, (
-                "cvc_short_i_u should be gated by unresolved substitution miscues"
-            )
+        # Assert cvc_short_i_u is LOCKED (class gate fires)
+        unlocked_s2 = unlocked(curriculum, _CHILD, s2)
+        assert "cvc_short_i_u" not in unlocked_s2, (
+            f"cvc_short_i_u should be LOCKED by the class gate. "
+            f"mastery[cvc_short_a]={m_a_s2:.4f} >= {MASTERY_THRESHOLD} "
+            f"(mastery gate PASSES) but last-5 window has "
+            f"{len(wrong_sub)} substitution error(s) — class gate must fire."
+        )
 
-            # And next_item must not return cvc_short_i_u
-            served_log = s2.get_served_log(_CHILD)
-            pick = next_item(
-                curriculum, _CHILD, s2, served_log,
-                now=_BASE_TS + timedelta(days=1)
-            )
-            if pick is not None:
-                assert pick[0] != "cvc_short_i_u", (
-                    "Planner served gated successor cvc_short_i_u; "
-                    "substitution gate should block it"
-                )
-        else:
-            pytest.skip(
-                "Window no longer contains substitution error (mastery/window cleared)"
+        # next_item must not serve cvc_short_i_u
+        served_log = s2.get_served_log(_CHILD)
+        pick = next_item(
+            curriculum, _CHILD, s2, served_log,
+            now=_BASE_TS + timedelta(days=1)
+        )
+        if pick is not None:
+            assert pick[0] != "cvc_short_i_u", (
+                "Planner served gated successor cvc_short_i_u; "
+                "class gate should block it even though mastery gate passes"
             )
 
         s2.close()
@@ -198,17 +227,17 @@ class TestSubstitutionGateBlocksSuccessor:
 class TestCompletedSkillNeverReservedNew:
     def test_completed_in_s1_not_new_in_s2(self, tmp_path):
         db_path = str(tmp_path / "demo.db")
+        snapshot = _build_session1(db_path)
         curriculum = load_curriculum(CURRICULUM_PATH)
 
-        # Session 1: complete cvc_short_a
-        s1 = SqliteLearnerStore(db_path)
-        _mastery_to(s1, "cvc_short_a", MASTERY_COMPLETED, session_id="s1")
-        s1.record_served(_CHILD, "cvc_short_a", _BASE_TS, "new")
-        mastery_s1 = s1.get_state(_CHILD).mastery.get("cvc_short_a", 0.0)
-        assert mastery_s1 >= MASTERY_COMPLETED
-        s1.close()
+        # cvc_short_i_u was completed in session 1
+        m_iu = snapshot.get("cvc_short_i_u", 0.0)
+        assert m_iu >= MASTERY_COMPLETED, (
+            f"Test setup: cvc_short_i_u mastery={m_iu:.4f} < MASTERY_COMPLETED. "
+            f"Check _build_session1."
+        )
 
-        # Session 2: reopen, pick items, never re-serve cvc_short_a as 'new'
+        # Session 2: reopen, pick items, never re-serve cvc_short_i_u as 'new'
         s2 = SqliteLearnerStore(db_path)
         for step in range(6):
             sl = s2.get_served_log(_CHILD)
@@ -218,9 +247,9 @@ class TestCompletedSkillNeverReservedNew:
             )
             if pick is not None:
                 skill, reason = pick
-                if skill == "cvc_short_a":
+                if skill == "cvc_short_i_u":
                     assert reason == "review", (
-                        f"Completed skill cvc_short_a returned as 'new' in step {step}"
+                        f"Completed skill cvc_short_i_u returned as 'new' in step {step}"
                     )
         s2.close()
 
@@ -235,13 +264,13 @@ class TestServedLogPersists:
         db_path = str(tmp_path / "demo.db")
         _build_session1(db_path)
 
-        # _build_session1 records cvc_short_a as served
+        # _build_session1 records cvc_short_i_u as served in session 1
         s2 = SqliteLearnerStore(db_path)
         log = s2.get_served_log(_CHILD)
         s2.close()
 
-        assert any(e["skill"] == "cvc_short_a" for e in log), (
-            "served_log entry for cvc_short_a should persist across close/reopen"
+        assert any(e["skill"] == "cvc_short_i_u" for e in log), (
+            "served_log entry for cvc_short_i_u should persist across close/reopen"
         )
 
     def test_served_log_next_item_appends(self, tmp_path):
