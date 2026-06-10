@@ -1,0 +1,177 @@
+{
+  "metadata": {
+    "backend": "faster-whisper-small",
+    "benchmark_version": "0.1.0",
+    "gold_sha256": "6cbb3b36a6d79a7ef13c87149abffd225ee5ebe71d1e18ab0d0759f6eb61601e",
+    "git_commit": "732092cb4303a79cd0a2de174bd55d4139830eec",
+    "date": "2026-06-10",
+    "n_items": 88,
+    "biases_run": [
+      "none",
+      "prompt",
+      "strong"
+    ],
+    "aggregation": "micro"
+  },
+  "results": {
+    "none": {
+      "substitution": {
+        "tp": 16,
+        "fp": 220,
+        "fn": 8,
+        "precision": 0.06779661016949153,
+        "recall": 0.6666666666666666,
+        "f1": 0.12307692307692307,
+        "n_gold": 24,
+        "n_pred": 236
+      },
+      "omission": {
+        "tp": 22,
+        "fp": 17,
+        "fn": 2,
+        "precision": 0.5641025641025641,
+        "recall": 0.9166666666666666,
+        "f1": 0.6984126984126983,
+        "n_gold": 24,
+        "n_pred": 39
+      },
+      "insertion": {
+        "tp": 19,
+        "fp": 22,
+        "fn": 5,
+        "precision": 0.4634146341463415,
+        "recall": 0.7916666666666666,
+        "f1": 0.5846153846153846,
+        "n_gold": 24,
+        "n_pred": 41
+      },
+      "self_correction": {
+        "tp": 8,
+        "fp": 1,
+        "fn": 16,
+        "precision": 0.8888888888888888,
+        "recall": 0.3333333333333333,
+        "f1": 0.48484848484848486,
+        "n_gold": 24,
+        "n_pred": 9
+      },
+      "hesitation": {
+        "tp": 5,
+        "fp": 2,
+        "fn": 27,
+        "precision": 0.7142857142857143,
+        "recall": 0.15625,
+        "f1": 0.25641025641025644,
+        "n_gold": 32,
+        "n_pred": 7
+      },
+      "fp_per_100_correct_words": 7.1021957169964764
+    },
+    "prompt": {
+      "substitution": {
+        "tp": 4,
+        "fp": 5,
+        "fn": 20,
+        "precision": 0.4444444444444444,
+        "recall": 0.16666666666666666,
+        "f1": 0.24242424242424243,
+        "n_gold": 24,
+        "n_pred": 9
+      },
+      "omission": {
+        "tp": 9,
+        "fp": 8,
+        "fn": 15,
+        "precision": 0.5294117647058824,
+        "recall": 0.375,
+        "f1": 0.4390243902439025,
+        "n_gold": 24,
+        "n_pred": 17
+      },
+      "insertion": {
+        "tp": 13,
+        "fp": 8,
+        "fn": 11,
+        "precision": 0.6190476190476191,
+        "recall": 0.5416666666666666,
+        "f1": 0.5777777777777778,
+        "n_gold": 24,
+        "n_pred": 21
+      },
+      "self_correction": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 23,
+        "precision": 1.0,
+        "recall": 0.041666666666666664,
+        "f1": 0.07999999999999999,
+        "n_gold": 24,
+        "n_pred": 1
+      },
+      "hesitation": {
+        "tp": 1,
+        "fp": 5,
+        "fn": 31,
+        "precision": 0.16666666666666666,
+        "recall": 0.03125,
+        "f1": 0.05263157894736842,
+        "n_gold": 32,
+        "n_pred": 6
+      },
+      "fp_per_100_correct_words": 0.7047980482515587
+    },
+    "strong": {
+      "substitution": {
+        "tp": 2,
+        "fp": 1,
+        "fn": 22,
+        "precision": 0.6666666666666666,
+        "recall": 0.08333333333333333,
+        "f1": 0.14814814814814814,
+        "n_gold": 24,
+        "n_pred": 3
+      },
+      "omission": {
+        "tp": 7,
+        "fp": 15,
+        "fn": 17,
+        "precision": 0.3181818181818182,
+        "recall": 0.2916666666666667,
+        "f1": 0.30434782608695654,
+        "n_gold": 24,
+        "n_pred": 22
+      },
+      "insertion": {
+        "tp": 11,
+        "fp": 1,
+        "fn": 13,
+        "precision": 0.9166666666666666,
+        "recall": 0.4583333333333333,
+        "f1": 0.611111111111111,
+        "n_gold": 24,
+        "n_pred": 12
+      },
+      "self_correction": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 23,
+        "precision": 1.0,
+        "recall": 0.041666666666666664,
+        "f1": 0.07999999999999999,
+        "n_gold": 24,
+        "n_pred": 1
+      },
+      "hesitation": {
+        "tp": 1,
+        "fp": 3,
+        "fn": 31,
+        "precision": 0.25,
+        "recall": 0.03125,
+        "f1": 0.05555555555555555,
+        "n_gold": 32,
+        "n_pred": 4
+      },
+      "fp_per_100_correct_words": 0.5421523448088913
+    }
+  }
+}
