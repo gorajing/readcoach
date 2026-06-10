@@ -3,7 +3,7 @@
 Modules:
     asr            ASR layer (swappable; supports the target-text prior)
     miscue         miscue detection (align to target text, classify deviations)
-    learner_model  per-skill mastery (pyBKT) + review scheduling (FSRS), in Redis
+    learner_model  per-skill mastery (pyBKT) + review scheduling (FSRS), in SQLite (Redis optional)
     tutor          the tutoring decision policy (when to intervene / how to help)
 
 The eval flywheel lives in the top-level ``evals`` package.

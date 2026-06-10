@@ -9,6 +9,7 @@ venv/
 # Env / secrets
 .env
 *.key
+.claude/
 
 # Data + audio + artifacts (keep large files out of git)
 data/raw/

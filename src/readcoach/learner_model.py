@@ -34,10 +34,10 @@ class LearnerState:
 
 
 class LearnerModel:
-    """pyBKT mastery + FSRS review, persisted in Redis."""
+    """pyBKT mastery + FSRS review, persisted in SQLite (Redis behind a flag)."""
 
-    def __init__(self, redis_url: str | None = None) -> None:
-        raise NotImplementedError("Day 3: pyBKT + py-fsrs + Redis-backed state")
+    def __init__(self, db_path: str | None = None) -> None:
+        raise NotImplementedError("Day 3: pyBKT + py-fsrs + SQLite-backed state")
 
     def update(self, child_id: str, observations: list[Observation]) -> None:
         """Fold new observations into per-skill mastery + the review schedule."""

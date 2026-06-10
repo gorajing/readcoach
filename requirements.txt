@@ -9,7 +9,7 @@ jiwer>=3.0               # WER + word-level edit ops -> miscue alignment
 pyBKT>=1.4               # Bayesian Knowledge Tracing (per-skill mastery)
 fsrs>=4.0                # FSRS spaced repetition (review scheduling)
 
-# --- eval flywheel (mirrors the rezn-ai method) ---
+# --- eval flywheel ---
 weave>=0.51              # W&B Weave: traces + eval comparison UI
 wandb>=0.17
 
