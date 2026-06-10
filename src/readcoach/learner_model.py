@@ -34,14 +34,20 @@ class LearnerState:
 
 
 class LearnerModel:
-    """BKT mastery + FSRS review, persisted in SQLite (Redis behind a flag)."""
+    """BKT mastery + FSRS review, persisted in SQLite (Redis behind a flag).
+
+    Delegates to readcoach.learner_store.LearnerModel; kept here so existing
+    imports continue to work (``from readcoach.learner_model import LearnerModel``).
+    """
 
     def __init__(self, db_path: str | None = None) -> None:
-        raise NotImplementedError("Day 3: hand-rolled BKT + py-fsrs + SQLite-backed state")
+        # Lazy import to avoid circular dependency during module initialisation.
+        from readcoach.learner_store import LearnerModel as _Impl  # noqa: PLC0415
+        self._impl = _Impl(db_path=db_path)
 
     def update(self, child_id: str, observations: list[Observation]) -> None:
         """Fold new observations into per-skill mastery + the review schedule."""
-        raise NotImplementedError
+        self._impl.update(child_id, observations)
 
     def state(self, child_id: str) -> LearnerState:
-        raise NotImplementedError
+        return self._impl.state(child_id)
