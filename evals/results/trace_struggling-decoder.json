@@ -1,0 +1,273 @@
+{
+  "child_id": "struggling-decoder",
+  "completed_skills_at_start": [
+    "cvc_short_a"
+  ],
+  "policy_version": "1.0.0",
+  "turns": [
+    {
+      "action_move": "WAIT",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": true,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 0,
+      "utterance": "I'm your computer reading helper, and I'm right here with you \u2014 take your time."
+    },
+    {
+      "action_move": "SCAFFOLDED_HINT",
+      "at_page_end": false,
+      "hint_level": "bounce",
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 1,
+      "utterance": "Let's bounce through those sounds \u2014 give each part a little tap!"
+    },
+    {
+      "action_move": "MODEL_THE_WORD",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 2,
+      "utterance": "That word is chip \u2014 go ahead and keep reading!"
+    },
+    {
+      "action_move": "NEXT_ITEM",
+      "at_page_end": true,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": null,
+      "served_reason": "new",
+      "skill_id": "digraph_ch",
+      "turn_index": 3,
+      "utterance": "You did a great job reading! Now let's practice some words with the 'ea' sound."
+    },
+    {
+      "action_move": "WAIT",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 4,
+      "utterance": "Take your time."
+    },
+    {
+      "action_move": "SCAFFOLDED_HINT",
+      "at_page_end": false,
+      "hint_level": "bounce",
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 5,
+      "utterance": "Let's bounce through the sounds \u2014 try tapping each one as you go."
+    },
+    {
+      "action_move": "MODEL_THE_WORD",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 6,
+      "utterance": "That word is \"shut\" \u2014 go ahead and keep reading!"
+    },
+    {
+      "action_move": "NEXT_ITEM",
+      "at_page_end": true,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": null,
+      "served_reason": "new",
+      "skill_id": "digraph_sh",
+      "turn_index": 7,
+      "utterance": "Wonderful reading! Now let's move on and practice some words with the 'ea' sound."
+    },
+    {
+      "action_move": "WAIT",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 8,
+      "utterance": "Take your time, you are doing great."
+    },
+    {
+      "action_move": "SCAFFOLDED_HINT",
+      "at_page_end": false,
+      "hint_level": "bounce",
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 9,
+      "utterance": "Let's tap that word \u2014 touch it and give one tap for each sound you hear!"
+    },
+    {
+      "action_move": "MODEL_THE_WORD",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 10,
+      "utterance": "That word is 'thick' \u2014 keep going, you're doing great!"
+    },
+    {
+      "action_move": "NEXT_ITEM",
+      "at_page_end": true,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": null,
+      "served_reason": "new",
+      "skill_id": "digraph_th",
+      "turn_index": 11,
+      "utterance": "Wonderful work on that page! Now let's move on and practice some words with the 'ea' sound."
+    },
+    {
+      "action_move": "WAIT",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": true,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 12,
+      "utterance": "I'm your computer reading helper, and I'm right here with you \u2014 take your time."
+    },
+    {
+      "action_move": "SCAFFOLDED_HINT",
+      "at_page_end": false,
+      "hint_level": "bounce",
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 13,
+      "utterance": "Let's bounce out the sounds in that word \u2014 tap each one and see what you get!"
+    },
+    {
+      "action_move": "MODEL_THE_WORD",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 14,
+      "utterance": "That word is brave \u2014 go ahead and keep reading!"
+    },
+    {
+      "action_move": "NEXT_ITEM",
+      "at_page_end": true,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": null,
+      "served_reason": "new",
+      "skill_id": "blend_br",
+      "turn_index": 15,
+      "utterance": "Great job on that page! Now let's practice some words with the special 'ea' sound."
+    },
+    {
+      "action_move": "WAIT",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 16,
+      "utterance": "Keep going, you're doing well."
+    },
+    {
+      "action_move": "SCAFFOLDED_HINT",
+      "at_page_end": false,
+      "hint_level": "bounce",
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 17,
+      "utterance": "Try giving that word a little bounce \u2014 tap it out on your leg as you say it."
+    },
+    {
+      "action_move": "MODEL_THE_WORD",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 18,
+      "utterance": "That word is 'stump' \u2014 go ahead and keep reading!"
+    },
+    {
+      "action_move": "NEXT_ITEM",
+      "at_page_end": true,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": null,
+      "served_reason": "new",
+      "skill_id": "blend_st",
+      "turn_index": 19,
+      "utterance": "Great reading! Now let's move on and practice some words with the 'ea' sound."
+    },
+    {
+      "action_move": "WAIT",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 20,
+      "utterance": "Take your time, keep going."
+    },
+    {
+      "action_move": "SCAFFOLDED_HINT",
+      "at_page_end": false,
+      "hint_level": "bounce",
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 21,
+      "utterance": "Let's bounce that tricky word \u2014 try the beginning part first: cl... then add the ending: ung."
+    },
+    {
+      "action_move": "MODEL_THE_WORD",
+      "at_page_end": false,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": "substitution",
+      "served_reason": null,
+      "skill_id": null,
+      "turn_index": 22,
+      "utterance": "That word is \"clung\" \u2014 go ahead and keep reading!"
+    },
+    {
+      "action_move": "NEXT_ITEM",
+      "at_page_end": true,
+      "hint_level": null,
+      "is_ai_reminder": false,
+      "miscue_type": null,
+      "served_reason": "new",
+      "skill_id": "blend_cl",
+      "turn_index": 23,
+      "utterance": "Great job finishing that page! Now let's try some words with the \"ea\" sound, like in \"eat\" and \"beach\"."
+    }
+  ]
+}
