@@ -1,0 +1,79 @@
+{
+  "benchmark_version": "0.1.0",
+  "coverage_matrix": {
+    "p01": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p02": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p03": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p04": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p05": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p06": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p07": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    },
+    "p08": {
+      "hesitation": 4,
+      "insertion": 3,
+      "omission": 3,
+      "self_correction": 3,
+      "substitution": 3
+    }
+  },
+  "generation_tools": {
+    "ffmpeg": "ffmpeg version 8.1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "say": "macOS/26.3.1"
+  },
+  "gold_jsonl_sha256": "6cbb3b36a6d79a7ef13c87149abffd225ee5ebe71d1e18ab0d0759f6eb61601e",
+  "license": "passages original to this project, MIT",
+  "n_items": 88,
+  "seed": 42,
+  "total_clip_bytes": 41442030,
+  "total_duration_s": 1294.849,
+  "voices_used": [
+    "Eddy (English (US))",
+    "Fred",
+    "Grandpa (English (US))",
+    "Junior",
+    "Kathy",
+    "Samantha"
+  ]
+}
