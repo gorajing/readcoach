@@ -22,7 +22,7 @@ from readcoach.speechocean import (
 def _ws(accuracy: int) -> WordScore:
     """Helper: build a WordScore with the given accuracy."""
     return WordScore(
-        utt_id="u0",
+        speaker="u0",
         word="test",
         accuracy=accuracy,
         mispronounced=(accuracy <= MISPRONOUNCED_MAX_ACCURACY),
@@ -97,7 +97,7 @@ def test_speechocean_smoke_network():
     for ws in scores:
         assert 0 <= ws.accuracy <= 10, (
             f"accuracy {ws.accuracy} out of [0,10] for word {ws.word!r} "
-            f"in utterance {ws.utt_id!r}"
+            f"from speaker {ws.speaker!r}"
         )
 
     prevalence = prevalence_check(scores)

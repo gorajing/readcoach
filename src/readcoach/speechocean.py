@@ -56,13 +56,15 @@ class WordScore:
     """A single word's pronunciation-accuracy annotation.
 
     Attributes:
-        utt_id:       Utterance identifier (e.g. ``"000001"``).
+        speaker:      Speaker identifier from the dataset (NOT unique per
+                      utterance; 125 distinct speakers across ~2500 utterances;
+                      do not group by expecting recordings).
         word:         Orthographic word form.
         accuracy:     Word-level accuracy on the 0–10 integer scale.
         mispronounced: ``True`` when *accuracy* ≤ MISPRONOUNCED_MAX_ACCURACY.
     """
 
-    utt_id: str
+    speaker: str
     word: str
     accuracy: int
     mispronounced: bool
@@ -93,8 +95,9 @@ def iter_word_scores(
         :class:`WordScore` for each annotated word in each utterance.
 
     Raises:
-        KeyError:   A required field (``id``, ``text``, ``words``, ``accuracy``)
-                    is absent from a record — fail loud, no defaults.
+        KeyError:   A required field (``speaker``, ``text``, ``words``,
+                    per-word ``accuracy``) is absent from a record — fail loud,
+                    no defaults.
         ValueError: An accuracy value is outside [0, 10].
     """
     from datasets import Audio, load_dataset  # type: ignore[import-untyped]
@@ -116,8 +119,8 @@ def iter_word_scores(
         #                    total, speaker, gender, age, audio
         #   word-level (inside 'words'): accuracy, phones, phones-accuracy,
         #                    stress, text, total, mispronunciations
-        # There is no utterance 'id' field; we use 'speaker' as the utt_id.
-        utt_id: str = utt["speaker"]     # raises KeyError if missing
+        # There is no utterance 'id' field; we use 'speaker' as the speaker id.
+        speaker: str = utt["speaker"]    # raises KeyError if missing
         words: list[dict] = utt["words"]  # raises KeyError if missing
 
         for word_entry in words:
@@ -127,11 +130,11 @@ def iter_word_scores(
             if not (0 <= accuracy <= 10):
                 raise ValueError(
                     f"accuracy {accuracy!r} out of range [0, 10] "
-                    f"for word {word!r} in utterance {utt_id!r}"
+                    f"for word {word!r} in utterance {speaker!r}"
                 )
 
             yield WordScore(
-                utt_id=utt_id,
+                speaker=speaker,
                 word=word,
                 accuracy=accuracy,
                 mispronounced=(accuracy <= MISPRONOUNCED_MAX_ACCURACY),
