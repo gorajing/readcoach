@@ -174,6 +174,13 @@ class InjectedItem:
     # which gold entries are audio-only without re-deriving it.
     gold_render: list[RenderMode | None] = field(default_factory=list)
 
+    def __post_init__(self) -> None:
+        if len(self.gold_render) != len(self.gold):
+            raise ValueError(
+                f"gold_render length ({len(self.gold_render)}) must equal "
+                f"gold length ({len(self.gold)})"
+            )
+
 
 # ---------------------------------------------------------------------------
 # Normalization helpers (mirror the detector exactly)

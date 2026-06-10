@@ -190,6 +190,25 @@ def test_clean_item_has_no_miscues():
     assert detect(item.miscued_text, item.target_text) == []
 
 
+def test_injected_item_gold_render_length_mismatch_raises():
+    """Constructing an InjectedItem with mismatched gold/gold_render lengths
+    must raise ValueError at construction time."""
+    from readcoach.miscue import Miscue
+
+    gold = [Miscue("substitution", target_word="cat", said_word="bat", index=0)]
+    # gold_render is empty while gold has 1 item — should raise.
+    with pytest.raises(ValueError, match="gold_render length.*must equal.*gold length"):
+        InjectedItem(
+            utt_id="test-mismatch",
+            passage_id="p01",
+            target_text="cat sat mat",
+            miscued_text="bat sat mat",
+            tts_text="bat sat mat",
+            gold=gold,
+            gold_render=[],  # Mismatch: gold has 1, gold_render has 0.
+        )
+
+
 # ===========================================================================
 # THE ROUND-TRIP PROPERTY (the plan's named test)
 # ===========================================================================
