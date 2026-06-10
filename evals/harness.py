@@ -23,6 +23,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Literal
 
+from evals.tracing import weave_status
+
 
 # ---------------------------------------------------------------------------
 # Dataclasses (all frozen)
@@ -184,6 +186,7 @@ def evaluate(
         "date": date.today().isoformat(),
         "golden_path": str(golden_path),
         "golden_sha256": golden_sha,
+        "weave": weave_status(),
     }
 
     # Ensure latency block is present.
