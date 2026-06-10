@@ -1,0 +1,195 @@
+{
+  "metadata": {
+    "fitter": "hand-rolled numpy two-stage grid MLE (pyBKT dropped, import-dead)",
+    "seed": 2026,
+    "n_students": 200,
+    "n_opportunities": 20,
+    "n_regimes": 4,
+    "event_order": "evidence-then-transit (matches readcoach.bkt.bkt_update)",
+    "grid": "coarse step 0.05 over (s,g,t,L0), refine ±0.05 at step 0.01",
+    "n_reliability_bins": 10,
+    "git_commit": "d77ccce91fa63f16efe1df14abe793665b2bb4ba",
+    "date": "2026-06-10",
+    "runtime_seconds": 15.62
+  },
+  "regimes": {
+    "easy_skill": {
+      "true": {
+        "s": 0.08,
+        "g": 0.15,
+        "t": 0.15,
+        "L0": 0.4
+      },
+      "fit": {
+        "s": 0.07,
+        "g": 0.15,
+        "t": 0.14,
+        "L0": 0.4
+      },
+      "recovery_error": {
+        "s": 0.009999999999999995,
+        "g": 0.0,
+        "t": 0.009999999999999981,
+        "L0": 0.0
+      },
+      "mastery_rmse": 0.23642689353132207
+    },
+    "hard_skill": {
+      "true": {
+        "s": 0.15,
+        "g": 0.25,
+        "t": 0.05,
+        "L0": 0.15
+      },
+      "fit": {
+        "s": 0.15,
+        "g": 0.25,
+        "t": 0.04,
+        "L0": 0.11
+      },
+      "recovery_error": {
+        "s": 0.0,
+        "g": 0.0,
+        "t": 0.010000000000000002,
+        "L0": 0.039999999999999994
+      },
+      "mastery_rmse": 0.29829370412032064
+    },
+    "high_guess": {
+      "true": {
+        "s": 0.1,
+        "g": 0.35,
+        "t": 0.1,
+        "L0": 0.25
+      },
+      "fit": {
+        "s": 0.1,
+        "g": 0.36,
+        "t": 0.09,
+        "L0": 0.31
+      },
+      "recovery_error": {
+        "s": 0.0,
+        "g": 0.010000000000000009,
+        "t": 0.010000000000000009,
+        "L0": 0.06
+      },
+      "mastery_rmse": 0.3103269402365051
+    },
+    "low_noise": {
+      "true": {
+        "s": 0.05,
+        "g": 0.1,
+        "t": 0.2,
+        "L0": 0.5
+      },
+      "fit": {
+        "s": 0.05,
+        "g": 0.1,
+        "t": 0.24,
+        "L0": 0.5
+      },
+      "recovery_error": {
+        "s": 0.0,
+        "g": 0.0,
+        "t": 0.03999999999999998,
+        "L0": 0.0
+      },
+      "mastery_rmse": 0.19645152875755859
+    }
+  },
+  "mean_recovery_error": {
+    "s": 0.0024999999999999988,
+    "g": 0.0025000000000000022,
+    "t": 0.017499999999999995,
+    "L0": 0.024999999999999998
+  },
+  "calibration": {
+    "brier_score": 0.13900902846707805,
+    "reliability": {
+      "bin_mean_predicted": [
+        0.05,
+        0.15000000000000002,
+        0.28139506701043837,
+        0.3361123439898198,
+        0.440597338433415,
+        0.5379145767307579,
+        0.6499972394302137,
+        0.7666453552353134,
+        0.8741710941229995,
+        0.9398639645157758
+      ],
+      "bin_observed_frequency": [
+        null,
+        null,
+        0.27503593675131766,
+        0.33765243902439024,
+        0.4503154574132492,
+        0.5370370370370371,
+        0.6471571906354515,
+        0.7535545023696683,
+        0.8766626360338573,
+        0.9370665742024965
+      ],
+      "bin_count": [
+        0,
+        0,
+        2087,
+        1312,
+        1268,
+        1026,
+        598,
+        633,
+        3308,
+        5768
+      ]
+    }
+  },
+  "cold_start_curve": {
+    "k": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "mastery_rmse": [
+      0.4448314287457666,
+      0.36522922748752124,
+      0.33992022387753423,
+      0.33408797170363635,
+      0.3127187602008265,
+      0.2953254040621771,
+      0.2761689695826766,
+      0.2609558030059963,
+      0.24972355709382357,
+      0.22930000928645872,
+      0.20832724512976433,
+      0.20088080619713608,
+      0.20650573422775492,
+      0.20720605548163595,
+      0.20556290134258787,
+      0.20959775322626878,
+      0.20105269669668413,
+      0.19621419534493223,
+      0.18826079964383613,
+      0.16197079803619616
+    ]
+  },
+  "weak_spot_note": "PARAMETER RECOVERY is strong across all four regimes: every |fit-true| is ≤ 0.06, at or near the 0.01 refine-grid resolution. The two largest residuals are L0 (+0.06 in high_guess) and t (+0.04 in low_noise); both are biased the SAME way (fit slightly high), the known t↔L0 confound at a 20-opportunity horizon — a touch more transit and a touch more prior explain a short record about equally well, so the likelihood ridge is shallow along that pair. It does not, at this n, distort the fits beyond grid resolution. THE REAL LIMITATION IS MASTERY ESTIMATION, NOT FITTING. Even with near-perfectly recovered params, pooled mastery RMSE against the true latent state runs 0.20 (low_noise) to 0.31 (high_guess). The latent mastery bit is simply not identifiable from a handful of noisy binary responses: the worst regime is high_guess, where a high guess rate makes a correct answer weak evidence of mastery, so P(L) stays muddy. CALIBRATION is good in aggregate (Brier 0.139; the reliability curve tracks the diagonal within ~0.01 in every populated bin), BUT it has a coverage hole: the 2 lowest probability bin(s) are empty — predict_correct never falls below ~0.28 because P(correct)=p·(1-s)+(1-p)·g is floored at the guess rate g. The model literally cannot predict a likely FAILURE; it has no calibration evidence in the low-probability region, which is exactly where a tutor most needs to trust it. COLD START: pooled mastery RMSE falls from 0.44 at k=1 (prior only) and plateaus near 0.21 by k≈11; the further dip to 0.16 at the final k=20 is a boundary effect (by then most students have transited to mastery, so the state is less ambiguous). Practically, estimates become usable after roughly 11 responses, not instantly — a cold-start cost the tutor pays on every new skill."
+}
