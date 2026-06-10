@@ -17,7 +17,9 @@ from pathlib import Path
 # Self-exclusion: this file must not be scanned because it contains the banned
 # phrases as test data.  We use a path relative to the repo root.
 # ---------------------------------------------------------------------------
-SELF_PATH = "tests/test_language_boundary.py"
+SELF_PATH = Path(__file__).resolve().relative_to(
+    Path(__file__).parent.parent.resolve()
+).as_posix()
 
 # ---------------------------------------------------------------------------
 # Banned patterns.
@@ -34,9 +36,9 @@ BANNED_PATTERNS: list[tuple[str, re.RegexFlag]] = [
     # \b ensures "shiring", "outreaching" etc. do NOT match if they lack a
     # boundary — actually word-boundaries handle the starts/ends correctly.
     (r"\boutreach\b", re.IGNORECASE),
-    (r"\bcold email\b", re.IGNORECASE),
+    (r"\bcold[ -]email\b", re.IGNORECASE),
     (r"\bhiring\b", re.IGNORECASE),
-    (r"\binterview\b", re.IGNORECASE),
+    (r"\binterviews?\b", re.IGNORECASE),
 ]
 
 # Compile once for performance.
@@ -80,7 +82,10 @@ def test_no_job_search_language() -> None:
     violations: list[str] = []
     repo_root = Path(__file__).parent.parent
 
-    for filepath in _get_tracked_files():
+    files = _get_tracked_files()
+    assert files, "No tracked *.md/*.py files found — the boundary scan would be vacuous"
+
+    for filepath in files:
         rel = filepath.relative_to(repo_root).as_posix()
         allowed_for_file = ALLOWLIST.get(rel, frozenset())
 
