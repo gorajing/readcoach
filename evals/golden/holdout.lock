@@ -1,0 +1,66 @@
+{
+  "calibration_tolerance": 0.5,
+  "created_utc": "2026-06-10T22:30:40Z",
+  "doctrine": "ONE-WAY freeze. The held-out half may ONLY be evaluated by a tutor version, never developed against. Re-running freeze_split.py will REFUSE if a fresh generation differs from these artifacts.",
+  "files": {
+    "persona_sessions_dev.jsonl": {
+      "n_items": 49,
+      "sha256": "6fb70c75ead685c571ac018fd2d3818a35bf3427863c1d059e2e029cf61d4f10"
+    },
+    "persona_sessions_holdout.jsonl": {
+      "n_items": 49,
+      "sha256": "0be295c3fdc6f8eefdadafecbed1331d911d75a0e82ea7317c8d05d0a74db3dc"
+    }
+  },
+  "generation_seed": 2026,
+  "n_dev": 49,
+  "n_holdout": 49,
+  "n_passages": 8,
+  "n_total": 98,
+  "observed_rates_per_100": {
+    "dyslexic_profile": {
+      "hesitation": 9.2139,
+      "insertion": 0.4227,
+      "omission": 2.3669,
+      "self_correction": 1.437,
+      "substitution": 5.3254
+    },
+    "ell_profile": {
+      "hesitation": 5.4817,
+      "insertion": 1.1628,
+      "omission": 1.7165,
+      "self_correction": 2.1041,
+      "substitution": 3.1561
+    },
+    "emergent": {
+      "hesitation": 7.7768,
+      "insertion": 1.0144,
+      "omission": 2.3669,
+      "self_correction": 1.3525,
+      "substitution": 4.5647
+    }
+  },
+  "per_persona_counts": {
+    "dev": {
+      "dyslexic_profile": 12,
+      "ell_profile": 21,
+      "emergent": 16
+    },
+    "holdout": {
+      "dyslexic_profile": 16,
+      "ell_profile": 21,
+      "emergent": 12
+    },
+    "total": {
+      "dyslexic_profile": 28,
+      "ell_profile": 42,
+      "emergent": 28
+    }
+  },
+  "persona_band_ceilings": {
+    "dyslexic_profile": 2,
+    "ell_profile": 3,
+    "emergent": 2
+  },
+  "split_seed": 2026
+}
