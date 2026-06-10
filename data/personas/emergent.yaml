@@ -1,0 +1,62 @@
+# Persona: emergent reader (early-grade, decoding-bound)
+#
+# CALIBRATION DOCTRINE (read before changing a number)
+# ----------------------------------------------------
+# We could find NO published source that reports per-class miscue rates per 100
+# running words for a named reader population. The honest literature gives two
+# things we CAN anchor to:
+#   (a) word-reading ACCURACY bands (running records / ORF norms), and
+#   (b) the relative DOMINANCE of substitution among oral-reading miscues.
+# Everything below therefore states, per field, whether the number is anchored to
+# a cited band or is OUR interpolation of the class mix within that band. We never
+# attach a precise citation to a number a source does not contain.
+#
+# Anchoring band for this persona: ~88-92% word accuracy = low instructional /
+# frustration edge (Clay running-record bands; Hasbrouck & Tindal 2017 ORF norms
+# place an early-grade-1 reader near the 10th-25th percentile WCPM here). A total
+# miscue load of ~10 events / 100 words corresponds to ~90% accuracy by the
+# running-record definition (accuracy = correct words / total words).
+
+id: emergent
+label: Emergent reader
+description: >-
+  Early-grade reader still decoding most words. High substitution and omission,
+  low self-correction (weak self-monitoring), frequent hesitation while sounding
+  out. Stays in the most decodable passages (band ceiling 2).
+band_ceiling: 2
+
+# rates: expected miscue events per 100 running words, per class.
+# Sum of error-producing classes (sub+om+ins) ~= 9.5/100 -> ~90% accuracy,
+# the instructional/frustration boundary. hesitation and self_correction do not
+# reduce accuracy (the word is still ultimately read) and are counted separately.
+rates:
+  substitution: 5.5      # dominant class; ANCHORED qualitatively (substitution is
+                         # the most frequent miscue for all readers — Goodman
+                         # miscue-analysis tradition, Kim et al. 2017 review).
+                         # The magnitude (5.5) is OUR interpolation within the
+                         # ~90% accuracy band.
+  omission: 3.0          # second decoding error; OUR interpolation within band.
+  insertion: 1.0         # low for emergent readers (they drop words, rarely add).
+                         # OUR interpolation.
+  self_correction: 1.5   # LOW: self-correction ratio worse than ~1:5 signals weak
+                         # self-monitoring (Clay running-record convention; a good
+                         # ratio is 1:3-1:5). 1.5 SC vs ~9.5 errors ~= 1:6 -> below
+                         # the "good" threshold by construction. Ratio anchored;
+                         # absolute rate is OUR interpolation.
+  hesitation: 8.0        # frequent pausing/sounding-out. No published per-100 rate;
+                         # OUR interpolation, set high to reflect laborious decoding.
+
+# Probability a mid-page miscue escalates into a consecutive-struggle run (drives
+# the tutor's hint ladder). High for emergent readers who get stuck on a word.
+struggle_escalation_p: 0.45
+
+citations:
+  - "Hasbrouck, J. & Tindal, G. (2017). An Update to Compiled ORF Norms (Technical Report No. 1702). Behavioral Research and Teaching, University of Oregon. https://files.eric.ed.gov/fulltext/ED594994.pdf — Grade 1 spring median 60 WCPM (10th pct 18); used to place this persona at the low-instructional accuracy band, NOT for per-class rates."
+  - "Clay, M. M. — Running Records / Reading Recovery accuracy bands: independent >=95%, instructional 90-94%, frustration <90%; self-correction ratio 1:3-1:5 = effective self-monitoring. Conventions summarized at https://learningattheprimarypond.com/blog/how-to-analyze-running-records/ — anchors the accuracy band and the self_correction:error ratio, NOT the absolute per-class magnitudes."
+  - "Goodman, K. S. — miscue-analysis tradition (Reading Miscue Inventory): substitution is the most frequent miscue class across reader abilities. Anchors the CLASS RANKING (substitution dominant), not its rate."
+
+calibration_notes:
+  - "No source reports per-class miscue events per 100 words for a named population; all absolute per-100 rates here are OUR interpolation within the cited accuracy band."
+  - "The error-producing classes (substitution+omission+insertion ~= 9.5/100) target ~90% word accuracy, the instructional/frustration boundary per Clay bands."
+  - "self_correction (1.5) vs error load (~9.5) gives a ~1:6 SC ratio, deliberately BELOW Clay's 'good' 1:3-1:5 threshold to model weak self-monitoring — ratio anchored, magnitude OUR interpolation."
+  - "hesitation rate (8.0) has no published per-100 anchor; set high to reflect laborious decoding. OUR interpolation."

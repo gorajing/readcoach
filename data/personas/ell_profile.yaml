@@ -1,0 +1,50 @@
+# Persona: English-language-learner reading profile (generic)
+#
+# CALIBRATION DOCTRINE — see emergent.yaml header. Same boundary: accuracy bands
+# are cited; per-class magnitudes within the band are OUR interpolation. The ONE
+# population-specific shape we DO anchor is that ELL substitutions skew
+# phonological (vowel-length / closest-L1-phoneme confusions) and insertions are
+# somewhat higher than for L1 decoders — qualitatively documented, not rate-given.
+#
+# This YAML is intentionally generic ("ell_profile"). We do NOT nationality-tag
+# the persona; the calibration note below cites the one specific study (Spanish-
+# L1 readers of English) whose phonological-interference findings we used to shape
+# the substitution/insertion skew, and that citation does NOT propagate a
+# nationality label onto the generated items.
+
+id: ell_profile
+label: English-language-learner profile
+description: >-
+  Reader whose oral-reading errors reflect L1->L2 phonological transfer:
+  substitutions skew phonological (vowel-shift / closest-L1-phoneme), insertion
+  is elevated, and self-correction is decent (the reader monitors meaning even
+  while mis-decoding surface phonology). Bands 1-3.
+band_ceiling: 3
+
+# Anchoring band: ~91-93% accuracy (instructional). Error load tuned so
+# sub+om+ins ~= 8/100 -> ~92% accuracy.
+rates:
+  substitution: 4.5      # phonological skew (vowel-length, /i:/~/I/, /ʌ/~/a/
+                         # confusions). CLASS SHAPE anchored to Spanish-L1 study
+                         # (see citations); magnitude is OUR interpolation.
+  omission: 2.0          # OUR interpolation within band.
+  insertion: 1.5         # ELEVATED vs L1 decoders — insertion is a documented
+                         # interference type for L2 readers. Relative elevation
+                         # anchored; magnitude OUR interpolation.
+  self_correction: 2.5   # DECENT self-monitoring: ~2.5 SC vs ~8 errors ~= 1:3.2,
+                         # within Clay's 'good' 1:3-1:5 band. Ratio anchored;
+                         # magnitude OUR interpolation.
+  hesitation: 6.0        # moderate pausing (lexical access in L2). OUR interpolation.
+
+struggle_escalation_p: 0.30
+
+citations:
+  - "Hasbrouck, J. & Tindal, G. (2017). An Update to Compiled ORF Norms (TR No. 1702). https://files.eric.ed.gov/fulltext/ED594994.pdf — used only to place this persona in the instructional accuracy band, not for per-class rates."
+  - "Clay, M. M. — Running Records accuracy bands (instructional 90-94%) and self-correction ratio convention (1:3-1:5 good). Anchors the accuracy band and the SC:error ratio."
+  - "Jiménez González, J. E. et al. — 'Influences of First and Second Language Phonology on Spanish Children Learning to Read in English', Frontiers in Psychology 13:803518 (2022). https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.803518/full — anchors the QUALITATIVE substitution skew (vowel-length and closest-L1-phoneme confusions); reports no per-100 miscue rates, so magnitudes are OUR interpolation."
+
+calibration_notes:
+  - "Persona is generic (ell_profile); the Spanish-L1 study is cited only as the source of the phonological-substitution SHAPE and does not nationality-tag generated items."
+  - "Substitution-skew and elevated-insertion are anchored as DIRECTIONS (relative to an L1 decoder); their absolute per-100 magnitudes are OUR interpolation within the ~92% accuracy band."
+  - "self_correction (2.5) vs error load (~8) gives ~1:3.2, inside Clay's 'good' SC ratio — ratio anchored, magnitude OUR interpolation."
+  - "Within the generator, the phonological skew is approximated by inject.py's orthographic-neighbour machinery (initial-consonant + interior-vowel swaps); it is an ORTHOGRAPHIC proxy for a phonological process and is documented as such, not claimed to be a phonological model."

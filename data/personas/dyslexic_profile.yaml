@@ -1,0 +1,54 @@
+# Persona: dyslexic reading profile
+#
+# CALIBRATION DOCTRINE — see emergent.yaml header. Accuracy bands cited; per-class
+# magnitudes are OUR interpolation. This persona has the ONE quantitative
+# class-MIX anchor we found: De Rom & Van Reybroeck (2024) report that children
+# with dyslexia make many more VISUAL errors (mean 4.82 vs 1.00 for age-matched
+# controls) and elevated morphemic/sequential errors, with semantic errors NOT
+# elevated. We use that to set substitution (visually-similar) as the dominant
+# class and to keep insertion low — the COUNTS in that study are per-task, not
+# per-100-words, so we anchor the MIX/ranking, not the absolute rate.
+
+id: dyslexic_profile
+label: Dyslexic profile
+description: >-
+  Reader with a decoding-level reading disability: high substitution by
+  visually-similar words, high hesitation and strong struggle escalation
+  (laborious, time-consuming decoding with repetition), and low self-correction.
+  Stays in the most decodable passages (band ceiling 2).
+band_ceiling: 2
+
+# Anchoring band: ~87-90% accuracy (frustration edge — dyslexic readers read
+# grade-level text below the instructional threshold). Error load tuned so
+# sub+om+ins ~= 10.5/100 -> ~89.5% accuracy.
+rates:
+  substitution: 7.0      # DOMINANT, visually-similar. Class ranking & dominance
+                         # anchored to De Rom & Van Reybroeck (2024): visual errors
+                         # far exceed controls. Magnitude is OUR interpolation.
+  omission: 2.5          # OUR interpolation within band.
+  insertion: 1.0         # LOW — the dyslexia error profile is substitution/visual
+                         # dominated, not insertion-driven (consistent with De Rom
+                         # & Van Reybroeck: semantic/insertion-type guessing not the
+                         # elevated class). Relative-low anchored; magnitude OURS.
+  self_correction: 1.0   # LOW self-monitoring: ~1.0 SC vs ~10.5 errors ~= 1:10.5,
+                         # well below Clay's 'good' 1:3-1:5. Ratio anchored;
+                         # magnitude OUR interpolation.
+  hesitation: 10.0       # HIGH — slow, divided, time-consuming reading with
+                         # repetition (De Rom & Van Reybroeck describe perceptual
+                         # dyslexics as making many time-consuming errors incl.
+                         # repetition). Direction anchored; magnitude OURS.
+
+# Highest escalation: dyslexic readers get stuck and the struggle compounds.
+struggle_escalation_p: 0.55
+
+citations:
+  - "De Rom, M. & Van Reybroeck, M. (2024). 'Guessing errors made by children with dyslexia in word and text reading.' Frontiers in Psychology, 15:1195696. https://doi.org/10.3389/fpsyg.2024.1195696 — children with dyslexia made significantly MORE visual errors (M=4.82, SD=2.55) than age-matched controls (M=1.00, SD=1.05) and elevated morphemic/sequential errors; semantic errors NOT elevated. Anchors the CLASS MIX (substitution/visual dominant, insertion low); the study's counts are per-task, so absolute per-100 rates are OUR interpolation."
+  - "Hasbrouck, J. & Tindal, G. (2017). An Update to Compiled ORF Norms (TR No. 1702). https://files.eric.ed.gov/fulltext/ED594994.pdf — places this persona at/below the instructional accuracy band; not used for per-class rates."
+  - "Clay, M. M. — Running Records accuracy bands & self-correction ratio convention. Anchors the accuracy band and SC:error ratio."
+
+calibration_notes:
+  - "Substitution dominance and low insertion are anchored to De Rom & Van Reybroeck (2024) as a class MIX/ranking; the study's error counts are per-task (isolated words / Alouette text), NOT per 100 running words, so all absolute per-100 magnitudes are OUR interpolation."
+  - "Accuracy band (~89.5%) sits at the frustration edge per Clay; error load tuned to that band."
+  - "self_correction (1.0) vs error load (~10.5) gives ~1:10.5, deliberately far below Clay's 'good' SC ratio to model weak self-monitoring — ratio anchored, magnitude OUR interpolation."
+  - "'Visually-similar' substitution is approximated by inject.py orthographic-neighbour swaps (an ORTHOGRAPHIC proxy for the visual confusion); documented as a proxy, not a perceptual model."
+  - "hesitation (10.0) and struggle_escalation_p (0.55) are the highest of the three personas, reflecting laborious/time-consuming decoding; directions anchored, magnitudes OURS."
