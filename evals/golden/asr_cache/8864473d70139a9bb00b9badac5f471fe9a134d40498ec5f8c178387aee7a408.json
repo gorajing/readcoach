@@ -1,0 +1,48 @@
+{
+  "text": "The cat sat on the mat.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.1,
+      "confidence": 0.3740963041782379
+    },
+    {
+      "text": " cat",
+      "start": 0.1,
+      "end": 0.3,
+      "confidence": 0.6491780877113342
+    },
+    {
+      "text": " sat",
+      "start": 0.3,
+      "end": 0.56,
+      "confidence": 0.8266701698303223
+    },
+    {
+      "text": " on",
+      "start": 0.56,
+      "end": 0.74,
+      "confidence": 0.9984399676322937
+    },
+    {
+      "text": " the",
+      "start": 0.74,
+      "end": 0.86,
+      "confidence": 0.9951333403587341
+    },
+    {
+      "text": " mat.",
+      "start": 0.86,
+      "end": 1.04,
+      "confidence": 0.9931769371032715
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}
