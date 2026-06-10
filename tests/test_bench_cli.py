@@ -207,8 +207,36 @@ class TestFailLoud:
         hyp_p = tmp_path / "hyp.jsonl"
         hyp_p.write_text('{"utt_id": "u1", "words": [}\n', encoding="utf-8")
         gold = load_gold(gold_p)
-        with pytest.raises(ValueError, match="invalid JSON"):
+        with pytest.raises(HypothesisError, match="invalid JSON"):
             load_hypotheses(hyp_p, gold)
+
+    def test_malformed_json_error_contains_file_and_lineno(self, tmp_path):
+        """HypothesisError for a malformed JSON line must name the file and line number.
+
+        CI-safe: no network, no model, no audio.  The error path goes through
+        _load_jsonl -> HypothesisError -> cmd_score's except HypothesisError handler,
+        so the CLI surfaces it as a clean 'ERROR:' message + exit 1, not a traceback.
+        """
+        gold_p = tmp_path / "gold.jsonl"
+        _write_jsonl(gold_p, [_gold_row("u1", "the cat", [])])
+        hyp_p = tmp_path / "bad.jsonl"
+        # Line 1 is valid; line 2 is malformed — the error must cite line 2.
+        hyp_p.write_text(
+            '{"utt_id": "u1", "words": [{"text": "the"}]}\n'
+            'NOT VALID JSON\n',
+            encoding="utf-8",
+        )
+        gold = load_gold(gold_p)
+
+        # 1. Exception type must be HypothesisError (so the CLI handler catches it).
+        with pytest.raises(HypothesisError) as exc_info:
+            load_hypotheses(hyp_p, gold)
+
+        msg = str(exc_info.value)
+        # 2. Message must name the file.
+        assert str(hyp_p) in msg, f"file path missing from error: {msg!r}"
+        # 3. Message must name the line number.
+        assert "line 2" in msg, f"line number missing from error: {msg!r}"
 
     def test_duplicate_gold_utt_id_fails_loud(self, tmp_path):
         gold_p = tmp_path / "gold.jsonl"

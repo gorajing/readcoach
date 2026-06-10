@@ -37,7 +37,7 @@ Verify it yourself in one command (run from the repo root, after the fetch in
 §1):
 
 ```bash
-python -c '
+uv run python -c '
 import sys
 from pathlib import Path
 from readcoach.bench_cli import load_gold, load_hypotheses, check_coverage, score_hypotheses
@@ -113,7 +113,7 @@ Each entry in `gold` is one labeled miscue:
 | field         | type                     | meaning                                              |
 |---------------|--------------------------|------------------------------------------------------|
 | `type`        | one of the 5 classes     | `substitution` / `omission` / `insertion` / `self_correction` / `hesitation` |
-| `target_word` | str \| null              | the expected word (null for insertions / repeat-hesitations) |
+| `target_word` | str \| null              | the expected word (null for insertions and filler-hesitations; in general: any miscue with no target-side word, e.g. repeat-hesitations in future versions) |
 | `said_word`   | str \| null              | what was actually read (null for omissions / silence-hesitations) |
 | `index`       | int                      | target-text word index (0-based)                     |
 | `render`      | null \| "filler" \| "silence" | hesitation subtype annotation (see §4.5)        |

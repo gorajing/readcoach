@@ -111,7 +111,7 @@ def _load_jsonl(path: Path) -> list[dict]:
             try:
                 obj = json.loads(stripped)
             except json.JSONDecodeError as exc:
-                raise ValueError(
+                raise HypothesisError(
                     f"{path}: line {lineno}: invalid JSON — {exc}"
                 ) from exc
             if not isinstance(obj, dict):
