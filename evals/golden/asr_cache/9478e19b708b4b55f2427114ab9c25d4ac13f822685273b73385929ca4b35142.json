@@ -1,0 +1,276 @@
+{
+  "text": "A pig sat in the mud by the pen. The sun was hot, so the pig dug a pit. A hen ran up and sat on the rim. The pig let the hen hop in. They had so much fun in the wet mud.",
+  "words": [
+    {
+      "text": " A",
+      "start": 0.0,
+      "end": 0.12,
+      "confidence": 0.7869192361831665
+    },
+    {
+      "text": " pig",
+      "start": 0.12,
+      "end": 0.32,
+      "confidence": 0.9879978895187378
+    },
+    {
+      "text": " sat",
+      "start": 0.32,
+      "end": 0.58,
+      "confidence": 0.9990770816802979
+    },
+    {
+      "text": " in",
+      "start": 0.58,
+      "end": 0.76,
+      "confidence": 0.9923270344734192
+    },
+    {
+      "text": " the",
+      "start": 0.76,
+      "end": 0.9,
+      "confidence": 6.133186946044589e-05
+    },
+    {
+      "text": " mud",
+      "start": 0.9,
+      "end": 1.1,
+      "confidence": 0.9912437200546265
+    },
+    {
+      "text": " by",
+      "start": 1.1,
+      "end": 1.34,
+      "confidence": 0.9929906129837036
+    },
+    {
+      "text": " the",
+      "start": 1.34,
+      "end": 1.5,
+      "confidence": 0.037302267737686634
+    },
+    {
+      "text": " pen.",
+      "start": 1.5,
+      "end": 1.86,
+      "confidence": 0.941476047039032
+    },
+    {
+      "text": " The",
+      "start": 2.38,
+      "end": 2.52,
+      "confidence": 0.9653692841529846
+    },
+    {
+      "text": " sun",
+      "start": 2.52,
+      "end": 2.78,
+      "confidence": 0.8015767335891724
+    },
+    {
+      "text": " was",
+      "start": 2.78,
+      "end": 3.02,
+      "confidence": 0.9822659492492676
+    },
+    {
+      "text": " hot,",
+      "start": 3.02,
+      "end": 3.38,
+      "confidence": 0.09532935917377472
+    },
+    {
+      "text": " so",
+      "start": 3.62,
+      "end": 3.8,
+      "confidence": 0.9866085648536682
+    },
+    {
+      "text": " the",
+      "start": 3.8,
+      "end": 3.96,
+      "confidence": 0.09093523118644953
+    },
+    {
+      "text": " pig",
+      "start": 3.96,
+      "end": 4.26,
+      "confidence": 0.9739764928817749
+    },
+    {
+      "text": " dug",
+      "start": 4.26,
+      "end": 4.48,
+      "confidence": 0.9093358516693115
+    },
+    {
+      "text": " a",
+      "start": 4.48,
+      "end": 4.68,
+      "confidence": 0.8873808979988098
+    },
+    {
+      "text": " pit.",
+      "start": 4.68,
+      "end": 4.92,
+      "confidence": 0.9946441650390625
+    },
+    {
+      "text": " A",
+      "start": 5.5,
+      "end": 5.58,
+      "confidence": 0.8932462930679321
+    },
+    {
+      "text": " hen",
+      "start": 5.58,
+      "end": 5.84,
+      "confidence": 0.1306164413690567
+    },
+    {
+      "text": " ran",
+      "start": 5.84,
+      "end": 6.06,
+      "confidence": 0.9900571703910828
+    },
+    {
+      "text": " up",
+      "start": 6.06,
+      "end": 6.34,
+      "confidence": 0.9875379800796509
+    },
+    {
+      "text": " and",
+      "start": 6.34,
+      "end": 6.46,
+      "confidence": 0.9429633021354675
+    },
+    {
+      "text": " sat",
+      "start": 6.46,
+      "end": 6.7,
+      "confidence": 0.9069798588752747
+    },
+    {
+      "text": " on",
+      "start": 6.7,
+      "end": 6.92,
+      "confidence": 0.7821182012557983
+    },
+    {
+      "text": " the",
+      "start": 6.92,
+      "end": 7.06,
+      "confidence": 0.47661569714546204
+    },
+    {
+      "text": " rim.",
+      "start": 7.06,
+      "end": 7.36,
+      "confidence": 0.9399024844169617
+    },
+    {
+      "text": " The",
+      "start": 7.88,
+      "end": 7.98,
+      "confidence": 0.9746720790863037
+    },
+    {
+      "text": " pig",
+      "start": 7.98,
+      "end": 8.24,
+      "confidence": 0.9780916571617126
+    },
+    {
+      "text": " let",
+      "start": 8.24,
+      "end": 8.5,
+      "confidence": 0.8015202283859253
+    },
+    {
+      "text": " the",
+      "start": 8.5,
+      "end": 8.86,
+      "confidence": 0.27080464584287256
+    },
+    {
+      "text": " hen",
+      "start": 8.86,
+      "end": 9.18,
+      "confidence": 0.5072247385978699
+    },
+    {
+      "text": " hop",
+      "start": 9.18,
+      "end": 9.44,
+      "confidence": 0.06845243275165558
+    },
+    {
+      "text": " in.",
+      "start": 9.44,
+      "end": 9.64,
+      "confidence": 0.5342223644256592
+    },
+    {
+      "text": " They",
+      "start": 9.78,
+      "end": 9.92,
+      "confidence": 0.010172673501074314
+    },
+    {
+      "text": " had",
+      "start": 9.92,
+      "end": 10.56,
+      "confidence": 0.3056376278400421
+    },
+    {
+      "text": " so",
+      "start": 10.56,
+      "end": 10.8,
+      "confidence": 0.9105608463287354
+    },
+    {
+      "text": " much",
+      "start": 10.8,
+      "end": 11.08,
+      "confidence": 0.887932300567627
+    },
+    {
+      "text": " fun",
+      "start": 11.08,
+      "end": 11.4,
+      "confidence": 0.9442545175552368
+    },
+    {
+      "text": " in",
+      "start": 11.4,
+      "end": 11.56,
+      "confidence": 0.8851051330566406
+    },
+    {
+      "text": " the",
+      "start": 11.56,
+      "end": 11.68,
+      "confidence": 0.6051174700260162
+    },
+    {
+      "text": " wet",
+      "start": 11.68,
+      "end": 11.84,
+      "confidence": 0.9880326986312866
+    },
+    {
+      "text": " mud.",
+      "start": 11.84,
+      "end": 12.1,
+      "confidence": 0.9978210926055908
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "A pig sat in the mud by the pen. The sun was hot, so the pig dug a pit. A hen ran up and sat on the rim. The pig let the hen hop in. They had so much fun in the wet mud.",
+    "bias": "strong",
+    "backend": "faster-whisper-small"
+  }
+}

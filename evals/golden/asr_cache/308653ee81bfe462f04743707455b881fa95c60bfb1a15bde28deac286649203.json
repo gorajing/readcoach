@@ -1,0 +1,258 @@
+{
+  "text": "The cat sat on a red mat. A big dog ran up to big the cat. The cat did not run. The dog sat next to the cat. Then the cat and the dog had a nap in the warm sun.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.1,
+      "confidence": 0.8933389186859131
+    },
+    {
+      "text": " cat",
+      "start": 0.1,
+      "end": 0.36,
+      "confidence": 0.9597756266593933
+    },
+    {
+      "text": " sat",
+      "start": 0.36,
+      "end": 0.58,
+      "confidence": 0.9979177117347717
+    },
+    {
+      "text": " on",
+      "start": 0.58,
+      "end": 0.84,
+      "confidence": 0.9983589053153992
+    },
+    {
+      "text": " a",
+      "start": 0.84,
+      "end": 0.94,
+      "confidence": 0.994106650352478
+    },
+    {
+      "text": " red",
+      "start": 0.94,
+      "end": 1.12,
+      "confidence": 0.9245936274528503
+    },
+    {
+      "text": " mat.",
+      "start": 1.12,
+      "end": 1.42,
+      "confidence": 0.9886257648468018
+    },
+    {
+      "text": " A",
+      "start": 1.8,
+      "end": 1.92,
+      "confidence": 0.9817019701004028
+    },
+    {
+      "text": " big",
+      "start": 1.92,
+      "end": 2.12,
+      "confidence": 0.986542820930481
+    },
+    {
+      "text": " dog",
+      "start": 2.12,
+      "end": 2.38,
+      "confidence": 0.9960817694664001
+    },
+    {
+      "text": " ran",
+      "start": 2.38,
+      "end": 2.66,
+      "confidence": 0.9984490871429443
+    },
+    {
+      "text": " up",
+      "start": 2.66,
+      "end": 2.86,
+      "confidence": 0.9983464479446411
+    },
+    {
+      "text": " to",
+      "start": 2.86,
+      "end": 3.02,
+      "confidence": 0.9967799782752991
+    },
+    {
+      "text": " big",
+      "start": 3.02,
+      "end": 3.22,
+      "confidence": 0.7700603604316711
+    },
+    {
+      "text": " the",
+      "start": 3.22,
+      "end": 3.38,
+      "confidence": 0.9783995747566223
+    },
+    {
+      "text": " cat.",
+      "start": 3.38,
+      "end": 3.76,
+      "confidence": 0.9949735403060913
+    },
+    {
+      "text": " The",
+      "start": 4.08,
+      "end": 4.22,
+      "confidence": 0.9904199242591858
+    },
+    {
+      "text": " cat",
+      "start": 4.22,
+      "end": 4.5,
+      "confidence": 0.9958904981613159
+    },
+    {
+      "text": " did",
+      "start": 4.5,
+      "end": 4.68,
+      "confidence": 0.9962807297706604
+    },
+    {
+      "text": " not",
+      "start": 4.68,
+      "end": 4.92,
+      "confidence": 0.9970909357070923
+    },
+    {
+      "text": " run.",
+      "start": 4.92,
+      "end": 5.26,
+      "confidence": 0.9989914298057556
+    },
+    {
+      "text": " The",
+      "start": 5.66,
+      "end": 5.78,
+      "confidence": 0.993676483631134
+    },
+    {
+      "text": " dog",
+      "start": 5.78,
+      "end": 6.06,
+      "confidence": 0.9952551126480103
+    },
+    {
+      "text": " sat",
+      "start": 6.06,
+      "end": 6.26,
+      "confidence": 0.9997220635414124
+    },
+    {
+      "text": " next",
+      "start": 6.26,
+      "end": 6.6,
+      "confidence": 0.9987972974777222
+    },
+    {
+      "text": " to",
+      "start": 6.6,
+      "end": 6.88,
+      "confidence": 0.9992830157279968
+    },
+    {
+      "text": " the",
+      "start": 6.88,
+      "end": 7.0,
+      "confidence": 0.9992733597755432
+    },
+    {
+      "text": " cat.",
+      "start": 7.0,
+      "end": 7.42,
+      "confidence": 0.9967243075370789
+    },
+    {
+      "text": " Then",
+      "start": 7.7,
+      "end": 7.88,
+      "confidence": 0.9844639897346497
+    },
+    {
+      "text": " the",
+      "start": 7.88,
+      "end": 8.04,
+      "confidence": 0.9903045296669006
+    },
+    {
+      "text": " cat",
+      "start": 8.04,
+      "end": 8.3,
+      "confidence": 0.9945979118347168
+    },
+    {
+      "text": " and",
+      "start": 8.3,
+      "end": 8.48,
+      "confidence": 0.990665853023529
+    },
+    {
+      "text": " the",
+      "start": 8.48,
+      "end": 8.6,
+      "confidence": 0.9955888986587524
+    },
+    {
+      "text": " dog",
+      "start": 8.6,
+      "end": 8.84,
+      "confidence": 0.9980598092079163
+    },
+    {
+      "text": " had",
+      "start": 8.84,
+      "end": 9.06,
+      "confidence": 0.996599018573761
+    },
+    {
+      "text": " a",
+      "start": 9.06,
+      "end": 9.22,
+      "confidence": 0.9967455863952637
+    },
+    {
+      "text": " nap",
+      "start": 9.22,
+      "end": 9.42,
+      "confidence": 0.9992825388908386
+    },
+    {
+      "text": " in",
+      "start": 9.42,
+      "end": 9.6,
+      "confidence": 0.9987442493438721
+    },
+    {
+      "text": " the",
+      "start": 9.6,
+      "end": 9.7,
+      "confidence": 0.9987308382987976
+    },
+    {
+      "text": " warm",
+      "start": 9.7,
+      "end": 9.94,
+      "confidence": 0.9871281385421753
+    },
+    {
+      "text": " sun.",
+      "start": 9.94,
+      "end": 10.34,
+      "confidence": 0.9896597266197205
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

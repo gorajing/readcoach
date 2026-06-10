@@ -1,0 +1,264 @@
+{
+  "text": "Shad and Bess went to the shop on the ship. They got fish and chips in the dish. A duck swam up with a splash. Bess gave it a chunk of bread. Then Shad and Bess went back up the long plank.",
+  "words": [
+    {
+      "text": " Shad",
+      "start": 0.0,
+      "end": 0.36,
+      "confidence": 0.6576362997293472
+    },
+    {
+      "text": " and",
+      "start": 0.36,
+      "end": 0.52,
+      "confidence": 0.810039222240448
+    },
+    {
+      "text": " Bess",
+      "start": 0.52,
+      "end": 0.76,
+      "confidence": 0.6682886034250259
+    },
+    {
+      "text": " went",
+      "start": 0.76,
+      "end": 1.02,
+      "confidence": 0.9977617263793945
+    },
+    {
+      "text": " to",
+      "start": 1.02,
+      "end": 1.28,
+      "confidence": 0.9948941469192505
+    },
+    {
+      "text": " the",
+      "start": 1.28,
+      "end": 1.44,
+      "confidence": 0.9882351160049438
+    },
+    {
+      "text": " shop",
+      "start": 1.44,
+      "end": 1.7,
+      "confidence": 0.984070897102356
+    },
+    {
+      "text": " on",
+      "start": 1.7,
+      "end": 1.98,
+      "confidence": 0.9920864701271057
+    },
+    {
+      "text": " the",
+      "start": 1.98,
+      "end": 2.16,
+      "confidence": 0.987854540348053
+    },
+    {
+      "text": " ship.",
+      "start": 2.16,
+      "end": 2.54,
+      "confidence": 0.9980359673500061
+    },
+    {
+      "text": " They",
+      "start": 3.06,
+      "end": 3.24,
+      "confidence": 0.987781286239624
+    },
+    {
+      "text": " got",
+      "start": 3.24,
+      "end": 3.54,
+      "confidence": 0.9898614883422852
+    },
+    {
+      "text": " fish",
+      "start": 3.54,
+      "end": 3.84,
+      "confidence": 0.9589285254478455
+    },
+    {
+      "text": " and",
+      "start": 3.84,
+      "end": 4.02,
+      "confidence": 0.9884618520736694
+    },
+    {
+      "text": " chips",
+      "start": 4.02,
+      "end": 4.36,
+      "confidence": 0.9920335412025452
+    },
+    {
+      "text": " in",
+      "start": 4.36,
+      "end": 4.62,
+      "confidence": 0.7976720333099365
+    },
+    {
+      "text": " the",
+      "start": 4.62,
+      "end": 4.72,
+      "confidence": 0.6585131287574768
+    },
+    {
+      "text": " dish.",
+      "start": 4.72,
+      "end": 5.08,
+      "confidence": 0.9976649284362793
+    },
+    {
+      "text": " A",
+      "start": 5.64,
+      "end": 5.74,
+      "confidence": 0.9778665900230408
+    },
+    {
+      "text": " duck",
+      "start": 5.74,
+      "end": 5.96,
+      "confidence": 0.9788578152656555
+    },
+    {
+      "text": " swam",
+      "start": 5.96,
+      "end": 6.46,
+      "confidence": 0.979366809129715
+    },
+    {
+      "text": " up",
+      "start": 6.46,
+      "end": 6.64,
+      "confidence": 0.9972735047340393
+    },
+    {
+      "text": " with",
+      "start": 6.64,
+      "end": 6.9,
+      "confidence": 0.9947006702423096
+    },
+    {
+      "text": " a",
+      "start": 6.9,
+      "end": 7.06,
+      "confidence": 0.9639020562171936
+    },
+    {
+      "text": " splash.",
+      "start": 7.06,
+      "end": 7.38,
+      "confidence": 0.9941891431808472
+    },
+    {
+      "text": " Bess",
+      "start": 8.2,
+      "end": 8.52,
+      "confidence": 0.9845276474952698
+    },
+    {
+      "text": " gave",
+      "start": 8.52,
+      "end": 8.78,
+      "confidence": 0.9953141212463379
+    },
+    {
+      "text": " it",
+      "start": 8.78,
+      "end": 9.0,
+      "confidence": 0.9921924471855164
+    },
+    {
+      "text": " a",
+      "start": 9.0,
+      "end": 9.16,
+      "confidence": 0.9989405274391174
+    },
+    {
+      "text": " chunk",
+      "start": 9.16,
+      "end": 9.36,
+      "confidence": 0.9927629828453064
+    },
+    {
+      "text": " of",
+      "start": 9.36,
+      "end": 9.58,
+      "confidence": 0.9985911250114441
+    },
+    {
+      "text": " bread.",
+      "start": 9.58,
+      "end": 9.88,
+      "confidence": 0.9994264841079712
+    },
+    {
+      "text": " Then",
+      "start": 10.58,
+      "end": 10.84,
+      "confidence": 0.9883953332901001
+    },
+    {
+      "text": " Shad",
+      "start": 10.84,
+      "end": 11.24,
+      "confidence": 0.9668943583965302
+    },
+    {
+      "text": " and",
+      "start": 11.24,
+      "end": 11.38,
+      "confidence": 0.996690034866333
+    },
+    {
+      "text": " Bess",
+      "start": 11.38,
+      "end": 11.66,
+      "confidence": 0.9985077381134033
+    },
+    {
+      "text": " went",
+      "start": 11.66,
+      "end": 11.94,
+      "confidence": 0.9989172220230103
+    },
+    {
+      "text": " back",
+      "start": 11.94,
+      "end": 12.22,
+      "confidence": 0.9960924983024597
+    },
+    {
+      "text": " up",
+      "start": 12.22,
+      "end": 12.46,
+      "confidence": 0.991256594657898
+    },
+    {
+      "text": " the",
+      "start": 12.46,
+      "end": 12.72,
+      "confidence": 0.38795390725135803
+    },
+    {
+      "text": " long",
+      "start": 12.72,
+      "end": 13.04,
+      "confidence": 0.5964061617851257
+    },
+    {
+      "text": " plank.",
+      "start": 13.04,
+      "end": 13.44,
+      "confidence": 0.9236125946044922
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

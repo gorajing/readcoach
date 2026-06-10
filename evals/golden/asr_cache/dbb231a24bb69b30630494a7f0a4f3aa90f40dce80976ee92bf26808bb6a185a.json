@@ -1,0 +1,264 @@
+{
+  "text": "Shat and death went to the shop on the ship. They got fish and chips in a dish. A duck swam up with a splash. Death gave it a chunk of bread. Then Shat and Death went back up the long plank.",
+  "words": [
+    {
+      "text": " Shat",
+      "start": 0.0,
+      "end": 0.32,
+      "confidence": 0.17928266525268555
+    },
+    {
+      "text": " and",
+      "start": 0.32,
+      "end": 0.44,
+      "confidence": 0.3932130038738251
+    },
+    {
+      "text": " death",
+      "start": 0.44,
+      "end": 0.62,
+      "confidence": 0.8344324827194214
+    },
+    {
+      "text": " went",
+      "start": 0.62,
+      "end": 0.9,
+      "confidence": 0.9925139546394348
+    },
+    {
+      "text": " to",
+      "start": 0.9,
+      "end": 1.14,
+      "confidence": 0.9887610077857971
+    },
+    {
+      "text": " the",
+      "start": 1.14,
+      "end": 1.28,
+      "confidence": 0.9914172291755676
+    },
+    {
+      "text": " shop",
+      "start": 1.28,
+      "end": 1.54,
+      "confidence": 0.9920557141304016
+    },
+    {
+      "text": " on",
+      "start": 1.54,
+      "end": 1.82,
+      "confidence": 0.9296260476112366
+    },
+    {
+      "text": " the",
+      "start": 1.82,
+      "end": 1.98,
+      "confidence": 0.8029153943061829
+    },
+    {
+      "text": " ship.",
+      "start": 1.98,
+      "end": 2.3,
+      "confidence": 0.6406989693641663
+    },
+    {
+      "text": " They",
+      "start": 2.94,
+      "end": 3.08,
+      "confidence": 0.47803691029548645
+    },
+    {
+      "text": " got",
+      "start": 3.08,
+      "end": 3.34,
+      "confidence": 0.9464678764343262
+    },
+    {
+      "text": " fish",
+      "start": 3.34,
+      "end": 3.7,
+      "confidence": 0.965282142162323
+    },
+    {
+      "text": " and",
+      "start": 3.7,
+      "end": 3.84,
+      "confidence": 0.9876435995101929
+    },
+    {
+      "text": " chips",
+      "start": 3.84,
+      "end": 4.14,
+      "confidence": 0.9200537800788879
+    },
+    {
+      "text": " in",
+      "start": 4.14,
+      "end": 4.42,
+      "confidence": 0.9367479681968689
+    },
+    {
+      "text": " a",
+      "start": 4.42,
+      "end": 4.52,
+      "confidence": 0.9269949197769165
+    },
+    {
+      "text": " dish.",
+      "start": 4.52,
+      "end": 4.88,
+      "confidence": 0.9960057139396667
+    },
+    {
+      "text": " A",
+      "start": 5.48,
+      "end": 5.58,
+      "confidence": 0.888263463973999
+    },
+    {
+      "text": " duck",
+      "start": 5.58,
+      "end": 5.78,
+      "confidence": 0.9600437879562378
+    },
+    {
+      "text": " swam",
+      "start": 5.78,
+      "end": 6.08,
+      "confidence": 0.6242531836032867
+    },
+    {
+      "text": " up",
+      "start": 6.08,
+      "end": 6.34,
+      "confidence": 0.9908315539360046
+    },
+    {
+      "text": " with",
+      "start": 6.34,
+      "end": 6.54,
+      "confidence": 0.9935612678527832
+    },
+    {
+      "text": " a",
+      "start": 6.54,
+      "end": 6.72,
+      "confidence": 0.42959389090538025
+    },
+    {
+      "text": " splash.",
+      "start": 6.72,
+      "end": 7.0,
+      "confidence": 0.9872753620147705
+    },
+    {
+      "text": " Death",
+      "start": 7.9,
+      "end": 8.06,
+      "confidence": 0.9854458570480347
+    },
+    {
+      "text": " gave",
+      "start": 8.06,
+      "end": 8.32,
+      "confidence": 0.9840546250343323
+    },
+    {
+      "text": " it",
+      "start": 8.32,
+      "end": 8.6,
+      "confidence": 0.8089379668235779
+    },
+    {
+      "text": " a",
+      "start": 8.6,
+      "end": 8.76,
+      "confidence": 0.7831097841262817
+    },
+    {
+      "text": " chunk",
+      "start": 8.76,
+      "end": 9.02,
+      "confidence": 0.9814866185188293
+    },
+    {
+      "text": " of",
+      "start": 9.02,
+      "end": 9.24,
+      "confidence": 0.9986233711242676
+    },
+    {
+      "text": " bread.",
+      "start": 9.24,
+      "end": 9.52,
+      "confidence": 0.9989367127418518
+    },
+    {
+      "text": " Then",
+      "start": 10.16,
+      "end": 10.44,
+      "confidence": 0.7730807662010193
+    },
+    {
+      "text": " Shat",
+      "start": 10.44,
+      "end": 10.76,
+      "confidence": 0.7836423814296722
+    },
+    {
+      "text": " and",
+      "start": 10.76,
+      "end": 10.86,
+      "confidence": 0.995470404624939
+    },
+    {
+      "text": " Death",
+      "start": 10.86,
+      "end": 11.08,
+      "confidence": 0.5368290543556213
+    },
+    {
+      "text": " went",
+      "start": 11.08,
+      "end": 11.26,
+      "confidence": 0.9980818033218384
+    },
+    {
+      "text": " back",
+      "start": 11.26,
+      "end": 11.62,
+      "confidence": 0.8470963835716248
+    },
+    {
+      "text": " up",
+      "start": 11.62,
+      "end": 12.1,
+      "confidence": 0.9631723761558533
+    },
+    {
+      "text": " the",
+      "start": 12.1,
+      "end": 12.28,
+      "confidence": 0.8980731964111328
+    },
+    {
+      "text": " long",
+      "start": 12.28,
+      "end": 12.54,
+      "confidence": 0.5867732763290405
+    },
+    {
+      "text": " plank.",
+      "start": 12.54,
+      "end": 12.94,
+      "confidence": 0.9820830821990967
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

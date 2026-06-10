@@ -1,0 +1,264 @@
+{
+  "text": "Frank fast to catch the truck. He must not be late for the trip. He packed his neck and a thick jacket in his pack. The bus went past the punt and it all planned. Frank fell glad and held the rail.",
+  "words": [
+    {
+      "text": " Frank",
+      "start": 0.0,
+      "end": 0.32,
+      "confidence": 0.8784192800521851
+    },
+    {
+      "text": " fast",
+      "start": 0.32,
+      "end": 0.68,
+      "confidence": 0.5897489786148071
+    },
+    {
+      "text": " to",
+      "start": 0.68,
+      "end": 0.94,
+      "confidence": 0.13162988424301147
+    },
+    {
+      "text": " catch",
+      "start": 0.94,
+      "end": 1.22,
+      "confidence": 0.9961320161819458
+    },
+    {
+      "text": " the",
+      "start": 1.22,
+      "end": 1.42,
+      "confidence": 0.9800155758857727
+    },
+    {
+      "text": " truck.",
+      "start": 1.42,
+      "end": 1.76,
+      "confidence": 0.9588390588760376
+    },
+    {
+      "text": " He",
+      "start": 2.36,
+      "end": 2.52,
+      "confidence": 0.9812570810317993
+    },
+    {
+      "text": " must",
+      "start": 2.52,
+      "end": 2.7,
+      "confidence": 0.9885462522506714
+    },
+    {
+      "text": " not",
+      "start": 2.7,
+      "end": 3.02,
+      "confidence": 0.9959533214569092
+    },
+    {
+      "text": " be",
+      "start": 3.02,
+      "end": 3.26,
+      "confidence": 0.9693836569786072
+    },
+    {
+      "text": " late",
+      "start": 3.26,
+      "end": 3.5,
+      "confidence": 0.9667448997497559
+    },
+    {
+      "text": " for",
+      "start": 3.5,
+      "end": 3.72,
+      "confidence": 0.9952387809753418
+    },
+    {
+      "text": " the",
+      "start": 3.72,
+      "end": 3.9,
+      "confidence": 0.9763142466545105
+    },
+    {
+      "text": " trip.",
+      "start": 3.9,
+      "end": 4.14,
+      "confidence": 0.7143399119377136
+    },
+    {
+      "text": " He",
+      "start": 4.78,
+      "end": 4.98,
+      "confidence": 0.9906564950942993
+    },
+    {
+      "text": " packed",
+      "start": 4.98,
+      "end": 5.32,
+      "confidence": 0.9187743067741394
+    },
+    {
+      "text": " his",
+      "start": 5.32,
+      "end": 5.52,
+      "confidence": 0.9958243370056152
+    },
+    {
+      "text": " neck",
+      "start": 5.52,
+      "end": 5.84,
+      "confidence": 0.6800670623779297
+    },
+    {
+      "text": " and",
+      "start": 5.84,
+      "end": 6.0,
+      "confidence": 0.9726971387863159
+    },
+    {
+      "text": " a",
+      "start": 6.0,
+      "end": 6.14,
+      "confidence": 0.8335631489753723
+    },
+    {
+      "text": " thick",
+      "start": 6.14,
+      "end": 6.32,
+      "confidence": 0.9940567016601562
+    },
+    {
+      "text": " jacket",
+      "start": 6.32,
+      "end": 6.66,
+      "confidence": 0.9958957433700562
+    },
+    {
+      "text": " in",
+      "start": 6.66,
+      "end": 7.04,
+      "confidence": 0.9928184747695923
+    },
+    {
+      "text": " his",
+      "start": 7.04,
+      "end": 7.22,
+      "confidence": 0.9988818764686584
+    },
+    {
+      "text": " pack.",
+      "start": 7.22,
+      "end": 7.54,
+      "confidence": 0.8419415354728699
+    },
+    {
+      "text": " The",
+      "start": 8.18,
+      "end": 8.3,
+      "confidence": 0.9863709807395935
+    },
+    {
+      "text": " bus",
+      "start": 8.3,
+      "end": 8.54,
+      "confidence": 0.9575552344322205
+    },
+    {
+      "text": " went",
+      "start": 8.54,
+      "end": 8.8,
+      "confidence": 0.6759228706359863
+    },
+    {
+      "text": " past",
+      "start": 8.8,
+      "end": 9.1,
+      "confidence": 0.9889912605285645
+    },
+    {
+      "text": " the",
+      "start": 9.1,
+      "end": 9.3,
+      "confidence": 0.9464197158813477
+    },
+    {
+      "text": " punt",
+      "start": 9.3,
+      "end": 9.62,
+      "confidence": 0.4743194580078125
+    },
+    {
+      "text": " and",
+      "start": 9.62,
+      "end": 9.9,
+      "confidence": 0.9026052355766296
+    },
+    {
+      "text": " it",
+      "start": 9.9,
+      "end": 10.06,
+      "confidence": 0.40508514642715454
+    },
+    {
+      "text": " all",
+      "start": 10.06,
+      "end": 10.28,
+      "confidence": 0.9908602237701416
+    },
+    {
+      "text": " planned.",
+      "start": 10.28,
+      "end": 10.68,
+      "confidence": 0.6718558073043823
+    },
+    {
+      "text": " Frank",
+      "start": 11.34,
+      "end": 11.7,
+      "confidence": 0.9953768253326416
+    },
+    {
+      "text": " fell",
+      "start": 11.7,
+      "end": 11.92,
+      "confidence": 0.4164476990699768
+    },
+    {
+      "text": " glad",
+      "start": 11.92,
+      "end": 12.28,
+      "confidence": 0.8942229747772217
+    },
+    {
+      "text": " and",
+      "start": 12.28,
+      "end": 12.48,
+      "confidence": 0.9495943188667297
+    },
+    {
+      "text": " held",
+      "start": 12.48,
+      "end": 12.72,
+      "confidence": 0.9838510155677795
+    },
+    {
+      "text": " the",
+      "start": 12.72,
+      "end": 12.92,
+      "confidence": 0.7164154648780823
+    },
+    {
+      "text": " rail.",
+      "start": 12.92,
+      "end": 13.18,
+      "confidence": 0.7979487180709839
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

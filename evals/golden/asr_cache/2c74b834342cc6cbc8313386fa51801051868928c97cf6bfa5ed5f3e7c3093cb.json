@@ -1,0 +1,270 @@
+{
+  "text": "Frank ran fast to catch the truck. He must not be late for the trip. He packed a snack and a thick jacket in his pack. The bus went past the pond and the tall plant. Frank felt glad and held the rail.",
+  "words": [
+    {
+      "text": " Frank",
+      "start": 0.0,
+      "end": 0.32,
+      "confidence": 0.9405842423439026
+    },
+    {
+      "text": " ran",
+      "start": 0.32,
+      "end": 0.66,
+      "confidence": 0.9963173866271973
+    },
+    {
+      "text": " fast",
+      "start": 0.66,
+      "end": 1.0,
+      "confidence": 0.994599461555481
+    },
+    {
+      "text": " to",
+      "start": 1.0,
+      "end": 1.24,
+      "confidence": 0.0001388413679705991
+    },
+    {
+      "text": " catch",
+      "start": 1.24,
+      "end": 1.58,
+      "confidence": 0.9954743981361389
+    },
+    {
+      "text": " the",
+      "start": 1.58,
+      "end": 1.82,
+      "confidence": 0.28007050120504573
+    },
+    {
+      "text": " truck.",
+      "start": 1.82,
+      "end": 2.12,
+      "confidence": 0.5352541798104843
+    },
+    {
+      "text": " He",
+      "start": 2.68,
+      "end": 2.88,
+      "confidence": 0.9677455425262451
+    },
+    {
+      "text": " must",
+      "start": 2.88,
+      "end": 3.06,
+      "confidence": 0.9093299508094788
+    },
+    {
+      "text": " not",
+      "start": 3.06,
+      "end": 3.36,
+      "confidence": 0.8492111563682556
+    },
+    {
+      "text": " be",
+      "start": 3.36,
+      "end": 3.58,
+      "confidence": 0.8652240037918091
+    },
+    {
+      "text": " late",
+      "start": 3.58,
+      "end": 3.84,
+      "confidence": 0.8648099303245544
+    },
+    {
+      "text": " for",
+      "start": 3.84,
+      "end": 4.04,
+      "confidence": 0.7564718723297119
+    },
+    {
+      "text": " the",
+      "start": 4.04,
+      "end": 4.2,
+      "confidence": 0.4220641553401947
+    },
+    {
+      "text": " trip.",
+      "start": 4.2,
+      "end": 4.46,
+      "confidence": 0.7238952815532684
+    },
+    {
+      "text": " He",
+      "start": 5.02,
+      "end": 5.22,
+      "confidence": 0.98595130443573
+    },
+    {
+      "text": " packed",
+      "start": 5.22,
+      "end": 5.52,
+      "confidence": 0.3517969846725464
+    },
+    {
+      "text": " a",
+      "start": 5.52,
+      "end": 5.76,
+      "confidence": 0.8219371438026428
+    },
+    {
+      "text": " snack",
+      "start": 5.76,
+      "end": 6.0,
+      "confidence": 0.4568158984184265
+    },
+    {
+      "text": " and",
+      "start": 6.0,
+      "end": 6.28,
+      "confidence": 0.4685191214084625
+    },
+    {
+      "text": " a",
+      "start": 6.28,
+      "end": 6.42,
+      "confidence": 0.9260935187339783
+    },
+    {
+      "text": " thick",
+      "start": 6.42,
+      "end": 6.94,
+      "confidence": 0.31445301060254377
+    },
+    {
+      "text": " jacket",
+      "start": 6.94,
+      "end": 7.34,
+      "confidence": 0.8337550759315491
+    },
+    {
+      "text": " in",
+      "start": 7.34,
+      "end": 7.58,
+      "confidence": 0.8879789113998413
+    },
+    {
+      "text": " his",
+      "start": 7.58,
+      "end": 7.76,
+      "confidence": 0.8033334612846375
+    },
+    {
+      "text": " pack.",
+      "start": 7.76,
+      "end": 8.12,
+      "confidence": 0.09551240503787994
+    },
+    {
+      "text": " The",
+      "start": 8.64,
+      "end": 8.78,
+      "confidence": 0.9645875692367554
+    },
+    {
+      "text": " bus",
+      "start": 8.78,
+      "end": 9.0,
+      "confidence": 0.9110167622566223
+    },
+    {
+      "text": " went",
+      "start": 9.0,
+      "end": 9.24,
+      "confidence": 0.9165340065956116
+    },
+    {
+      "text": " past",
+      "start": 9.24,
+      "end": 9.56,
+      "confidence": 0.8510313034057617
+    },
+    {
+      "text": " the",
+      "start": 9.56,
+      "end": 9.84,
+      "confidence": 0.42280449345707893
+    },
+    {
+      "text": " pond",
+      "start": 9.84,
+      "end": 10.18,
+      "confidence": 0.4767531190106335
+    },
+    {
+      "text": " and",
+      "start": 10.18,
+      "end": 10.38,
+      "confidence": 0.944389820098877
+    },
+    {
+      "text": " the",
+      "start": 10.38,
+      "end": 10.54,
+      "confidence": 0.42077917605638504
+    },
+    {
+      "text": " tall",
+      "start": 10.54,
+      "end": 10.84,
+      "confidence": 0.6911634107430776
+    },
+    {
+      "text": " plant.",
+      "start": 10.84,
+      "end": 11.22,
+      "confidence": 0.823461651802063
+    },
+    {
+      "text": " Frank",
+      "start": 11.8,
+      "end": 12.18,
+      "confidence": 0.9879344701766968
+    },
+    {
+      "text": " felt",
+      "start": 12.18,
+      "end": 12.44,
+      "confidence": 0.9442449808120728
+    },
+    {
+      "text": " glad",
+      "start": 12.44,
+      "end": 12.82,
+      "confidence": 0.8210653066635132
+    },
+    {
+      "text": " and",
+      "start": 12.82,
+      "end": 13.18,
+      "confidence": 0.0008886464638635516
+    },
+    {
+      "text": " held",
+      "start": 13.18,
+      "end": 13.94,
+      "confidence": 0.3069058954715729
+    },
+    {
+      "text": " the",
+      "start": 13.94,
+      "end": 14.18,
+      "confidence": 0.4316421449184418
+    },
+    {
+      "text": " rail.",
+      "start": 14.18,
+      "end": 14.48,
+      "confidence": 0.9476756453514099
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "Frank ran fast to catch the truck. He must not be late for the trip. He packed a snack and a thick jacket in his pack. The bus went past the pond and the tall plant. Frank felt glad and held the rail.",
+    "bias": "strong",
+    "backend": "faster-whisper-small"
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "text": "The farmer parked his cart near the barn before the storm. His sister Marta turned the corner with a basket of corn. The thunder was louder than a horn. A nervous bird hid under the porch. After the storm they shared warm corn for supper.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.14,
+      "confidence": 0.743866503238678
+    },
+    {
+      "text": " farmer",
+      "start": 0.14,
+      "end": 0.48,
+      "confidence": 0.9841465353965759
+    },
+    {
+      "text": " parked",
+      "start": 0.48,
+      "end": 0.96,
+      "confidence": 0.9827038645744324
+    },
+    {
+      "text": " his",
+      "start": 0.96,
+      "end": 1.28,
+      "confidence": 0.9941991567611694
+    },
+    {
+      "text": " cart",
+      "start": 1.28,
+      "end": 1.58,
+      "confidence": 0.0217557605355978
+    },
+    {
+      "text": " near",
+      "start": 1.58,
+      "end": 1.82,
+      "confidence": 0.9949473142623901
+    },
+    {
+      "text": " the",
+      "start": 1.82,
+      "end": 2.0,
+      "confidence": 7.489091953516436e-05
+    },
+    {
+      "text": " barn",
+      "start": 2.0,
+      "end": 2.26,
+      "confidence": 0.9946740865707397
+    },
+    {
+      "text": " before",
+      "start": 2.26,
+      "end": 2.58,
+      "confidence": 0.9784034490585327
+    },
+    {
+      "text": " the",
+      "start": 2.58,
+      "end": 2.84,
+      "confidence": 0.025856198277324438
+    },
+    {
+      "text": " storm.",
+      "start": 2.84,
+      "end": 4.24,
+      "confidence": 0.7050969004631042
+    },
+    {
+      "text": " His",
+      "start": 5.04,
+      "end": 5.28,
+      "confidence": 0.9471825957298279
+    },
+    {
+      "text": " sister",
+      "start": 5.28,
+      "end": 5.64,
+      "confidence": 0.9642554521560669
+    },
+    {
+      "text": " Marta",
+      "start": 5.64,
+      "end": 6.16,
+      "confidence": 0.26003043726086617
+    },
+    {
+      "text": " turned",
+      "start": 6.16,
+      "end": 6.56,
+      "confidence": 0.3413795265078079
+    },
+    {
+      "text": " the",
+      "start": 6.56,
+      "end": 6.72,
+      "confidence": 0.24027325958013535
+    },
+    {
+      "text": " corner",
+      "start": 6.72,
+      "end": 7.06,
+      "confidence": 0.9507988095283508
+    },
+    {
+      "text": " with",
+      "start": 7.06,
+      "end": 7.34,
+      "confidence": 0.9554886221885681
+    },
+    {
+      "text": " a",
+      "start": 7.34,
+      "end": 7.54,
+      "confidence": 0.7634038329124451
+    },
+    {
+      "text": " basket",
+      "start": 7.54,
+      "end": 7.82,
+      "confidence": 0.9256598353385925
+    },
+    {
+      "text": " of",
+      "start": 7.82,
+      "end": 8.12,
+      "confidence": 0.9530925750732422
+    },
+    {
+      "text": " corn.",
+      "start": 8.12,
+      "end": 8.44,
+      "confidence": 0.8102713227272034
+    },
+    {
+      "text": " The",
+      "start": 9.06,
+      "end": 9.24,
+      "confidence": 0.9542437791824341
+    },
+    {
+      "text": " thunder",
+      "start": 9.24,
+      "end": 9.52,
+      "confidence": 0.3720875166667004
+    },
+    {
+      "text": " was",
+      "start": 9.52,
+      "end": 9.8,
+      "confidence": 0.9859132170677185
+    },
+    {
+      "text": " louder",
+      "start": 9.8,
+      "end": 10.08,
+      "confidence": 0.9887579083442688
+    },
+    {
+      "text": " than",
+      "start": 10.08,
+      "end": 10.46,
+      "confidence": 0.4890214502811432
+    },
+    {
+      "text": " a",
+      "start": 10.46,
+      "end": 10.6,
+      "confidence": 0.8154808878898621
+    },
+    {
+      "text": " horn.",
+      "start": 10.6,
+      "end": 10.92,
+      "confidence": 0.9572460055351257
+    },
+    {
+      "text": " A",
+      "start": 11.54,
+      "end": 11.66,
+      "confidence": 0.4919586777687073
+    },
+    {
+      "text": " nervous",
+      "start": 11.66,
+      "end": 11.92,
+      "confidence": 0.0470261387526989
+    },
+    {
+      "text": " bird",
+      "start": 11.92,
+      "end": 12.26,
+      "confidence": 0.7538965344429016
+    },
+    {
+      "text": " hid",
+      "start": 12.26,
+      "end": 12.52,
+      "confidence": 0.8674513101577759
+    },
+    {
+      "text": " under",
+      "start": 12.52,
+      "end": 12.78,
+      "confidence": 0.2777193784713745
+    },
+    {
+      "text": " the",
+      "start": 12.78,
+      "end": 13.0,
+      "confidence": 0.5474411323666573
+    },
+    {
+      "text": " porch.",
+      "start": 13.0,
+      "end": 13.34,
+      "confidence": 0.9855929017066956
+    },
+    {
+      "text": " After",
+      "start": 14.06,
+      "end": 14.32,
+      "confidence": 0.9689180850982666
+    },
+    {
+      "text": " the",
+      "start": 14.32,
+      "end": 14.56,
+      "confidence": 0.5346145778894424
+    },
+    {
+      "text": " storm",
+      "start": 14.56,
+      "end": 14.84,
+      "confidence": 0.914939284324646
+    },
+    {
+      "text": " they",
+      "start": 14.84,
+      "end": 15.08,
+      "confidence": 0.4703612495213747
+    },
+    {
+      "text": " shared",
+      "start": 15.08,
+      "end": 15.36,
+      "confidence": 0.9473814368247986
+    },
+    {
+      "text": " warm",
+      "start": 15.36,
+      "end": 15.68,
+      "confidence": 0.8199812173843384
+    },
+    {
+      "text": " corn",
+      "start": 15.68,
+      "end": 16.0,
+      "confidence": 0.7939069271087646
+    },
+    {
+      "text": " for",
+      "start": 16.0,
+      "end": 16.26,
+      "confidence": 0.964637815952301
+    },
+    {
+      "text": " supper.",
+      "start": 16.26,
+      "end": 16.58,
+      "confidence": 0.9206982851028442
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "The farmer parked his cart near the barn before the storm. His sister Marta turned the corner with a basket of corn. The thunder was louder than a horn. A nervous bird hid under the porch. After the storm they shared warm corn for supper.",
+    "bias": "strong",
+    "backend": "faster-whisper-small"
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "text": "Chad and Beth went to the shop the ship. They got fish and chips in a dish. A duck swam up with a splash. Beth gave it a chunk of bread. Then Chad and Beth went back up the long plank.",
+  "words": [
+    {
+      "text": " Chad",
+      "start": 0.0,
+      "end": 0.2,
+      "confidence": 0.5959978103637695
+    },
+    {
+      "text": " and",
+      "start": 0.2,
+      "end": 0.36,
+      "confidence": 0.9458873867988586
+    },
+    {
+      "text": " Beth",
+      "start": 0.36,
+      "end": 0.56,
+      "confidence": 0.9831320643424988
+    },
+    {
+      "text": " went",
+      "start": 0.56,
+      "end": 0.82,
+      "confidence": 0.9986358284950256
+    },
+    {
+      "text": " to",
+      "start": 0.82,
+      "end": 1.02,
+      "confidence": 0.9959757924079895
+    },
+    {
+      "text": " the",
+      "start": 1.02,
+      "end": 1.16,
+      "confidence": 3.589535876358241e-05
+    },
+    {
+      "text": " shop",
+      "start": 1.16,
+      "end": 1.42,
+      "confidence": 0.9788636565208435
+    },
+    {
+      "text": " the",
+      "start": 1.42,
+      "end": 1.64,
+      "confidence": 0.036068469285964966
+    },
+    {
+      "text": " ship.",
+      "start": 1.64,
+      "end": 1.92,
+      "confidence": 0.9884090423583984
+    },
+    {
+      "text": " They",
+      "start": 2.24,
+      "end": 2.38,
+      "confidence": 0.9408263564109802
+    },
+    {
+      "text": " got",
+      "start": 2.38,
+      "end": 2.64,
+      "confidence": 0.9562416672706604
+    },
+    {
+      "text": " fish",
+      "start": 2.64,
+      "end": 2.96,
+      "confidence": 0.9759618639945984
+    },
+    {
+      "text": " and",
+      "start": 2.96,
+      "end": 3.12,
+      "confidence": 0.9316418766975403
+    },
+    {
+      "text": " chips",
+      "start": 3.12,
+      "end": 3.38,
+      "confidence": 0.985744059085846
+    },
+    {
+      "text": " in",
+      "start": 3.38,
+      "end": 3.62,
+      "confidence": 0.9588636159896851
+    },
+    {
+      "text": " a",
+      "start": 3.62,
+      "end": 3.72,
+      "confidence": 0.9024716019630432
+    },
+    {
+      "text": " dish.",
+      "start": 3.72,
+      "end": 4.12,
+      "confidence": 0.94680255651474
+    },
+    {
+      "text": " A",
+      "start": 4.42,
+      "end": 4.52,
+      "confidence": 0.9474341869354248
+    },
+    {
+      "text": " duck",
+      "start": 4.52,
+      "end": 4.74,
+      "confidence": 0.9851428866386414
+    },
+    {
+      "text": " swam",
+      "start": 4.74,
+      "end": 5.1,
+      "confidence": 0.9821703732013702
+    },
+    {
+      "text": " up",
+      "start": 5.1,
+      "end": 5.24,
+      "confidence": 0.9961951971054077
+    },
+    {
+      "text": " with",
+      "start": 5.24,
+      "end": 5.44,
+      "confidence": 0.9851089119911194
+    },
+    {
+      "text": " a",
+      "start": 5.44,
+      "end": 5.58,
+      "confidence": 0.9603875875473022
+    },
+    {
+      "text": " splash.",
+      "start": 5.58,
+      "end": 5.88,
+      "confidence": 0.9939405918121338
+    },
+    {
+      "text": " Beth",
+      "start": 6.42,
+      "end": 6.64,
+      "confidence": 0.9943044781684875
+    },
+    {
+      "text": " gave",
+      "start": 6.64,
+      "end": 6.9,
+      "confidence": 0.9902240633964539
+    },
+    {
+      "text": " it",
+      "start": 6.9,
+      "end": 7.08,
+      "confidence": 0.9704016447067261
+    },
+    {
+      "text": " a",
+      "start": 7.08,
+      "end": 7.2,
+      "confidence": 0.9872035384178162
+    },
+    {
+      "text": " chunk",
+      "start": 7.2,
+      "end": 7.42,
+      "confidence": 0.9910481572151184
+    },
+    {
+      "text": " of",
+      "start": 7.42,
+      "end": 7.66,
+      "confidence": 0.9967346787452698
+    },
+    {
+      "text": " bread.",
+      "start": 7.66,
+      "end": 7.96,
+      "confidence": 0.9987698197364807
+    },
+    {
+      "text": " Then",
+      "start": 8.34,
+      "end": 8.52,
+      "confidence": 0.9852215647697449
+    },
+    {
+      "text": " Chad",
+      "start": 8.52,
+      "end": 8.82,
+      "confidence": 0.9796501398086548
+    },
+    {
+      "text": " and",
+      "start": 8.82,
+      "end": 8.98,
+      "confidence": 0.9961523413658142
+    },
+    {
+      "text": " Beth",
+      "start": 8.98,
+      "end": 9.18,
+      "confidence": 0.9987517595291138
+    },
+    {
+      "text": " went",
+      "start": 9.18,
+      "end": 9.44,
+      "confidence": 0.9927921295166016
+    },
+    {
+      "text": " back",
+      "start": 9.44,
+      "end": 9.68,
+      "confidence": 0.9676544666290283
+    },
+    {
+      "text": " up",
+      "start": 9.68,
+      "end": 9.92,
+      "confidence": 0.9967922568321228
+    },
+    {
+      "text": " the",
+      "start": 9.92,
+      "end": 10.08,
+      "confidence": 0.2965962500311434
+    },
+    {
+      "text": " long",
+      "start": 10.08,
+      "end": 10.32,
+      "confidence": 0.9102568626403809
+    },
+    {
+      "text": " plank.",
+      "start": 10.32,
+      "end": 10.62,
+      "confidence": 0.9497531056404114
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "Chad and Beth went to the shop on the ship. They got fish and chips in a dish. A duck swam up with a splash. Beth gave it a chunk of bread. Then Chad and Beth went back up the long plank.",
+    "bias": "strong",
+    "backend": "faster-whisper-small"
+  }
+}

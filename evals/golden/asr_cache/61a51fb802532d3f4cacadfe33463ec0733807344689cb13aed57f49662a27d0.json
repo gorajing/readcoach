@@ -1,0 +1,246 @@
+{
+  "text": "The cat sat on a red mat. A big dog ran up to the cat. The cat did not run. The dog sat next to the cat. Then the cat and the dog had to in the worm sun.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.12,
+      "confidence": 0.7848113179206848
+    },
+    {
+      "text": " cat",
+      "start": 0.12,
+      "end": 0.38,
+      "confidence": 0.9497522711753845
+    },
+    {
+      "text": " sat",
+      "start": 0.38,
+      "end": 0.66,
+      "confidence": 0.9938283562660217
+    },
+    {
+      "text": " on",
+      "start": 0.66,
+      "end": 0.98,
+      "confidence": 0.9846459031105042
+    },
+    {
+      "text": " a",
+      "start": 0.98,
+      "end": 1.14,
+      "confidence": 0.7092061638832092
+    },
+    {
+      "text": " red",
+      "start": 1.14,
+      "end": 1.34,
+      "confidence": 0.7776333689689636
+    },
+    {
+      "text": " mat.",
+      "start": 1.34,
+      "end": 1.58,
+      "confidence": 0.9927841424942017
+    },
+    {
+      "text": " A",
+      "start": 2.26,
+      "end": 2.42,
+      "confidence": 0.9747368693351746
+    },
+    {
+      "text": " big",
+      "start": 2.42,
+      "end": 2.62,
+      "confidence": 0.9906373620033264
+    },
+    {
+      "text": " dog",
+      "start": 2.62,
+      "end": 2.88,
+      "confidence": 0.993340790271759
+    },
+    {
+      "text": " ran",
+      "start": 2.88,
+      "end": 3.18,
+      "confidence": 0.9977208971977234
+    },
+    {
+      "text": " up",
+      "start": 3.18,
+      "end": 3.42,
+      "confidence": 0.9955136179924011
+    },
+    {
+      "text": " to",
+      "start": 3.42,
+      "end": 3.62,
+      "confidence": 0.9913320541381836
+    },
+    {
+      "text": " the",
+      "start": 3.62,
+      "end": 3.74,
+      "confidence": 0.9902862906455994
+    },
+    {
+      "text": " cat.",
+      "start": 3.74,
+      "end": 4.04,
+      "confidence": 0.9887976050376892
+    },
+    {
+      "text": " The",
+      "start": 4.58,
+      "end": 4.76,
+      "confidence": 0.9913017153739929
+    },
+    {
+      "text": " cat",
+      "start": 4.76,
+      "end": 5.02,
+      "confidence": 0.994579553604126
+    },
+    {
+      "text": " did",
+      "start": 5.02,
+      "end": 5.18,
+      "confidence": 0.998225748538971
+    },
+    {
+      "text": " not",
+      "start": 5.18,
+      "end": 5.4,
+      "confidence": 0.9974544644355774
+    },
+    {
+      "text": " run.",
+      "start": 5.4,
+      "end": 5.76,
+      "confidence": 0.9985995888710022
+    },
+    {
+      "text": " The",
+      "start": 6.38,
+      "end": 6.52,
+      "confidence": 0.9911177158355713
+    },
+    {
+      "text": " dog",
+      "start": 6.52,
+      "end": 6.76,
+      "confidence": 0.9755668640136719
+    },
+    {
+      "text": " sat",
+      "start": 6.76,
+      "end": 6.98,
+      "confidence": 0.9987345337867737
+    },
+    {
+      "text": " next",
+      "start": 6.98,
+      "end": 7.28,
+      "confidence": 0.9975371360778809
+    },
+    {
+      "text": " to",
+      "start": 7.28,
+      "end": 7.56,
+      "confidence": 0.998383641242981
+    },
+    {
+      "text": " the",
+      "start": 7.56,
+      "end": 7.68,
+      "confidence": 0.9976868629455566
+    },
+    {
+      "text": " cat.",
+      "start": 7.68,
+      "end": 8.02,
+      "confidence": 0.994682252407074
+    },
+    {
+      "text": " Then",
+      "start": 8.54,
+      "end": 8.78,
+      "confidence": 0.9147579073905945
+    },
+    {
+      "text": " the",
+      "start": 8.78,
+      "end": 8.92,
+      "confidence": 0.9506331086158752
+    },
+    {
+      "text": " cat",
+      "start": 8.92,
+      "end": 9.16,
+      "confidence": 0.9457065463066101
+    },
+    {
+      "text": " and",
+      "start": 9.16,
+      "end": 9.32,
+      "confidence": 0.922620415687561
+    },
+    {
+      "text": " the",
+      "start": 9.32,
+      "end": 9.46,
+      "confidence": 0.9917668700218201
+    },
+    {
+      "text": " dog",
+      "start": 9.46,
+      "end": 9.66,
+      "confidence": 0.997071385383606
+    },
+    {
+      "text": " had",
+      "start": 9.66,
+      "end": 9.88,
+      "confidence": 0.9171027541160583
+    },
+    {
+      "text": " to",
+      "start": 9.88,
+      "end": 10.02,
+      "confidence": 0.29475992918014526
+    },
+    {
+      "text": " in",
+      "start": 10.02,
+      "end": 10.18,
+      "confidence": 0.61928391456604
+    },
+    {
+      "text": " the",
+      "start": 10.18,
+      "end": 10.32,
+      "confidence": 0.9367927312850952
+    },
+    {
+      "text": " worm",
+      "start": 10.32,
+      "end": 10.56,
+      "confidence": 0.8877193927764893
+    },
+    {
+      "text": " sun.",
+      "start": 10.56,
+      "end": 10.88,
+      "confidence": 0.41781842708587646
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

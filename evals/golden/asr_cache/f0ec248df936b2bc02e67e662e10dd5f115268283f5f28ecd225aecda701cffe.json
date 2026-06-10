@@ -1,0 +1,282 @@
+{
+  "text": "Jane rode her bike home before the rain came. She made a cake and gave a slice to Dave. The just cake was nice and the time was late. Dave woke from a nap and ate his plate. They both hope to bake again soon.",
+  "words": [
+    {
+      "text": " Jane",
+      "start": 0.0,
+      "end": 0.28,
+      "confidence": 0.9718427062034607
+    },
+    {
+      "text": " rode",
+      "start": 0.28,
+      "end": 0.6,
+      "confidence": 0.27478066086769104
+    },
+    {
+      "text": " her",
+      "start": 0.6,
+      "end": 0.78,
+      "confidence": 0.9333787560462952
+    },
+    {
+      "text": " bike",
+      "start": 0.78,
+      "end": 1.02,
+      "confidence": 0.9973151087760925
+    },
+    {
+      "text": " home",
+      "start": 1.02,
+      "end": 1.58,
+      "confidence": 0.919016420841217
+    },
+    {
+      "text": " before",
+      "start": 1.58,
+      "end": 2.2,
+      "confidence": 0.9188588857650757
+    },
+    {
+      "text": " the",
+      "start": 2.2,
+      "end": 2.54,
+      "confidence": 0.00036399243128926173
+    },
+    {
+      "text": " rain",
+      "start": 2.54,
+      "end": 2.84,
+      "confidence": 0.9934373497962952
+    },
+    {
+      "text": " came.",
+      "start": 2.84,
+      "end": 3.24,
+      "confidence": 0.9859024286270142
+    },
+    {
+      "text": " She",
+      "start": 3.94,
+      "end": 4.08,
+      "confidence": 0.9819444417953491
+    },
+    {
+      "text": " made",
+      "start": 4.08,
+      "end": 4.42,
+      "confidence": 0.9900627732276917
+    },
+    {
+      "text": " a",
+      "start": 4.42,
+      "end": 4.6,
+      "confidence": 0.9852625131607056
+    },
+    {
+      "text": " cake",
+      "start": 4.6,
+      "end": 4.84,
+      "confidence": 0.9952274560928345
+    },
+    {
+      "text": " and",
+      "start": 4.84,
+      "end": 5.1,
+      "confidence": 0.9451941251754761
+    },
+    {
+      "text": " gave",
+      "start": 5.1,
+      "end": 5.38,
+      "confidence": 0.9693529605865479
+    },
+    {
+      "text": " a",
+      "start": 5.38,
+      "end": 5.64,
+      "confidence": 0.9741277098655701
+    },
+    {
+      "text": " slice",
+      "start": 5.64,
+      "end": 5.84,
+      "confidence": 0.9920547008514404
+    },
+    {
+      "text": " to",
+      "start": 5.84,
+      "end": 6.22,
+      "confidence": 0.9883617758750916
+    },
+    {
+      "text": " Dave.",
+      "start": 6.22,
+      "end": 6.52,
+      "confidence": 0.9806880950927734
+    },
+    {
+      "text": " The",
+      "start": 7.2,
+      "end": 7.36,
+      "confidence": 0.9660670161247253
+    },
+    {
+      "text": " just",
+      "start": 7.36,
+      "end": 7.6,
+      "confidence": 0.9618554711341858
+    },
+    {
+      "text": " cake",
+      "start": 7.6,
+      "end": 7.94,
+      "confidence": 0.9627752900123596
+    },
+    {
+      "text": " was",
+      "start": 7.94,
+      "end": 8.24,
+      "confidence": 0.9977703094482422
+    },
+    {
+      "text": " nice",
+      "start": 8.24,
+      "end": 8.52,
+      "confidence": 0.9917709827423096
+    },
+    {
+      "text": " and",
+      "start": 8.52,
+      "end": 8.74,
+      "confidence": 0.9114102125167847
+    },
+    {
+      "text": " the",
+      "start": 8.74,
+      "end": 8.9,
+      "confidence": 0.01173388393362984
+    },
+    {
+      "text": " time",
+      "start": 8.9,
+      "end": 9.26,
+      "confidence": 0.006284259958192706
+    },
+    {
+      "text": " was",
+      "start": 9.26,
+      "end": 9.52,
+      "confidence": 0.986984133720398
+    },
+    {
+      "text": " late.",
+      "start": 9.52,
+      "end": 9.84,
+      "confidence": 0.953307032585144
+    },
+    {
+      "text": " Dave",
+      "start": 10.46,
+      "end": 10.78,
+      "confidence": 0.9902138113975525
+    },
+    {
+      "text": " woke",
+      "start": 10.78,
+      "end": 11.02,
+      "confidence": 0.9413369297981262
+    },
+    {
+      "text": " from",
+      "start": 11.02,
+      "end": 11.36,
+      "confidence": 0.9105646014213562
+    },
+    {
+      "text": " a",
+      "start": 11.36,
+      "end": 11.56,
+      "confidence": 0.3689759075641632
+    },
+    {
+      "text": " nap",
+      "start": 11.56,
+      "end": 11.8,
+      "confidence": 0.9934619665145874
+    },
+    {
+      "text": " and",
+      "start": 11.8,
+      "end": 11.94,
+      "confidence": 0.9204939007759094
+    },
+    {
+      "text": " ate",
+      "start": 11.94,
+      "end": 12.12,
+      "confidence": 0.8252424001693726
+    },
+    {
+      "text": " his",
+      "start": 12.12,
+      "end": 12.32,
+      "confidence": 0.8490155339241028
+    },
+    {
+      "text": " plate.",
+      "start": 12.32,
+      "end": 12.66,
+      "confidence": 0.004564150236546993
+    },
+    {
+      "text": " They",
+      "start": 13.46,
+      "end": 13.68,
+      "confidence": 0.9630124568939209
+    },
+    {
+      "text": " both",
+      "start": 13.68,
+      "end": 14.02,
+      "confidence": 0.9692192077636719
+    },
+    {
+      "text": " hope",
+      "start": 14.02,
+      "end": 14.3,
+      "confidence": 0.6587621569633484
+    },
+    {
+      "text": " to",
+      "start": 14.3,
+      "end": 14.58,
+      "confidence": 0.03071251604706049
+    },
+    {
+      "text": " bake",
+      "start": 14.58,
+      "end": 14.82,
+      "confidence": 0.9672131538391113
+    },
+    {
+      "text": " again",
+      "start": 14.82,
+      "end": 15.18,
+      "confidence": 0.9925559163093567
+    },
+    {
+      "text": " soon.",
+      "start": 15.18,
+      "end": 15.6,
+      "confidence": 0.9781205058097839
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "Jane rode her bike home before the rain came. She made a cake and gave a slice to Dave. The cake was nice and the time was late. Dave woke from a nap and ate his plate. They both hope to bake again soon.",
+    "bias": "prompt",
+    "backend": "faster-whisper-small"
+  }
+}

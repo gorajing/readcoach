@@ -1,0 +1,276 @@
+{
+  "text": "The garden behind the market was open every morning. A gardener named Carter planted yellow flowers in tidy rows. Children gathered to wander and water the plants together. A rabbit hopped under the corner basket. Carter smiled and offered them a sweet purple turnip.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.14,
+      "confidence": 0.727055013179779
+    },
+    {
+      "text": " garden",
+      "start": 0.14,
+      "end": 0.46,
+      "confidence": 0.9897908568382263
+    },
+    {
+      "text": " behind",
+      "start": 0.46,
+      "end": 0.88,
+      "confidence": 0.9882105588912964
+    },
+    {
+      "text": " the",
+      "start": 0.88,
+      "end": 1.18,
+      "confidence": 0.00309580437533441
+    },
+    {
+      "text": " market",
+      "start": 1.18,
+      "end": 1.6,
+      "confidence": 0.0022390487138181925
+    },
+    {
+      "text": " was",
+      "start": 1.6,
+      "end": 2.04,
+      "confidence": 0.9857402443885803
+    },
+    {
+      "text": " open",
+      "start": 2.04,
+      "end": 2.46,
+      "confidence": 0.9436376094818115
+    },
+    {
+      "text": " every",
+      "start": 2.46,
+      "end": 2.86,
+      "confidence": 0.9680113196372986
+    },
+    {
+      "text": " morning.",
+      "start": 2.86,
+      "end": 3.38,
+      "confidence": 0.9815753698348999
+    },
+    {
+      "text": " A",
+      "start": 4.12,
+      "end": 4.24,
+      "confidence": 0.4217093884944916
+    },
+    {
+      "text": " gardener",
+      "start": 4.24,
+      "end": 4.66,
+      "confidence": 0.5320474393665791
+    },
+    {
+      "text": " named",
+      "start": 4.66,
+      "end": 4.88,
+      "confidence": 0.9940582513809204
+    },
+    {
+      "text": " Carter",
+      "start": 4.88,
+      "end": 5.28,
+      "confidence": 0.9932506680488586
+    },
+    {
+      "text": " planted",
+      "start": 5.28,
+      "end": 5.9,
+      "confidence": 0.991597592830658
+    },
+    {
+      "text": " yellow",
+      "start": 5.9,
+      "end": 6.26,
+      "confidence": 0.9853596091270447
+    },
+    {
+      "text": " flowers",
+      "start": 6.26,
+      "end": 6.84,
+      "confidence": 0.9931631088256836
+    },
+    {
+      "text": " in",
+      "start": 6.84,
+      "end": 7.18,
+      "confidence": 0.9064635038375854
+    },
+    {
+      "text": " tidy",
+      "start": 7.18,
+      "end": 7.56,
+      "confidence": 0.17845377440486723
+    },
+    {
+      "text": " rows.",
+      "start": 7.56,
+      "end": 7.94,
+      "confidence": 0.9296584129333496
+    },
+    {
+      "text": " Children",
+      "start": 8.8,
+      "end": 9.14,
+      "confidence": 0.9898867011070251
+    },
+    {
+      "text": " gathered",
+      "start": 9.14,
+      "end": 9.58,
+      "confidence": 0.9818854928016663
+    },
+    {
+      "text": " to",
+      "start": 9.58,
+      "end": 9.98,
+      "confidence": 0.028942724224179983
+    },
+    {
+      "text": " wander",
+      "start": 9.98,
+      "end": 10.28,
+      "confidence": 0.9785182476043701
+    },
+    {
+      "text": " and",
+      "start": 10.28,
+      "end": 10.54,
+      "confidence": 0.9501107931137085
+    },
+    {
+      "text": " water",
+      "start": 10.54,
+      "end": 10.84,
+      "confidence": 0.9869121313095093
+    },
+    {
+      "text": " the",
+      "start": 10.84,
+      "end": 11.16,
+      "confidence": 0.46254246262833476
+    },
+    {
+      "text": " plants",
+      "start": 11.16,
+      "end": 11.48,
+      "confidence": 0.9933116436004639
+    },
+    {
+      "text": " together.",
+      "start": 11.48,
+      "end": 12.06,
+      "confidence": 0.6374240408961972
+    },
+    {
+      "text": " A",
+      "start": 12.76,
+      "end": 12.9,
+      "confidence": 0.5315572023391724
+    },
+    {
+      "text": " rabbit",
+      "start": 12.9,
+      "end": 13.22,
+      "confidence": 0.9758710265159607
+    },
+    {
+      "text": " hopped",
+      "start": 13.22,
+      "end": 13.76,
+      "confidence": 0.9498287439346313
+    },
+    {
+      "text": " under",
+      "start": 13.76,
+      "end": 13.92,
+      "confidence": 0.44084587693214417
+    },
+    {
+      "text": " the",
+      "start": 13.92,
+      "end": 14.12,
+      "confidence": 0.5289679206907749
+    },
+    {
+      "text": " corner",
+      "start": 14.12,
+      "end": 14.44,
+      "confidence": 0.9645197987556458
+    },
+    {
+      "text": " basket.",
+      "start": 14.44,
+      "end": 14.98,
+      "confidence": 0.9814242720603943
+    },
+    {
+      "text": " Carter",
+      "start": 15.76,
+      "end": 16.1,
+      "confidence": 0.9986968636512756
+    },
+    {
+      "text": " smiled",
+      "start": 16.1,
+      "end": 16.46,
+      "confidence": 0.9808380007743835
+    },
+    {
+      "text": " and",
+      "start": 16.46,
+      "end": 16.82,
+      "confidence": 0.7151761651039124
+    },
+    {
+      "text": " offered",
+      "start": 16.82,
+      "end": 17.18,
+      "confidence": 0.9444293975830078
+    },
+    {
+      "text": " them",
+      "start": 17.18,
+      "end": 17.46,
+      "confidence": 0.5649222880601883
+    },
+    {
+      "text": " a",
+      "start": 17.46,
+      "end": 17.58,
+      "confidence": 0.8930196762084961
+    },
+    {
+      "text": " sweet",
+      "start": 17.58,
+      "end": 17.8,
+      "confidence": 0.4001828730106354
+    },
+    {
+      "text": " purple",
+      "start": 17.8,
+      "end": 18.24,
+      "confidence": 0.9887229204177856
+    },
+    {
+      "text": " turnip.",
+      "start": 18.24,
+      "end": 18.82,
+      "confidence": 0.3467407065133254
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "The garden behind the market was open every morning. A gardener named Carter planted yellow flowers in tidy rows. Children gathered to wander and water the plants together. A rabbit hopped under the corner basket. Carter smiled and offered them a sweet purple turnip.",
+    "bias": "strong",
+    "backend": "faster-whisper-small"
+  }
+}

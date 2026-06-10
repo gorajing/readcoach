@@ -1,0 +1,282 @@
+{
+  "text": "The farmer parked his car at the barn before the storm. His sister, Margaret, turned the corner with a basket of corn. The thunder was louder than a horn. A nervous bird hid under the porch. After the storm, they shared warm corn for supper.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.14,
+      "confidence": 0.8270515203475952
+    },
+    {
+      "text": " farmer",
+      "start": 0.14,
+      "end": 0.48,
+      "confidence": 0.9870714545249939
+    },
+    {
+      "text": " parked",
+      "start": 0.48,
+      "end": 0.96,
+      "confidence": 0.986332356929779
+    },
+    {
+      "text": " his",
+      "start": 0.96,
+      "end": 1.28,
+      "confidence": 0.9935556054115295
+    },
+    {
+      "text": " car",
+      "start": 1.28,
+      "end": 1.58,
+      "confidence": 0.8587350845336914
+    },
+    {
+      "text": " at",
+      "start": 1.58,
+      "end": 1.74,
+      "confidence": 0.8232036828994751
+    },
+    {
+      "text": " the",
+      "start": 1.74,
+      "end": 1.8,
+      "confidence": 0.9497320652008057
+    },
+    {
+      "text": " barn",
+      "start": 1.8,
+      "end": 2.06,
+      "confidence": 0.9593912363052368
+    },
+    {
+      "text": " before",
+      "start": 2.06,
+      "end": 2.32,
+      "confidence": 0.99122554063797
+    },
+    {
+      "text": " the",
+      "start": 2.32,
+      "end": 2.64,
+      "confidence": 0.9981271624565125
+    },
+    {
+      "text": " storm.",
+      "start": 2.64,
+      "end": 3.1,
+      "confidence": 0.99814772605896
+    },
+    {
+      "text": " His",
+      "start": 3.68,
+      "end": 3.96,
+      "confidence": 0.8191019296646118
+    },
+    {
+      "text": " sister,",
+      "start": 3.96,
+      "end": 4.46,
+      "confidence": 0.9855964779853821
+    },
+    {
+      "text": " Margaret,",
+      "start": 4.54,
+      "end": 4.82,
+      "confidence": 0.17496612668037415
+    },
+    {
+      "text": " turned",
+      "start": 4.96,
+      "end": 5.18,
+      "confidence": 0.985889196395874
+    },
+    {
+      "text": " the",
+      "start": 5.18,
+      "end": 5.46,
+      "confidence": 0.8861990571022034
+    },
+    {
+      "text": " corner",
+      "start": 5.46,
+      "end": 5.82,
+      "confidence": 0.9718692898750305
+    },
+    {
+      "text": " with",
+      "start": 5.82,
+      "end": 6.08,
+      "confidence": 0.996410071849823
+    },
+    {
+      "text": " a",
+      "start": 6.08,
+      "end": 6.24,
+      "confidence": 0.9575004577636719
+    },
+    {
+      "text": " basket",
+      "start": 6.24,
+      "end": 6.56,
+      "confidence": 0.993420422077179
+    },
+    {
+      "text": " of",
+      "start": 6.56,
+      "end": 6.86,
+      "confidence": 0.9955915212631226
+    },
+    {
+      "text": " corn.",
+      "start": 6.86,
+      "end": 7.18,
+      "confidence": 0.9940809607505798
+    },
+    {
+      "text": " The",
+      "start": 7.8,
+      "end": 7.98,
+      "confidence": 0.9916566610336304
+    },
+    {
+      "text": " thunder",
+      "start": 7.98,
+      "end": 8.24,
+      "confidence": 0.9705668091773987
+    },
+    {
+      "text": " was",
+      "start": 8.24,
+      "end": 8.56,
+      "confidence": 0.998005211353302
+    },
+    {
+      "text": " louder",
+      "start": 8.56,
+      "end": 8.92,
+      "confidence": 0.9981076717376709
+    },
+    {
+      "text": " than",
+      "start": 8.92,
+      "end": 9.22,
+      "confidence": 0.9970694184303284
+    },
+    {
+      "text": " a",
+      "start": 9.22,
+      "end": 9.34,
+      "confidence": 0.9174509048461914
+    },
+    {
+      "text": " horn.",
+      "start": 9.34,
+      "end": 9.64,
+      "confidence": 0.9949564337730408
+    },
+    {
+      "text": " A",
+      "start": 10.26,
+      "end": 10.4,
+      "confidence": 0.5484465956687927
+    },
+    {
+      "text": " nervous",
+      "start": 10.4,
+      "end": 10.68,
+      "confidence": 0.9604079127311707
+    },
+    {
+      "text": " bird",
+      "start": 10.68,
+      "end": 11.02,
+      "confidence": 0.989431619644165
+    },
+    {
+      "text": " hid",
+      "start": 11.02,
+      "end": 11.26,
+      "confidence": 0.9003565907478333
+    },
+    {
+      "text": " under",
+      "start": 11.26,
+      "end": 11.54,
+      "confidence": 0.9981595873832703
+    },
+    {
+      "text": " the",
+      "start": 11.54,
+      "end": 11.74,
+      "confidence": 0.993943989276886
+    },
+    {
+      "text": " porch.",
+      "start": 11.74,
+      "end": 12.12,
+      "confidence": 0.9982743263244629
+    },
+    {
+      "text": " After",
+      "start": 12.8,
+      "end": 13.06,
+      "confidence": 0.9959707856178284
+    },
+    {
+      "text": " the",
+      "start": 13.06,
+      "end": 13.32,
+      "confidence": 0.9972686767578125
+    },
+    {
+      "text": " storm,",
+      "start": 13.32,
+      "end": 13.6,
+      "confidence": 0.9982630610466003
+    },
+    {
+      "text": " they",
+      "start": 13.68,
+      "end": 13.82,
+      "confidence": 0.9968631267547607
+    },
+    {
+      "text": " shared",
+      "start": 13.82,
+      "end": 14.1,
+      "confidence": 0.9871048927307129
+    },
+    {
+      "text": " warm",
+      "start": 14.1,
+      "end": 14.44,
+      "confidence": 0.9474800229072571
+    },
+    {
+      "text": " corn",
+      "start": 14.44,
+      "end": 14.76,
+      "confidence": 0.9888413548469543
+    },
+    {
+      "text": " for",
+      "start": 14.76,
+      "end": 15.0,
+      "confidence": 0.9928303360939026
+    },
+    {
+      "text": " supper.",
+      "start": 15.0,
+      "end": 15.34,
+      "confidence": 0.9982357025146484
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

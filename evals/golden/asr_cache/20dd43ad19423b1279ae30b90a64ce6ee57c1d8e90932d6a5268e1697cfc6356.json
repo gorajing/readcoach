@@ -1,0 +1,282 @@
+{
+  "text": "The team set sail on a boat at dawn. The sea was green and the cool air felt clean. Jean kept the rope near her feet. A seal swam by and gave a squeal. They reached the beach and ate a meal of sweet peach.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.1,
+      "confidence": 0.7692105770111084
+    },
+    {
+      "text": " team",
+      "start": 0.1,
+      "end": 0.38,
+      "confidence": 0.31581337566207895
+    },
+    {
+      "text": " set",
+      "start": 0.38,
+      "end": 0.64,
+      "confidence": 0.901054859161377
+    },
+    {
+      "text": " sail",
+      "start": 0.64,
+      "end": 0.94,
+      "confidence": 0.9952805638313293
+    },
+    {
+      "text": " on",
+      "start": 0.94,
+      "end": 1.16,
+      "confidence": 0.9924477338790894
+    },
+    {
+      "text": " a",
+      "start": 1.16,
+      "end": 1.32,
+      "confidence": 0.8237338066101074
+    },
+    {
+      "text": " boat",
+      "start": 1.32,
+      "end": 1.52,
+      "confidence": 0.9645822048187256
+    },
+    {
+      "text": " at",
+      "start": 1.52,
+      "end": 1.64,
+      "confidence": 0.9648193120956421
+    },
+    {
+      "text": " dawn.",
+      "start": 1.64,
+      "end": 1.98,
+      "confidence": 0.9594512581825256
+    },
+    {
+      "text": " The",
+      "start": 2.38,
+      "end": 2.46,
+      "confidence": 0.9814809560775757
+    },
+    {
+      "text": " sea",
+      "start": 2.46,
+      "end": 2.7,
+      "confidence": 0.9783962368965149
+    },
+    {
+      "text": " was",
+      "start": 2.7,
+      "end": 2.88,
+      "confidence": 0.9992163181304932
+    },
+    {
+      "text": " green",
+      "start": 2.88,
+      "end": 3.14,
+      "confidence": 0.9978765249252319
+    },
+    {
+      "text": " and",
+      "start": 3.14,
+      "end": 3.34,
+      "confidence": 0.981749415397644
+    },
+    {
+      "text": " the",
+      "start": 3.34,
+      "end": 3.5,
+      "confidence": 0.0019521192443789914
+    },
+    {
+      "text": " cool",
+      "start": 3.5,
+      "end": 3.7,
+      "confidence": 0.964383065700531
+    },
+    {
+      "text": " air",
+      "start": 3.7,
+      "end": 3.9,
+      "confidence": 0.9914867877960205
+    },
+    {
+      "text": " felt",
+      "start": 3.9,
+      "end": 4.2,
+      "confidence": 0.834550678730011
+    },
+    {
+      "text": " clean.",
+      "start": 4.2,
+      "end": 4.64,
+      "confidence": 0.9934448003768921
+    },
+    {
+      "text": " Jean",
+      "start": 5.12,
+      "end": 5.22,
+      "confidence": 0.792845606803894
+    },
+    {
+      "text": " kept",
+      "start": 5.22,
+      "end": 5.54,
+      "confidence": 0.9719240069389343
+    },
+    {
+      "text": " the",
+      "start": 5.54,
+      "end": 5.76,
+      "confidence": 0.07638821378350258
+    },
+    {
+      "text": " rope",
+      "start": 5.76,
+      "end": 5.94,
+      "confidence": 0.9938971400260925
+    },
+    {
+      "text": " near",
+      "start": 5.94,
+      "end": 6.2,
+      "confidence": 0.963359534740448
+    },
+    {
+      "text": " her",
+      "start": 6.2,
+      "end": 6.42,
+      "confidence": 0.9785935878753662
+    },
+    {
+      "text": " feet.",
+      "start": 6.42,
+      "end": 6.78,
+      "confidence": 0.9942189455032349
+    },
+    {
+      "text": " A",
+      "start": 7.18,
+      "end": 7.26,
+      "confidence": 0.7817761301994324
+    },
+    {
+      "text": " seal",
+      "start": 7.26,
+      "end": 7.5,
+      "confidence": 0.8253238201141357
+    },
+    {
+      "text": " swam",
+      "start": 7.5,
+      "end": 7.9,
+      "confidence": 0.9843654930591583
+    },
+    {
+      "text": " by",
+      "start": 7.9,
+      "end": 8.16,
+      "confidence": 0.9934932589530945
+    },
+    {
+      "text": " and",
+      "start": 8.16,
+      "end": 8.32,
+      "confidence": 0.6730625629425049
+    },
+    {
+      "text": " gave",
+      "start": 8.32,
+      "end": 8.52,
+      "confidence": 0.8709474802017212
+    },
+    {
+      "text": " a",
+      "start": 8.52,
+      "end": 8.7,
+      "confidence": 0.9785350561141968
+    },
+    {
+      "text": " squeal.",
+      "start": 8.7,
+      "end": 9.16,
+      "confidence": 0.9839366376399994
+    },
+    {
+      "text": " They",
+      "start": 9.44,
+      "end": 9.58,
+      "confidence": 0.9619645476341248
+    },
+    {
+      "text": " reached",
+      "start": 9.58,
+      "end": 9.88,
+      "confidence": 0.9368712902069092
+    },
+    {
+      "text": " the",
+      "start": 9.88,
+      "end": 10.26,
+      "confidence": 0.09230479411780834
+    },
+    {
+      "text": " beach",
+      "start": 10.26,
+      "end": 11.86,
+      "confidence": 0.3870948851108551
+    },
+    {
+      "text": " and",
+      "start": 11.86,
+      "end": 12.12,
+      "confidence": 0.8800356388092041
+    },
+    {
+      "text": " ate",
+      "start": 12.12,
+      "end": 12.3,
+      "confidence": 0.9813528656959534
+    },
+    {
+      "text": " a",
+      "start": 12.3,
+      "end": 12.42,
+      "confidence": 0.9855107069015503
+    },
+    {
+      "text": " meal",
+      "start": 12.42,
+      "end": 12.62,
+      "confidence": 0.9390783905982971
+    },
+    {
+      "text": " of",
+      "start": 12.62,
+      "end": 12.82,
+      "confidence": 0.982466459274292
+    },
+    {
+      "text": " sweet",
+      "start": 12.82,
+      "end": 13.14,
+      "confidence": 0.8274701237678528
+    },
+    {
+      "text": " peach.",
+      "start": 13.14,
+      "end": 13.5,
+      "confidence": 0.9149743318557739
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "The team set sail on a boat at dawn. The sea was green and the cool air felt clean. Jean kept the rope near her feet. A seal swam by and gave a squeal. They reached the beach and ate a meal of sweet peach.",
+    "bias": "strong",
+    "backend": "faster-whisper-small"
+  }
+}

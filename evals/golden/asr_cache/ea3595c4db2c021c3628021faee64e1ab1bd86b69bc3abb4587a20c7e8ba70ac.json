@@ -1,0 +1,288 @@
+{
+  "text": "The team set sail on a boat hat done. The sea was green and the cool air hum felt clean. Jean kept a rope near her feet. A seal swam by and gave a squeal. They reached the beach and ate a meal of sweet peach.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.12,
+      "confidence": 0.7674015760421753
+    },
+    {
+      "text": " team",
+      "start": 0.12,
+      "end": 0.4,
+      "confidence": 0.793721079826355
+    },
+    {
+      "text": " set",
+      "start": 0.4,
+      "end": 0.64,
+      "confidence": 0.9344915151596069
+    },
+    {
+      "text": " sail",
+      "start": 0.64,
+      "end": 0.98,
+      "confidence": 0.9993294477462769
+    },
+    {
+      "text": " on",
+      "start": 0.98,
+      "end": 1.22,
+      "confidence": 0.962030291557312
+    },
+    {
+      "text": " a",
+      "start": 1.22,
+      "end": 1.36,
+      "confidence": 0.710513174533844
+    },
+    {
+      "text": " boat",
+      "start": 1.36,
+      "end": 1.58,
+      "confidence": 0.9983343482017517
+    },
+    {
+      "text": " hat",
+      "start": 1.58,
+      "end": 1.8,
+      "confidence": 0.23819372057914734
+    },
+    {
+      "text": " done.",
+      "start": 1.8,
+      "end": 2.12,
+      "confidence": 0.459786057472229
+    },
+    {
+      "text": " The",
+      "start": 2.88,
+      "end": 2.98,
+      "confidence": 0.9765017628669739
+    },
+    {
+      "text": " sea",
+      "start": 2.98,
+      "end": 3.18,
+      "confidence": 0.9527168273925781
+    },
+    {
+      "text": " was",
+      "start": 3.18,
+      "end": 3.38,
+      "confidence": 0.9944297671318054
+    },
+    {
+      "text": " green",
+      "start": 3.38,
+      "end": 3.68,
+      "confidence": 0.9955767393112183
+    },
+    {
+      "text": " and",
+      "start": 3.68,
+      "end": 3.92,
+      "confidence": 0.9389505982398987
+    },
+    {
+      "text": " the",
+      "start": 3.92,
+      "end": 4.06,
+      "confidence": 0.9609864950180054
+    },
+    {
+      "text": " cool",
+      "start": 4.06,
+      "end": 4.32,
+      "confidence": 0.9772006273269653
+    },
+    {
+      "text": " air",
+      "start": 4.32,
+      "end": 4.5,
+      "confidence": 0.9873939752578735
+    },
+    {
+      "text": " hum",
+      "start": 4.5,
+      "end": 4.76,
+      "confidence": 0.21508772671222687
+    },
+    {
+      "text": " felt",
+      "start": 4.76,
+      "end": 5.0,
+      "confidence": 0.2871561348438263
+    },
+    {
+      "text": " clean.",
+      "start": 5.0,
+      "end": 5.44,
+      "confidence": 0.9980441331863403
+    },
+    {
+      "text": " Jean",
+      "start": 6.16,
+      "end": 6.38,
+      "confidence": 0.7692211270332336
+    },
+    {
+      "text": " kept",
+      "start": 6.38,
+      "end": 6.7,
+      "confidence": 0.9852208495140076
+    },
+    {
+      "text": " a",
+      "start": 6.7,
+      "end": 6.92,
+      "confidence": 0.45191583037376404
+    },
+    {
+      "text": " rope",
+      "start": 6.92,
+      "end": 7.16,
+      "confidence": 0.977776288986206
+    },
+    {
+      "text": " near",
+      "start": 7.16,
+      "end": 7.4,
+      "confidence": 0.9966651797294617
+    },
+    {
+      "text": " her",
+      "start": 7.4,
+      "end": 7.62,
+      "confidence": 0.9969673752784729
+    },
+    {
+      "text": " feet.",
+      "start": 7.62,
+      "end": 7.96,
+      "confidence": 0.9983874559402466
+    },
+    {
+      "text": " A",
+      "start": 8.6,
+      "end": 8.74,
+      "confidence": 0.6333432793617249
+    },
+    {
+      "text": " seal",
+      "start": 8.74,
+      "end": 8.94,
+      "confidence": 0.7691388130187988
+    },
+    {
+      "text": " swam",
+      "start": 8.94,
+      "end": 9.3,
+      "confidence": 0.9697946012020111
+    },
+    {
+      "text": " by",
+      "start": 9.3,
+      "end": 9.62,
+      "confidence": 0.9927241206169128
+    },
+    {
+      "text": " and",
+      "start": 9.62,
+      "end": 9.78,
+      "confidence": 0.9827336072921753
+    },
+    {
+      "text": " gave",
+      "start": 9.78,
+      "end": 10.04,
+      "confidence": 0.9881231188774109
+    },
+    {
+      "text": " a",
+      "start": 10.04,
+      "end": 10.28,
+      "confidence": 0.8245007991790771
+    },
+    {
+      "text": " squeal.",
+      "start": 10.28,
+      "end": 10.78,
+      "confidence": 0.9831859469413757
+    },
+    {
+      "text": " They",
+      "start": 11.34,
+      "end": 11.52,
+      "confidence": 0.983306884765625
+    },
+    {
+      "text": " reached",
+      "start": 11.52,
+      "end": 11.88,
+      "confidence": 0.9616643786430359
+    },
+    {
+      "text": " the",
+      "start": 11.88,
+      "end": 12.04,
+      "confidence": 0.9026113152503967
+    },
+    {
+      "text": " beach",
+      "start": 12.04,
+      "end": 12.3,
+      "confidence": 0.9945729374885559
+    },
+    {
+      "text": " and",
+      "start": 12.3,
+      "end": 12.48,
+      "confidence": 0.9235617518424988
+    },
+    {
+      "text": " ate",
+      "start": 12.48,
+      "end": 12.72,
+      "confidence": 0.9987285733222961
+    },
+    {
+      "text": " a",
+      "start": 12.72,
+      "end": 12.92,
+      "confidence": 0.9130515456199646
+    },
+    {
+      "text": " meal",
+      "start": 12.92,
+      "end": 13.1,
+      "confidence": 0.9887387752532959
+    },
+    {
+      "text": " of",
+      "start": 13.1,
+      "end": 13.26,
+      "confidence": 0.9864444136619568
+    },
+    {
+      "text": " sweet",
+      "start": 13.26,
+      "end": 13.48,
+      "confidence": 0.928531289100647
+    },
+    {
+      "text": " peach.",
+      "start": 13.48,
+      "end": 13.86,
+      "confidence": 0.9709239602088928
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

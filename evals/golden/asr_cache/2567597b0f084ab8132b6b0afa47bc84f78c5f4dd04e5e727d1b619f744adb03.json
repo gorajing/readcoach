@@ -1,0 +1,276 @@
+{
+  "text": "The garden behind the unmarked was open every morning. The gardener named Carter planted yellow flowers in tidy rows. Children gathered to wander and water the plants together. A rabbit hopped under the corner basket. Carter smiled and offered them a sweet purple turnip.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.14,
+      "confidence": 0.727055013179779
+    },
+    {
+      "text": " garden",
+      "start": 0.14,
+      "end": 0.46,
+      "confidence": 0.9897908568382263
+    },
+    {
+      "text": " behind",
+      "start": 0.46,
+      "end": 0.88,
+      "confidence": 0.9882105588912964
+    },
+    {
+      "text": " the",
+      "start": 0.88,
+      "end": 1.18,
+      "confidence": 0.9896558523178101
+    },
+    {
+      "text": " unmarked",
+      "start": 1.18,
+      "end": 1.86,
+      "confidence": 0.6785162687301636
+    },
+    {
+      "text": " was",
+      "start": 1.86,
+      "end": 2.06,
+      "confidence": 0.9412710666656494
+    },
+    {
+      "text": " open",
+      "start": 2.06,
+      "end": 2.48,
+      "confidence": 0.9488117694854736
+    },
+    {
+      "text": " every",
+      "start": 2.48,
+      "end": 2.86,
+      "confidence": 0.9866004586219788
+    },
+    {
+      "text": " morning.",
+      "start": 2.86,
+      "end": 3.38,
+      "confidence": 0.9955242872238159
+    },
+    {
+      "text": " The",
+      "start": 4.12,
+      "end": 4.24,
+      "confidence": 0.4919112026691437
+    },
+    {
+      "text": " gardener",
+      "start": 4.24,
+      "end": 4.62,
+      "confidence": 0.6713408976793289
+    },
+    {
+      "text": " named",
+      "start": 4.62,
+      "end": 4.88,
+      "confidence": 0.9848441481590271
+    },
+    {
+      "text": " Carter",
+      "start": 4.88,
+      "end": 5.28,
+      "confidence": 0.9786567091941833
+    },
+    {
+      "text": " planted",
+      "start": 5.28,
+      "end": 5.9,
+      "confidence": 0.9867513179779053
+    },
+    {
+      "text": " yellow",
+      "start": 5.9,
+      "end": 6.26,
+      "confidence": 0.9853237867355347
+    },
+    {
+      "text": " flowers",
+      "start": 6.26,
+      "end": 6.84,
+      "confidence": 0.9958040118217468
+    },
+    {
+      "text": " in",
+      "start": 6.84,
+      "end": 7.18,
+      "confidence": 0.9012693762779236
+    },
+    {
+      "text": " tidy",
+      "start": 7.18,
+      "end": 7.54,
+      "confidence": 0.8160759806632996
+    },
+    {
+      "text": " rows.",
+      "start": 7.54,
+      "end": 7.98,
+      "confidence": 0.9634515643119812
+    },
+    {
+      "text": " Children",
+      "start": 8.78,
+      "end": 9.14,
+      "confidence": 0.9891646504402161
+    },
+    {
+      "text": " gathered",
+      "start": 9.14,
+      "end": 9.62,
+      "confidence": 0.9896822571754456
+    },
+    {
+      "text": " to",
+      "start": 9.62,
+      "end": 9.98,
+      "confidence": 0.9944972395896912
+    },
+    {
+      "text": " wander",
+      "start": 9.98,
+      "end": 10.3,
+      "confidence": 0.9916282892227173
+    },
+    {
+      "text": " and",
+      "start": 10.3,
+      "end": 10.54,
+      "confidence": 0.9766663908958435
+    },
+    {
+      "text": " water",
+      "start": 10.54,
+      "end": 10.86,
+      "confidence": 0.9813934564590454
+    },
+    {
+      "text": " the",
+      "start": 10.86,
+      "end": 11.16,
+      "confidence": 0.8050558567047119
+    },
+    {
+      "text": " plants",
+      "start": 11.16,
+      "end": 11.48,
+      "confidence": 0.9971519708633423
+    },
+    {
+      "text": " together.",
+      "start": 11.48,
+      "end": 12.1,
+      "confidence": 0.992439866065979
+    },
+    {
+      "text": " A",
+      "start": 12.72,
+      "end": 12.9,
+      "confidence": 0.6573358178138733
+    },
+    {
+      "text": " rabbit",
+      "start": 12.9,
+      "end": 13.22,
+      "confidence": 0.9708941578865051
+    },
+    {
+      "text": " hopped",
+      "start": 13.22,
+      "end": 13.76,
+      "confidence": 0.9841170907020569
+    },
+    {
+      "text": " under",
+      "start": 13.76,
+      "end": 13.94,
+      "confidence": 0.9938715696334839
+    },
+    {
+      "text": " the",
+      "start": 13.94,
+      "end": 14.14,
+      "confidence": 0.9936206936836243
+    },
+    {
+      "text": " corner",
+      "start": 14.14,
+      "end": 14.44,
+      "confidence": 0.9809716939926147
+    },
+    {
+      "text": " basket.",
+      "start": 14.44,
+      "end": 14.96,
+      "confidence": 0.9943172335624695
+    },
+    {
+      "text": " Carter",
+      "start": 15.76,
+      "end": 16.1,
+      "confidence": 0.9995288848876953
+    },
+    {
+      "text": " smiled",
+      "start": 16.1,
+      "end": 16.48,
+      "confidence": 0.9969532489776611
+    },
+    {
+      "text": " and",
+      "start": 16.48,
+      "end": 16.82,
+      "confidence": 0.9904580116271973
+    },
+    {
+      "text": " offered",
+      "start": 16.82,
+      "end": 17.2,
+      "confidence": 0.9987655878067017
+    },
+    {
+      "text": " them",
+      "start": 17.2,
+      "end": 17.46,
+      "confidence": 0.9881576895713806
+    },
+    {
+      "text": " a",
+      "start": 17.46,
+      "end": 17.58,
+      "confidence": 0.9940650463104248
+    },
+    {
+      "text": " sweet",
+      "start": 17.58,
+      "end": 17.8,
+      "confidence": 0.5281072854995728
+    },
+    {
+      "text": " purple",
+      "start": 17.8,
+      "end": 18.24,
+      "confidence": 0.9904786348342896
+    },
+    {
+      "text": " turnip.",
+      "start": 18.24,
+      "end": 18.82,
+      "confidence": 0.6543401181697845
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}

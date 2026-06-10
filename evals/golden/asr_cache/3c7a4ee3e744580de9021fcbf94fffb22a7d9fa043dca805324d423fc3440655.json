@@ -1,0 +1,282 @@
+{
+  "text": "The garden behind the market was open every morning. A gardener named Carter planted yellow flowers in litty tidy rows. Children gathered to wander and water the plants together. A rabbit hopped under the corner basket. Carter smiled and offered them a sweet purple turnip.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.14,
+      "confidence": 0.6634089946746826
+    },
+    {
+      "text": " garden",
+      "start": 0.14,
+      "end": 0.48,
+      "confidence": 0.9902336597442627
+    },
+    {
+      "text": " behind",
+      "start": 0.48,
+      "end": 0.86,
+      "confidence": 0.9858298897743225
+    },
+    {
+      "text": " the",
+      "start": 0.86,
+      "end": 1.14,
+      "confidence": 0.0014588818022502892
+    },
+    {
+      "text": " market",
+      "start": 1.14,
+      "end": 1.52,
+      "confidence": 0.9173708558082581
+    },
+    {
+      "text": " was",
+      "start": 1.52,
+      "end": 1.78,
+      "confidence": 0.99208003282547
+    },
+    {
+      "text": " open",
+      "start": 1.78,
+      "end": 2.2,
+      "confidence": 0.946124255657196
+    },
+    {
+      "text": " every",
+      "start": 2.2,
+      "end": 2.6,
+      "confidence": 0.9631093144416809
+    },
+    {
+      "text": " morning.",
+      "start": 2.6,
+      "end": 3.1,
+      "confidence": 0.9635182619094849
+    },
+    {
+      "text": " A",
+      "start": 3.86,
+      "end": 3.98,
+      "confidence": 0.4956147074699402
+    },
+    {
+      "text": " gardener",
+      "start": 3.98,
+      "end": 4.38,
+      "confidence": 0.5798067674040794
+    },
+    {
+      "text": " named",
+      "start": 4.38,
+      "end": 4.64,
+      "confidence": 0.9906147718429565
+    },
+    {
+      "text": " Carter",
+      "start": 4.64,
+      "end": 5.0,
+      "confidence": 0.9928836822509766
+    },
+    {
+      "text": " planted",
+      "start": 5.0,
+      "end": 5.64,
+      "confidence": 0.9908808469772339
+    },
+    {
+      "text": " yellow",
+      "start": 5.64,
+      "end": 6.0,
+      "confidence": 0.982601523399353
+    },
+    {
+      "text": " flowers",
+      "start": 6.0,
+      "end": 6.58,
+      "confidence": 0.9923684000968933
+    },
+    {
+      "text": " in",
+      "start": 6.58,
+      "end": 6.86,
+      "confidence": 0.9324974417686462
+    },
+    {
+      "text": " litty",
+      "start": 6.86,
+      "end": 7.18,
+      "confidence": 0.15539379864155003
+    },
+    {
+      "text": " tidy",
+      "start": 7.18,
+      "end": 7.56,
+      "confidence": 0.4175347089767456
+    },
+    {
+      "text": " rows.",
+      "start": 7.56,
+      "end": 8.06,
+      "confidence": 0.866302490234375
+    },
+    {
+      "text": " Children",
+      "start": 8.84,
+      "end": 9.22,
+      "confidence": 0.9922046661376953
+    },
+    {
+      "text": " gathered",
+      "start": 9.22,
+      "end": 9.62,
+      "confidence": 0.9808761477470398
+    },
+    {
+      "text": " to",
+      "start": 9.62,
+      "end": 10.0,
+      "confidence": 0.007712891325354576
+    },
+    {
+      "text": " wander",
+      "start": 10.0,
+      "end": 10.34,
+      "confidence": 0.9776169061660767
+    },
+    {
+      "text": " and",
+      "start": 10.34,
+      "end": 10.62,
+      "confidence": 0.9297627806663513
+    },
+    {
+      "text": " water",
+      "start": 10.62,
+      "end": 10.9,
+      "confidence": 0.978050172328949
+    },
+    {
+      "text": " the",
+      "start": 10.9,
+      "end": 11.24,
+      "confidence": 0.4570882823318243
+    },
+    {
+      "text": " plants",
+      "start": 11.24,
+      "end": 11.54,
+      "confidence": 0.9962047934532166
+    },
+    {
+      "text": " together.",
+      "start": 11.54,
+      "end": 12.12,
+      "confidence": 0.6288264043008288
+    },
+    {
+      "text": " A",
+      "start": 12.82,
+      "end": 12.96,
+      "confidence": 0.3984428942203522
+    },
+    {
+      "text": " rabbit",
+      "start": 12.96,
+      "end": 13.3,
+      "confidence": 0.9825072884559631
+    },
+    {
+      "text": " hopped",
+      "start": 13.3,
+      "end": 13.82,
+      "confidence": 0.9346852898597717
+    },
+    {
+      "text": " under",
+      "start": 13.82,
+      "end": 14.0,
+      "confidence": 0.5452114343643188
+    },
+    {
+      "text": " the",
+      "start": 14.0,
+      "end": 14.2,
+      "confidence": 0.5526490956544876
+    },
+    {
+      "text": " corner",
+      "start": 14.2,
+      "end": 14.52,
+      "confidence": 0.9670720100402832
+    },
+    {
+      "text": " basket.",
+      "start": 14.52,
+      "end": 15.04,
+      "confidence": 0.9833606481552124
+    },
+    {
+      "text": " Carter",
+      "start": 15.84,
+      "end": 16.18,
+      "confidence": 0.9984123706817627
+    },
+    {
+      "text": " smiled",
+      "start": 16.18,
+      "end": 16.54,
+      "confidence": 0.9775968194007874
+    },
+    {
+      "text": " and",
+      "start": 16.54,
+      "end": 16.9,
+      "confidence": 0.6227120161056519
+    },
+    {
+      "text": " offered",
+      "start": 16.9,
+      "end": 17.24,
+      "confidence": 0.9354318976402283
+    },
+    {
+      "text": " them",
+      "start": 17.24,
+      "end": 17.54,
+      "confidence": 0.44563955813646317
+    },
+    {
+      "text": " a",
+      "start": 17.54,
+      "end": 17.66,
+      "confidence": 0.9122119545936584
+    },
+    {
+      "text": " sweet",
+      "start": 17.66,
+      "end": 17.86,
+      "confidence": 0.09996265918016434
+    },
+    {
+      "text": " purple",
+      "start": 17.86,
+      "end": 18.26,
+      "confidence": 0.9914838671684265
+    },
+    {
+      "text": " turnip.",
+      "start": 18.26,
+      "end": 18.9,
+      "confidence": 0.3518637418746948
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "The garden behind the market was open every morning. A gardener named Carter planted yellow flowers in tidy rows. Children gathered to wander and water the plants together. A rabbit hopped under the corner basket. Carter smiled and offered them a sweet purple turnip.",
+    "bias": "prompt",
+    "backend": "faster-whisper-small"
+  }
+}

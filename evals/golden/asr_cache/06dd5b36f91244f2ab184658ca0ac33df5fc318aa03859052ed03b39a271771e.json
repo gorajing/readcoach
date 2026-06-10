@@ -1,0 +1,252 @@
+{
+  "text": "The cat sat on a red mat. A big dog ran up to the cat. The cat did not run. The dog sat next to the cat. Then the cat and the dog had a nap in the warm sun.",
+  "words": [
+    {
+      "text": " The",
+      "start": 0.0,
+      "end": 0.1,
+      "confidence": 0.8966357707977295
+    },
+    {
+      "text": " cat",
+      "start": 0.1,
+      "end": 0.36,
+      "confidence": 0.9653419256210327
+    },
+    {
+      "text": " sat",
+      "start": 0.36,
+      "end": 0.58,
+      "confidence": 0.9975892305374146
+    },
+    {
+      "text": " on",
+      "start": 0.58,
+      "end": 0.84,
+      "confidence": 0.9975885152816772
+    },
+    {
+      "text": " a",
+      "start": 0.84,
+      "end": 0.94,
+      "confidence": 0.9928182363510132
+    },
+    {
+      "text": " red",
+      "start": 0.94,
+      "end": 1.12,
+      "confidence": 0.9206201434135437
+    },
+    {
+      "text": " mat.",
+      "start": 1.12,
+      "end": 1.42,
+      "confidence": 0.9851463437080383
+    },
+    {
+      "text": " A",
+      "start": 1.8,
+      "end": 1.92,
+      "confidence": 0.9829357862472534
+    },
+    {
+      "text": " big",
+      "start": 1.92,
+      "end": 2.12,
+      "confidence": 0.9907070398330688
+    },
+    {
+      "text": " dog",
+      "start": 2.12,
+      "end": 2.38,
+      "confidence": 0.9964721202850342
+    },
+    {
+      "text": " ran",
+      "start": 2.38,
+      "end": 2.66,
+      "confidence": 0.9987698197364807
+    },
+    {
+      "text": " up",
+      "start": 2.66,
+      "end": 2.84,
+      "confidence": 0.9986923336982727
+    },
+    {
+      "text": " to",
+      "start": 2.84,
+      "end": 3.02,
+      "confidence": 0.00011221676388117885
+    },
+    {
+      "text": " the",
+      "start": 3.02,
+      "end": 3.16,
+      "confidence": 0.1982102332112845
+    },
+    {
+      "text": " cat.",
+      "start": 3.16,
+      "end": 3.48,
+      "confidence": 0.9879767298698425
+    },
+    {
+      "text": " The",
+      "start": 3.82,
+      "end": 3.98,
+      "confidence": 0.9712642431259155
+    },
+    {
+      "text": " cat",
+      "start": 3.98,
+      "end": 4.26,
+      "confidence": 0.9918031096458435
+    },
+    {
+      "text": " did",
+      "start": 4.26,
+      "end": 4.46,
+      "confidence": 0.9817253947257996
+    },
+    {
+      "text": " not",
+      "start": 4.46,
+      "end": 4.68,
+      "confidence": 0.9363669157028198
+    },
+    {
+      "text": " run.",
+      "start": 4.68,
+      "end": 5.02,
+      "confidence": 0.9780504703521729
+    },
+    {
+      "text": " The",
+      "start": 5.42,
+      "end": 5.54,
+      "confidence": 0.987036406993866
+    },
+    {
+      "text": " dog",
+      "start": 5.54,
+      "end": 5.8,
+      "confidence": 0.992021918296814
+    },
+    {
+      "text": " sat",
+      "start": 5.8,
+      "end": 6.02,
+      "confidence": 0.9983881711959839
+    },
+    {
+      "text": " next",
+      "start": 6.02,
+      "end": 6.38,
+      "confidence": 0.9433586001396179
+    },
+    {
+      "text": " to",
+      "start": 6.38,
+      "end": 6.62,
+      "confidence": 0.5596450045704842
+    },
+    {
+      "text": " the",
+      "start": 6.62,
+      "end": 6.78,
+      "confidence": 0.5034209368750453
+    },
+    {
+      "text": " cat.",
+      "start": 6.78,
+      "end": 7.16,
+      "confidence": 0.996785044670105
+    },
+    {
+      "text": " Then",
+      "start": 7.46,
+      "end": 7.66,
+      "confidence": 0.9676074385643005
+    },
+    {
+      "text": " the",
+      "start": 7.66,
+      "end": 7.82,
+      "confidence": 0.5040723420679569
+    },
+    {
+      "text": " cat",
+      "start": 7.82,
+      "end": 8.06,
+      "confidence": 0.9923904538154602
+    },
+    {
+      "text": " and",
+      "start": 8.06,
+      "end": 8.24,
+      "confidence": 0.9278274774551392
+    },
+    {
+      "text": " the",
+      "start": 8.24,
+      "end": 8.38,
+      "confidence": 0.6166602373123169
+    },
+    {
+      "text": " dog",
+      "start": 8.38,
+      "end": 8.62,
+      "confidence": 0.984233558177948
+    },
+    {
+      "text": " had",
+      "start": 8.62,
+      "end": 8.82,
+      "confidence": 0.8706798553466797
+    },
+    {
+      "text": " a",
+      "start": 8.82,
+      "end": 9.0,
+      "confidence": 0.8237923979759216
+    },
+    {
+      "text": " nap",
+      "start": 9.0,
+      "end": 9.2,
+      "confidence": 0.9785276055335999
+    },
+    {
+      "text": " in",
+      "start": 9.2,
+      "end": 9.48,
+      "confidence": 0.9776673913002014
+    },
+    {
+      "text": " the",
+      "start": 9.48,
+      "end": 9.58,
+      "confidence": 0.6597570329904556
+    },
+    {
+      "text": " warm",
+      "start": 9.58,
+      "end": 9.82,
+      "confidence": 0.9490455389022827
+    },
+    {
+      "text": " sun.",
+      "start": 9.82,
+      "end": 10.2,
+      "confidence": 0.974306583404541
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": "The cat sat on a red mat. A big dog ran up to the cat. The cat did not run. The dog sat next to the cat. Then the cat and the dog had a nap in the warm sun.",
+    "bias": "prompt",
+    "backend": "faster-whisper-small"
+  }
+}

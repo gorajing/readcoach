@@ -1,0 +1,282 @@
+{
+  "text": "A pig sat in the mudbite. The pen. The sun was hot, so the pig bug dug a pit. A hen ran up and sat on the rim. The now pig let the hen up in. They had so much fun in the wet mud.",
+  "words": [
+    {
+      "text": " A",
+      "start": 0.0,
+      "end": 0.14,
+      "confidence": 0.5653343200683594
+    },
+    {
+      "text": " pig",
+      "start": 0.14,
+      "end": 0.34,
+      "confidence": 0.9817845821380615
+    },
+    {
+      "text": " sat",
+      "start": 0.34,
+      "end": 0.6,
+      "confidence": 0.998376727104187
+    },
+    {
+      "text": " in",
+      "start": 0.6,
+      "end": 0.76,
+      "confidence": 0.9748417735099792
+    },
+    {
+      "text": " the",
+      "start": 0.76,
+      "end": 0.92,
+      "confidence": 0.9262215495109558
+    },
+    {
+      "text": " mudbite.",
+      "start": 0.92,
+      "end": 1.4,
+      "confidence": 0.7019938975572586
+    },
+    {
+      "text": " The",
+      "start": 2.28,
+      "end": 2.76,
+      "confidence": 0.9381946921348572
+    },
+    {
+      "text": " pen.",
+      "start": 2.76,
+      "end": 3.1,
+      "confidence": 0.8599950671195984
+    },
+    {
+      "text": " The",
+      "start": 3.62,
+      "end": 3.76,
+      "confidence": 0.9827447533607483
+    },
+    {
+      "text": " sun",
+      "start": 3.76,
+      "end": 4.04,
+      "confidence": 0.7798445820808411
+    },
+    {
+      "text": " was",
+      "start": 4.04,
+      "end": 4.26,
+      "confidence": 0.9975022673606873
+    },
+    {
+      "text": " hot,",
+      "start": 4.26,
+      "end": 4.64,
+      "confidence": 0.4650208055973053
+    },
+    {
+      "text": " so",
+      "start": 4.86,
+      "end": 5.06,
+      "confidence": 0.9711700081825256
+    },
+    {
+      "text": " the",
+      "start": 5.06,
+      "end": 5.22,
+      "confidence": 0.9850286245346069
+    },
+    {
+      "text": " pig",
+      "start": 5.22,
+      "end": 5.52,
+      "confidence": 0.9873145818710327
+    },
+    {
+      "text": " bug",
+      "start": 5.52,
+      "end": 5.74,
+      "confidence": 0.9411181807518005
+    },
+    {
+      "text": " dug",
+      "start": 5.74,
+      "end": 5.98,
+      "confidence": 0.9036900997161865
+    },
+    {
+      "text": " a",
+      "start": 5.98,
+      "end": 6.2,
+      "confidence": 0.916751503944397
+    },
+    {
+      "text": " pit.",
+      "start": 6.2,
+      "end": 6.48,
+      "confidence": 0.9958261847496033
+    },
+    {
+      "text": " A",
+      "start": 7.0,
+      "end": 7.1,
+      "confidence": 0.8036484122276306
+    },
+    {
+      "text": " hen",
+      "start": 7.1,
+      "end": 7.36,
+      "confidence": 0.35136789083480835
+    },
+    {
+      "text": " ran",
+      "start": 7.36,
+      "end": 7.6,
+      "confidence": 0.997161865234375
+    },
+    {
+      "text": " up",
+      "start": 7.6,
+      "end": 7.86,
+      "confidence": 0.9940904974937439
+    },
+    {
+      "text": " and",
+      "start": 7.86,
+      "end": 7.98,
+      "confidence": 0.9938035011291504
+    },
+    {
+      "text": " sat",
+      "start": 7.98,
+      "end": 8.24,
+      "confidence": 0.9971203804016113
+    },
+    {
+      "text": " on",
+      "start": 8.24,
+      "end": 8.46,
+      "confidence": 0.9928556084632874
+    },
+    {
+      "text": " the",
+      "start": 8.46,
+      "end": 8.6,
+      "confidence": 0.9942736029624939
+    },
+    {
+      "text": " rim.",
+      "start": 8.6,
+      "end": 8.9,
+      "confidence": 0.9958462119102478
+    },
+    {
+      "text": " The",
+      "start": 9.4,
+      "end": 9.52,
+      "confidence": 0.987525224685669
+    },
+    {
+      "text": " now",
+      "start": 9.52,
+      "end": 9.76,
+      "confidence": 0.9271751642227173
+    },
+    {
+      "text": " pig",
+      "start": 9.76,
+      "end": 10.0,
+      "confidence": 0.9349805116653442
+    },
+    {
+      "text": " let",
+      "start": 10.0,
+      "end": 10.3,
+      "confidence": 0.7430837154388428
+    },
+    {
+      "text": " the",
+      "start": 10.3,
+      "end": 10.48,
+      "confidence": 0.9911491870880127
+    },
+    {
+      "text": " hen",
+      "start": 10.48,
+      "end": 10.74,
+      "confidence": 0.9535976648330688
+    },
+    {
+      "text": " up",
+      "start": 10.74,
+      "end": 11.02,
+      "confidence": 0.6034793853759766
+    },
+    {
+      "text": " in.",
+      "start": 11.02,
+      "end": 11.26,
+      "confidence": 0.9823324084281921
+    },
+    {
+      "text": " They",
+      "start": 11.78,
+      "end": 11.98,
+      "confidence": 0.9759368896484375
+    },
+    {
+      "text": " had",
+      "start": 11.98,
+      "end": 12.18,
+      "confidence": 0.7705563902854919
+    },
+    {
+      "text": " so",
+      "start": 12.18,
+      "end": 12.4,
+      "confidence": 0.9978634715080261
+    },
+    {
+      "text": " much",
+      "start": 12.4,
+      "end": 12.66,
+      "confidence": 0.9984217882156372
+    },
+    {
+      "text": " fun",
+      "start": 12.66,
+      "end": 12.98,
+      "confidence": 0.9992347955703735
+    },
+    {
+      "text": " in",
+      "start": 12.98,
+      "end": 13.14,
+      "confidence": 0.9507239460945129
+    },
+    {
+      "text": " the",
+      "start": 13.14,
+      "end": 13.28,
+      "confidence": 0.9875554442405701
+    },
+    {
+      "text": " wet",
+      "start": 13.28,
+      "end": 13.44,
+      "confidence": 0.9987547397613525
+    },
+    {
+      "text": " mud.",
+      "start": 13.44,
+      "end": 13.68,
+      "confidence": 0.999394416809082
+    }
+  ],
+  "rtf": null,
+  "backend": "faster-whisper-small",
+  "params": {
+    "target_text": null,
+    "bias": "none",
+    "backend": "faster-whisper-small"
+  }
+}
