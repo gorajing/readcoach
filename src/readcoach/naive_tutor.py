@@ -24,10 +24,25 @@ Design
   miscue (including self-corrections), uses "wrong word, the word is X"
   corrective phrasing mid-page, and never sets is_ai_reminder.  The stub's
   nature is printed in the output header of naive_replay.py.
+* **NaiveCliTransport.**  The CLI transport for the live run.  It reuses the
+  subprocess pattern from ``ClaudeCliTransport`` (same binary, same
+  ``--output-format json`` envelope) but with the unconstrained naive system
+  prompt.  Crucially:
+  - The system prompt is ONLY the ~5-line unconstrained prompt (_SYSTEM_PROMPT).
+  - An output-format instruction is appended so we can parse the utterance.
+  OUTPUT FORMAT ≠ BEHAVIORAL CONSTRAINT: telling the model "respond as JSON
+  {"text": "..."}" does NOT restrict what it says — only how it is formatted.
+  The model is still fully unconstrained in what pedagogical moves it makes,
+  which words it says, and whether it follows or violates policy.  The format
+  instruction is purely an extraction mechanism, not a guardrail.  Contrast with
+  the policy-tutor's ClaudeCliTransport, which merges a versioned system prompt
+  containing 20+ hard behavioral rules before the format instruction.
 """
 from __future__ import annotations
 
+import json
 import os
+import subprocess
 from collections.abc import Callable
 from typing import Any
 
@@ -38,9 +53,29 @@ _MODEL_ID = "claude-opus-4-8"
 _MAX_TOKENS = 256
 _DEFAULT_TIMEOUT_S = 30.0
 
+# CLI transport: same binary as ClaudeCliTransport, pinned to sonnet-4-6.
+_CLI_MODEL_ID = "claude-sonnet-4-6"
+_CLI_DEFAULT_TIMEOUT_S = 120.0
+
+# The unconstrained naive system prompt — ~5 lines, zero guardrails.
+# This is INTENTIONALLY minimal: we want raw helpful-assistant behavior.
 _SYSTEM_PROMPT = (
     "You are a friendly reading tutor helping a child read aloud. "
     "Here is what just happened; respond as you see fit."
+)
+
+# OUTPUT FORMAT INSTRUCTION (appended to every CLI call, NOT to the system
+# prompt): this is solely a machine-parseable extraction shim.  It does NOT
+# constrain what the model says — only the serialization format.  The model is
+# still free to give the word away, correct self-corrections, praise effusively,
+# or do anything else a naive helpful assistant would do.
+_CLI_FORMAT_INSTRUCTION = (
+    "\n\n"
+    "IMPORTANT — OUTPUT FORMAT ONLY: Respond with ONLY a single JSON object "
+    "on one line, exactly like this: {\"text\": \"<exactly what you would say to the child>\"}\n"
+    "No markdown, no code fences, no extra text — ONLY the JSON object.\n"
+    "This is a format requirement, not a content restriction: say whatever "
+    "you would naturally say; just wrap it as {\"text\": \"...\"}."
 )
 
 _OK_STOP_REASONS = frozenset({"end_turn", "tool_use", "stop_sequence"})
@@ -67,6 +102,155 @@ def _default_client_factory():  # noqa: ANN202
     import anthropic  # local import: tests never construct a real client
 
     return anthropic.Anthropic()
+
+
+# ---------------------------------------------------------------------------
+# CLI transport (live model, no API key required)
+# ---------------------------------------------------------------------------
+
+class NaiveCliTransport:
+    """Thin naive-flavored CLI transport for the live unconstrained run.
+
+    Reuses the same subprocess pattern as ``ClaudeCliTransport`` in
+    ``llm_client.py`` (same ``claude -p`` binary, same ``--output-format json``
+    envelope) but with an important structural difference:
+
+    * **Prompt is the unconstrained naive system prompt only** — the ~5-line
+      _SYSTEM_PROMPT describing a generic friendly reading tutor with zero rules.
+    * **No subprocess-logic duplication** — the underlying shell-out code is
+      identical in shape to ClaudeCliTransport; we don't extract a shared base
+      class because the call site (``messages_create`` vs. ``verbalize``) and
+      the prompt construction differ structurally.
+    * **Format instruction appended to the USER message only** — see
+      _CLI_FORMAT_INSTRUCTION and the module docstring for why this is not a
+      behavioral constraint.
+
+    ``transport_meta`` records the transport name and model for the audit JSON.
+    """
+
+    transport_meta: dict = {
+        "transport": "claude-cli",
+        "model": _CLI_MODEL_ID,
+    }
+
+    def __init__(self, *, timeout_s: float = _CLI_DEFAULT_TIMEOUT_S) -> None:
+        self._timeout_s = timeout_s
+
+    def messages_create(
+        self,
+        *,
+        model: str,
+        max_tokens: int,
+        system: str,
+        messages: list[dict],
+        timeout: float,
+        **_kw: Any,
+    ) -> "_NaiveCliResponse":
+        """Send the naive unconstrained prompt via ``claude -p``; return a response object.
+
+        The ``system`` arg is the caller's system prompt (_SYSTEM_PROMPT); the
+        user message has the format instruction appended.  The outer
+        ``--output-format json`` envelope is parsed to extract the model result,
+        then the inner ``{"text": ...}`` is parsed fail-loud.
+
+        Raises
+        ------
+        RuntimeError
+            Non-zero exit, subprocess timeout, unparseable outer JSON, or
+            missing/empty ``text`` key in the inner JSON.
+        """
+        user_text = messages[0]["content"] if messages else ""
+
+        # Merge system prompt + user message for -p (no separate system flag in
+        # basic claude CLI usage); append the format-only instruction.
+        full_prompt = f"{system}\n\n---\n\n{user_text}{_CLI_FORMAT_INSTRUCTION}"
+
+        cmd = [
+            "claude",
+            "-p", full_prompt,
+            "--model", _CLI_MODEL_ID,
+            "--output-format", "json",
+        ]
+
+        try:
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=self._timeout_s,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError(
+                f"NaiveCliTransport: subprocess timed out after {self._timeout_s}s"
+            ) from exc
+
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"NaiveCliTransport: claude exited {proc.returncode}; "
+                f"stderr={proc.stderr!r}"
+            )
+
+        # Parse outer JSON envelope (--output-format json wraps the response).
+        raw_output = proc.stdout.strip()
+        try:
+            envelope = json.loads(raw_output)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"NaiveCliTransport: could not parse outer JSON envelope; "
+                f"raw={raw_output[:200]!r}"
+            ) from exc
+
+        result_text = envelope.get("result", "")
+        if not result_text:
+            raise RuntimeError(
+                f"NaiveCliTransport: empty or missing 'result' in envelope; "
+                f"envelope keys={list(envelope)}"
+            )
+
+        # Strip markdown code fences if the model disobeyed the format instruction.
+        result_text = result_text.strip()
+        if result_text.startswith("```"):
+            lines = result_text.splitlines()
+            inner = [ln for ln in lines if not ln.startswith("```")]
+            result_text = "\n".join(inner).strip()
+
+        # Parse the inner {"text": "..."} — fail-loud; never fall back to raw prose.
+        try:
+            payload = json.loads(result_text)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"NaiveCliTransport: model did not return strict JSON; "
+                f"result={result_text[:200]!r}"
+            ) from exc
+
+        text = payload.get("text") if isinstance(payload, dict) else None
+        if not text or not str(text).strip():
+            raise RuntimeError(
+                f"NaiveCliTransport: parsed JSON missing 'text' key or empty; "
+                f"payload={payload!r}"
+            )
+
+        return _NaiveCliResponse(text=str(text).strip())
+
+
+class _NaiveCliResponse:
+    """Minimal response object matching the shape NaiveTutor.react() expects."""
+
+    def __init__(self, text: str) -> None:
+        self.stop_reason = "end_turn"
+        self._text = text
+        self.content = [_NaiveCliTextBlock(text=text)]
+
+
+class _NaiveCliTextBlock:
+    def __init__(self, text: str) -> None:
+        self.type = "text"
+        self.text = text
+
+
+def naive_cli_transport(*, timeout_s: float = _CLI_DEFAULT_TIMEOUT_S) -> NaiveCliTransport:
+    """Factory: return a ``NaiveCliTransport`` with the given timeout."""
+    return NaiveCliTransport(timeout_s=timeout_s)
 
 
 # ---------------------------------------------------------------------------

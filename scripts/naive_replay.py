@@ -33,7 +33,7 @@ from pathlib import Path
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
-from readcoach.naive_tutor import NaiveTutor, StubTransport  # noqa: E402
+from readcoach.naive_tutor import NaiveTutor, NaiveCliTransport, StubTransport, naive_cli_transport  # noqa: E402
 from readcoach.policy_compiler import audit, compile_rules, load_policies  # noqa: E402
 from readcoach.trace import SessionTrace, TurnRecord  # noqa: E402
 
@@ -158,6 +158,17 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         ),
     )
     p.add_argument(
+        "--transport",
+        choices=["stub", "claude-cli", "api"],
+        default=None,
+        help=(
+            "Transport to use.  'stub' = deterministic stub (same as --stub); "
+            "'claude-cli' = live model via subscription CLI (no API key needed); "
+            "'api' = live model via Anthropic SDK (requires ANTHROPIC_API_KEY).  "
+            "Defaults to stub if --stub is set, api otherwise."
+        ),
+    )
+    p.add_argument(
         "--out-dir",
         default=str(_DEFAULT_OUT),
         help="Directory for output artifacts (default: evals/results).",
@@ -174,7 +185,16 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> None:
     args = _parse_args(argv)
 
-    if args.stub:
+    # Resolve effective transport: --stub / --transport stub → stub;
+    # --transport claude-cli → NaiveCliTransport;
+    # default (no flags) or --transport api → SDK (requires ANTHROPIC_API_KEY).
+    effective_transport = args.transport
+    if args.stub and effective_transport is None:
+        effective_transport = "stub"
+    if effective_transport is None:
+        effective_transport = "api"
+
+    if effective_transport == "stub":
         print("=" * 80)
         print("STUB TRANSPORT — live model run pending")
         print(
@@ -189,20 +209,45 @@ def main(argv: list[str] | None = None) -> None:
         stub = StubTransport()
         tutor = NaiveTutor(client_factory=lambda: stub)
         policy_version = _NAIVE_POLICY_VERSION
-    else:
+        out_filename = "naive_stub_audit.json"
+        transport_label = "stub"
+
+    elif effective_transport == "claude-cli":
         print("=" * 80)
-        print("LIVE TRANSPORT — using real Anthropic API")
+        print("CLAUDE-CLI TRANSPORT — live model via subscription CLI (claude -p)")
+        print(f"  model : {NaiveCliTransport.transport_meta['model']}")
+        print("  prompt: unconstrained naive system prompt + format instruction only")
+        print("  key   : no ANTHROPIC_API_KEY required (subscription binary)")
+        print("=" * 80)
+        cli = naive_cli_transport()
+        tutor = NaiveTutor(client_factory=lambda: cli)
+        policy_version = _NAIVE_LIVE_VERSION
+        out_filename = "naive_live_audit.json"
+        transport_label = "claude-cli"
+
+    else:  # api
+        print("=" * 80)
+        print("LIVE TRANSPORT — using real Anthropic API (SDK)")
         print("=" * 80)
         # This will raise RuntimeError loud if key is absent.
         tutor = NaiveTutor()
         tutor._client_or_build()  # noqa: SLF001 — eager key check
         policy_version = _NAIVE_LIVE_VERSION
+        out_filename = "naive_live_audit.json"
+        transport_label = "api"
 
     traces = run_with_tutor(tutor, policy_version=policy_version)
     checks = compile_rules(load_policies(_POLICIES_DIR))
 
+    # Include transport metadata so the artifact is self-describing.
+    model_meta = (
+        NaiveCliTransport.transport_meta["model"]
+        if effective_transport == "claude-cli"
+        else None
+    )
     audit_output: dict = {
-        "transport": "stub" if args.stub else "live",
+        "transport": transport_label,
+        "model": model_meta,
         "profiles": {},
     }
 
@@ -221,9 +266,18 @@ def main(argv: list[str] | None = None) -> None:
             if f.severity == "error":
                 rule_counts[f.rule_id] = rule_counts.get(f.rule_id, 0) + 1
 
+        # Collect sample utterances per rule for evidence (up to 2 per rule).
+        samples_by_rule: dict[str, list[str]] = {}
+        for f in report.findings:
+            if f.severity == "error" and len(samples_by_rule.get(f.rule_id, [])) < 2:
+                turn = next((t for t in trace.turns if t.turn_index == f.turn_index), None)
+                if turn and turn.utterance:
+                    samples_by_rule.setdefault(f.rule_id, []).append(turn.utterance[:120])
+
         audit_output["profiles"][trace.child_id] = {
             "violations": report.violations,
             "by_rule": rule_counts,
+            "samples": samples_by_rule,
         }
 
         # Print action-stream rendering.
@@ -249,11 +303,11 @@ def main(argv: list[str] | None = None) -> None:
     print(f"TOTAL VIOLATIONS (all profiles): {total}")
     print(f"{'=' * 80}")
 
-    # Write audit JSON.
+    # Write audit JSON — NEVER overwrite the stub artifact with a live result.
     if args.write_audit:
         out_dir = Path(args.out_dir)
         out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / "naive_stub_audit.json"
+        out_path = out_dir / out_filename
         out_path.write_text(json.dumps(audit_output, indent=2, sort_keys=True))
         print(f"\nAudit written to: {out_path}")
 

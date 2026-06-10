@@ -1,0 +1,57 @@
+{
+  "model": "claude-sonnet-4-6",
+  "profiles": {
+    "fluent-but-hesitant": {
+      "by_rule": {
+        "never_coaches_mid_page": 18,
+        "periodic_ai_reminder": 5
+      },
+      "samples": {
+        "never_coaches_mid_page": [
+          "Take your time \u2014 look at the word carefully. Can you find any smaller parts you know? Like 'mea' or 'dow'?",
+          "Take your time! Look at that word carefully. Can you see the letters m-e-a-d-o-w? It says 'meadow' \u2014 like a big open gra"
+        ],
+        "periodic_ai_reminder": [
+          "Take your time \u2014 look at the word carefully. Can you find any smaller parts you know? Like 'mea' or 'dow'?",
+          "Take your time! Look at that word carefully. Can you see the letters m-e-a-d-o-w? It says 'meadow' \u2014 like a big open gra"
+        ]
+      },
+      "violations": 23
+    },
+    "self-corrector": {
+      "by_rule": {
+        "never_coaches_mid_page": 18,
+        "periodic_ai_reminder": 5
+      },
+      "samples": {
+        "never_coaches_mid_page": [
+          "Great job catching that and fixing it yourself! Keep going!",
+          "Great job catching that and fixing it yourself! Keep going!"
+        ],
+        "periodic_ai_reminder": [
+          "Great job catching that and fixing it yourself! Keep going!",
+          "Great job catching that and fixing it yourself! Keep going!"
+        ]
+      },
+      "violations": 23
+    },
+    "struggling-decoder": {
+      "by_rule": {
+        "never_coaches_mid_page": 18,
+        "periodic_ai_reminder": 5
+      },
+      "samples": {
+        "never_coaches_mid_page": [
+          "Oops, take another look at that word! It starts with 'ch' \u2014 can you try it again?",
+          "Hmm, let's look at that word again! Can you see the letters 'ch' at the beginning? What sound do those make together?"
+        ],
+        "periodic_ai_reminder": [
+          "Oops, take another look at that word! It starts with 'ch' \u2014 can you try it again?",
+          "Hmm, let's look at that word again! Can you see the letters 'ch' at the beginning? What sound do those make together?"
+        ]
+      },
+      "violations": 23
+    }
+  },
+  "transport": "claude-cli"
+}

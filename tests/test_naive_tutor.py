@@ -8,14 +8,28 @@ Covers:
   * stub determinism (same event → same canned response)
   * audit integration: stub run → ≥1 violation per profile, specific rules asserted
   * missing key raises RuntimeError loud
+  * NaiveCliTransport: prompt contains unconstrained system prompt + format-only instruction
+  * NaiveCliTransport: does NOT contain policy/behavioral constraints
+  * NaiveCliTransport: fail-loud on non-JSON, missing text key, non-zero exit, timeout
+  * NaiveCliTransport: happy path extracts utterance correctly
 """
 from __future__ import annotations
 
+import json
+import subprocess
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
-from readcoach.naive_tutor import NaiveTutor, StubTransport
+from readcoach.naive_tutor import (
+    NaiveTutor,
+    NaiveCliTransport,
+    StubTransport,
+    naive_cli_transport,
+    _CLI_MODEL_ID,
+    _SYSTEM_PROMPT,
+)
 from readcoach.policy_compiler import audit, compile_rules, load_policies
 from readcoach.trace import SessionTrace, TurnRecord
 
@@ -328,3 +342,196 @@ def test_missing_api_key_raises_loud(monkeypatch):
         tutor.react(
             turn_index=0, at_page_end=False, miscue_type="substitution", target_word="cat"
         )
+
+
+# ---------------------------------------------------------------------------
+# NaiveCliTransport: mocked subprocess tests (CI-safe, no live calls)
+# ---------------------------------------------------------------------------
+
+def _make_cli_envelope(result_text: str, returncode: int = 0):
+    """Build a mock CompletedProcess with --output-format json envelope."""
+    from unittest.mock import MagicMock
+    proc = MagicMock()
+    proc.returncode = returncode
+    proc.stdout = json.dumps({
+        "type": "result",
+        "subtype": "success",
+        "result": result_text,
+    })
+    proc.stderr = ""
+    return proc
+
+
+def _react_via_cli(transport, **kw):
+    """Call NaiveTutor.react() with the given NaiveCliTransport."""
+    tutor = NaiveTutor(client_factory=lambda: transport)
+    defaults = dict(turn_index=0, at_page_end=False, miscue_type="substitution", target_word="cat")
+    defaults.update(kw)
+    return tutor.react(**defaults)
+
+
+def test_naive_cli_happy_path_extracts_text():
+    """Well-formed CLI response extracts the utterance."""
+    expected = "Good try — keep going!"
+    proc = _make_cli_envelope(json.dumps({"text": expected}))
+
+    with patch("subprocess.run", return_value=proc):
+        transport = NaiveCliTransport(timeout_s=60)
+        record = _react_via_cli(transport)
+
+    assert record.utterance == expected
+    assert record.action_move is None  # unconstrained — no policy taxonomy
+
+
+def test_naive_cli_prompt_contains_system_prompt():
+    """The -p prompt must embed the unconstrained naive system prompt."""
+    proc = _make_cli_envelope(json.dumps({"text": "ok"}))
+
+    with patch("subprocess.run", return_value=proc) as mock_run:
+        transport = NaiveCliTransport()
+        _react_via_cli(transport)
+
+    cmd = mock_run.call_args[0][0]
+    p_idx = cmd.index("-p")
+    full_prompt = cmd[p_idx + 1]
+    # The naive system prompt must be present verbatim.
+    assert _SYSTEM_PROMPT in full_prompt
+
+
+def test_naive_cli_prompt_contains_format_instruction():
+    """The -p prompt must include the format-only output instruction."""
+    proc = _make_cli_envelope(json.dumps({"text": "ok"}))
+
+    with patch("subprocess.run", return_value=proc) as mock_run:
+        transport = NaiveCliTransport()
+        _react_via_cli(transport)
+
+    cmd = mock_run.call_args[0][0]
+    p_idx = cmd.index("-p")
+    full_prompt = cmd[p_idx + 1]
+    assert '{"text":' in full_prompt or '"text"' in full_prompt
+    assert "OUTPUT FORMAT" in full_prompt or "format" in full_prompt.lower()
+
+
+def test_naive_cli_prompt_does_not_contain_behavioral_constraints():
+    """The naive prompt must NOT embed policy/behavioral constraints.
+
+    The policy tutor's prompt (prompts/tutor/1.0.md) contains terms like
+    'ReadCoach', 'SCAFFOLDED_HINT', and explicit 'never' rules.  The naive
+    tutor must not include any of these — the unconstrained experiment only
+    adds a format instruction, not behavioral guardrails.
+    """
+    proc = _make_cli_envelope(json.dumps({"text": "ok"}))
+
+    with patch("subprocess.run", return_value=proc) as mock_run:
+        transport = NaiveCliTransport()
+        _react_via_cli(transport)
+
+    cmd = mock_run.call_args[0][0]
+    p_idx = cmd.index("-p")
+    full_prompt = cmd[p_idx + 1]
+    # These are hallmarks of the policy tutor's constrained prompt.
+    assert "SCAFFOLDED_HINT" not in full_prompt
+    assert "ReadCoach" not in full_prompt
+    assert "never say" not in full_prompt.lower()
+
+
+def test_naive_cli_uses_pinned_model():
+    """The subprocess call must use _CLI_MODEL_ID."""
+    proc = _make_cli_envelope(json.dumps({"text": "ok"}))
+
+    with patch("subprocess.run", return_value=proc) as mock_run:
+        transport = NaiveCliTransport()
+        _react_via_cli(transport)
+
+    cmd = mock_run.call_args[0][0]
+    assert "--model" in cmd
+    model_idx = cmd.index("--model")
+    assert cmd[model_idx + 1] == _CLI_MODEL_ID
+
+
+def test_naive_cli_timeout_passed_to_subprocess():
+    """timeout_s must be forwarded to subprocess.run."""
+    proc = _make_cli_envelope(json.dumps({"text": "ok"}))
+
+    with patch("subprocess.run", return_value=proc) as mock_run:
+        transport = NaiveCliTransport(timeout_s=99.0)
+        _react_via_cli(transport)
+
+    kwargs = mock_run.call_args[1]
+    assert kwargs.get("timeout") == 99.0
+
+
+def test_naive_cli_malformed_outer_json_raises():
+    """Non-JSON stdout from the CLI raises RuntimeError."""
+    from unittest.mock import MagicMock
+    proc = MagicMock()
+    proc.returncode = 0
+    proc.stdout = "this is not json"
+    proc.stderr = ""
+
+    with patch("subprocess.run", return_value=proc):
+        transport = NaiveCliTransport()
+        with pytest.raises(RuntimeError, match="outer JSON"):
+            _react_via_cli(transport)
+
+
+def test_naive_cli_prose_response_raises():
+    """If model returns prose instead of JSON, RuntimeError is raised."""
+    proc = _make_cli_envelope("Let me help you with that word!")
+
+    with patch("subprocess.run", return_value=proc):
+        transport = NaiveCliTransport()
+        with pytest.raises(RuntimeError, match="strict JSON"):
+            _react_via_cli(transport)
+
+
+def test_naive_cli_missing_text_key_raises():
+    """If model JSON has no 'text' key, RuntimeError is raised."""
+    proc = _make_cli_envelope(json.dumps({"response": "oops wrong key"}))
+
+    with patch("subprocess.run", return_value=proc):
+        transport = NaiveCliTransport()
+        with pytest.raises(RuntimeError, match="missing 'text' key"):
+            _react_via_cli(transport)
+
+
+def test_naive_cli_nonzero_exit_raises():
+    """Non-zero subprocess exit raises RuntimeError."""
+    from unittest.mock import MagicMock
+    proc = MagicMock()
+    proc.returncode = 1
+    proc.stdout = ""
+    proc.stderr = "auth error"
+
+    with patch("subprocess.run", return_value=proc):
+        transport = NaiveCliTransport()
+        with pytest.raises(RuntimeError, match="auth error"):
+            _react_via_cli(transport)
+
+
+def test_naive_cli_timeout_raises():
+    """subprocess.TimeoutExpired is re-raised as RuntimeError."""
+    with patch("subprocess.run", side_effect=subprocess.TimeoutExpired(cmd="claude", timeout=120)):
+        transport = NaiveCliTransport(timeout_s=120)
+        with pytest.raises(RuntimeError, match="timed out"):
+            _react_via_cli(transport)
+
+
+def test_naive_cli_transport_meta():
+    """NaiveCliTransport.transport_meta must record transport and model."""
+    meta = NaiveCliTransport.transport_meta
+    assert meta["transport"] == "claude-cli"
+    assert meta["model"] == _CLI_MODEL_ID
+
+
+def test_naive_cli_transport_factory():
+    """naive_cli_transport() factory must return a NaiveCliTransport."""
+    t = naive_cli_transport()
+    assert isinstance(t, NaiveCliTransport)
+
+
+def test_naive_cli_transport_factory_custom_timeout():
+    """naive_cli_transport(timeout_s=...) must plumb through to the instance."""
+    t = naive_cli_transport(timeout_s=45)
+    assert t._timeout_s == 45  # noqa: SLF001
