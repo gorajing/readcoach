@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "commit": "67e160a3db006e660ff3a7933eb27470de7435c9",
+    "date": "2026-06-11",
+    "golden_path": "/Users/jinchoi/Code/readcoach/evals/golden/persona_sessions_holdout.jsonl",
+    "golden_sha256": "0be295c3fdc6f8eefdadafecbed1331d911d75a0e82ea7317c8d05d0a74db3dc",
+    "weave": "disabled:no_wandb_api_key"
+  },
+  "metrics": {
+    "invariants": {
+      "violations": 0
+    },
+    "latency": {
+      "decision_ms_p50": null,
+      "decision_ms_p95": null,
+      "rtf_offline_proxy": null
+    },
+    "n_decision_turns": 793,
+    "n_sessions": 49,
+    "n_turns": 2334,
+    "serve_violations": 0,
+    "targeted_next_items": 101,
+    "wait_rate": 0.37326607818411095,
+    "wait_rate_ceiling": 0.37326607818411095
+  },
+  "version": "v2-holdout"
+}

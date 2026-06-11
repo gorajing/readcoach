@@ -777,7 +777,11 @@ def _holdout_report(version: str, metrics: dict) -> EvalReport:
 # ---------------------------------------------------------------------------
 
 
-def append_prediction5_verdict(analysis: dict, results_doc: Path = _RESULTS_DOC) -> None:
+def append_prediction5_verdict(
+    analysis: dict,
+    results_doc: Path = _RESULTS_DOC,
+    deterministic: dict | None = None,
+) -> None:
     """Append the prediction-#5 verdict block to docs/results_vs_predictions.md.
 
     ONLY called on a completed LIVE run (gated by --live in main).  Replaces the
@@ -785,6 +789,12 @@ def append_prediction5_verdict(analysis: dict, results_doc: Path = _RESULTS_DOC)
     verdict + per-dimension table + the honest-pairing note.  Idempotent-ish: if a
     holdout-verdict block already exists it is NOT duplicated (a second live run
     would no-op the append).
+
+    When ``analysis["prediction_5"]["verdict"]`` is UNADJUDICABLE (all judge dims
+    failed validation), the block records: the prediction verbatim, WHY (kappa
+    numbers), the deterministic results that DID run, and the honest path to
+    future adjudication (fresh labels required — reusing the 60 validation labels
+    would overfit the judge to its own validation set).
     """
     pred5 = analysis["prediction_5"]
     marker = "<!-- holdout-prediction-5-verdict -->"
@@ -801,21 +811,81 @@ def append_prediction5_verdict(analysis: dict, results_doc: Path = _RESULTS_DOC)
         "",
         f"{pred5['finding']}",
         "",
-        "| dimension | eligible | mean v1 | mean v2 | diff (v2-v1) | 95% CI | v2 beats v1 |",
-        "|-----------|----------|---------|---------|--------------|--------|-------------|",
     ]
-    for dim, d in analysis["per_dimension"].items():
-        ci = d["diff_ci_95"]
-        lines.append(
-            f"| {dim} | {d['eligible']} | {_fmt(d['mean_v1'])} | {_fmt(d['mean_v2'])} | "
-            f"{_fmt(d['diff_v2_minus_v1'])} | [{ci[0]:.3f}, {ci[1]:.3f}] | "
-            f"{d['v2_beats_v1']} |"
-        )
-    lines += [
-        "",
-        f"_Pairing: {analysis['pairing']}._ {analysis['pairing_note']}",
-        "",
-    ]
+
+    if pred5["verdict"] == "UNADJUDICABLE":
+        # --- Verbatim prediction quote (frozen in docs/predictions.md) ---
+        lines += [
+            "**Verbatim prediction #5:**",
+            "> v2 (mastery-conditioned) beats v1 (state-blind) on judged guidance "
+            "and actionability on the held-out split.",
+            "",
+        ]
+        # --- WHY: kappa numbers ---
+        zero_note = analysis.get("zero_eligible_note", "")
+        if zero_note:
+            lines += [
+                "**Why UNADJUDICABLE:** " + zero_note,
+                "",
+            ]
+        lines += [
+            "The kappa ≥ 0.4 floor (Landis & Koch moderate-agreement threshold, "
+            "pre-registered in scripts/validate_judge.py) was not met by any "
+            "dimension. Without a validated judge, the LLM-judged scores on the "
+            "holdout carry no agreed-upon reliability guarantee and cannot adjudicate "
+            "the prediction.",
+            "",
+        ]
+        # --- Deterministic results that DID run ---
+        if deterministic:
+            gate = deterministic.get("gate_v1_to_v2", {})
+            n = deterministic.get("n_sessions", "?")
+            gate_str = "PASS" if gate.get("passed") else "BLOCKED"
+            lines += [
+                f"**Deterministic results (DID run — {n} holdout sessions):**",
+                "",
+                f"- Invariant-gate v1→v2: exit {gate.get('exit_code', '?')} ({gate_str})",
+            ]
+            breaches = gate.get("breaches", [])
+            if breaches:
+                for b in breaches:
+                    lines.append(f"  - breach: {b}")
+            else:
+                lines.append("  - no breaches")
+            lines.append("")
+        # --- Honest path to future adjudication ---
+        lines += [
+            "**Path to future adjudication:**",
+            "",
+            "A better judge must be validated on FRESH labels before any judge "
+            "iteration can adjudicate prediction #5. The 60 labels used in "
+            "judge_validation.json must NOT be reused for a new judge — doing so "
+            "would overfit the judge to its own validation set, undermining the "
+            "independence of the kappa estimate. Collect a new annotation batch "
+            "(≥ 30 per dimension), run scripts/validate_judge.py on those fresh "
+            "labels, and re-run this holdout runner only if ≥ 1 dimension clears "
+            "the kappa ≥ 0.4 gate.",
+            "",
+        ]
+    else:
+        # Normal adjudicated case: per-dimension table
+        lines += [
+            "| dimension | eligible | mean v1 | mean v2 | diff (v2-v1) | 95% CI | v2 beats v1 |",
+            "|-----------|----------|---------|---------|--------------|--------|-------------|",
+        ]
+        for dim, d in analysis["per_dimension"].items():
+            ci = d["diff_ci_95"]
+            lines.append(
+                f"| {dim} | {d['eligible']} | {_fmt(d['mean_v1'])} | {_fmt(d['mean_v2'])} | "
+                f"{_fmt(d['diff_v2_minus_v1'])} | [{ci[0]:.3f}, {ci[1]:.3f}] | "
+                f"{d['v2_beats_v1']} |"
+            )
+        lines += [
+            "",
+            f"_Pairing: {analysis['pairing']}._ {analysis['pairing_note']}",
+            "",
+        ]
+
     results_doc.write_text(text.rstrip("\n") + "\n" + "\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -854,10 +924,13 @@ def run(
 
     judge_dims = [d for d in JUDGED_DIMENSIONS if d in eligible]
     if not judge_dims:
-        _abort(
-            "no judged dimension is gate_eligible in judge_validation.json — there "
-            "is nothing to judge on the holdout. Reported as a finding (the judge "
-            "failed validation on every dimension)."
+        print(
+            "INFO: no gate-eligible judged dimension in judge_validation.json — "
+            "phases 3 (verbalize) and 4 (judge) will be skipped. "
+            "The judge failed validation on every dimension (kappa < 0.4 for all). "
+            "Phases 1 (deterministic replay), 2 (sampling manifest), and 5 (analysis "
+            "/ UNADJUDICABLE verdict) still run per the pre-registered plan.",
+            file=sys.stderr,
         )
 
     curriculum = load_curriculum(_CURRICULUM_PATH)
@@ -885,17 +958,49 @@ def run(
     sample = v1_sample + v2_sample
     _write_sample_manifest(workdir / "sample_manifest.json", v1_sample, v2_sample)
 
-    # --- Phase 3: verbalize (checkpointed) --------------------------------
-    utterances = verbalize_phase(sample, verbalizer, workdir / ".verbalize_work.jsonl")
+    # --- Phase 3: verbalize (checkpointed; skipped when no eligible dims) ---
+    if judge_dims:
+        utterances = verbalize_phase(sample, verbalizer, workdir / ".verbalize_work.jsonl")
+    else:
+        print(
+            "INFO: Phase 3 (verbalize) skipped — zero gate-eligible judge dims.",
+            file=sys.stderr,
+        )
+        utterances = {}
 
-    # --- Phase 4: judge (checkpointed) ------------------------------------
-    verdicts = judge_phase(
-        sample, utterances, judge_dims, judge_transport,
-        workdir / ".judge_work.jsonl", judge_fn=judge_fn,
-    )
+    # --- Phase 4: judge (checkpointed; skipped when no eligible dims) -----
+    if judge_dims:
+        verdicts = judge_phase(
+            sample, utterances, judge_dims, judge_transport,
+            workdir / ".judge_work.jsonl", judge_fn=judge_fn,
+        )
+    else:
+        print(
+            "INFO: Phase 4 (judge) skipped — zero gate-eligible judge dims.",
+            file=sys.stderr,
+        )
+        verdicts = {}
 
     # --- Phase 5: analysis (all-or-nothing) -------------------------------
     analysis = analyze(verdicts, judge_dims, eligible)
+    if not judge_dims:
+        # Enrich analysis with per-dimension kappa numbers from the validation file
+        # so the verdict block carries the full "why" explanation.
+        dim_kappas = {
+            d["dimension"]: d.get("kappa")
+            for d in validation.get("dimensions", [])
+        }
+        kappa_parts = [
+            f"{dim} kappa={dim_kappas.get(dim, 'N/A'):.3f}"
+            if isinstance(dim_kappas.get(dim), float)
+            else f"{dim} kappa=N/A"
+            for dim in JUDGED_DIMENSIONS
+        ]
+        analysis["zero_eligible_note"] = (
+            f"All judged dimensions failed the kappa ≥ 0.4 gate: "
+            f"{', '.join(kappa_parts)}. "
+            "Phases 3–4 (verbalize/judge) did not run."
+        )
 
     payload = {
         "ticket": "T5.4",
@@ -1022,7 +1127,7 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     # Live-only side effect: append the adjudicated verdict to the predictions doc.
-    append_prediction5_verdict(payload["judged"])
+    append_prediction5_verdict(payload["judged"], deterministic=payload["deterministic"])
 
     _print_summary(payload)
     print(f"\nWrote {_AB_HOLDOUT_JSON.relative_to(_PROJECT_ROOT)}")

@@ -157,3 +157,27 @@ per grid point in the JSON, not hidden.
 **Status: pending (experiment not yet run)**
 
 Requires both tutor variants and the held-out evaluation split (T4+ scope).
+
+<!-- holdout-prediction-5-verdict -->
+### Holdout adjudication (run via scripts/run_ab_holdout.py --live)
+
+**Verdict: UNADJUDICABLE**
+
+dimension(s) ['guidance', 'actionability'] failed judge validation (not gate_eligible), so prediction #5's claim on them cannot be adjudicated. Reported as a finding, not silently dropped.
+
+**Verbatim prediction #5:**
+> v2 (mastery-conditioned) beats v1 (state-blind) on judged guidance and actionability on the held-out split.
+
+**Why UNADJUDICABLE:** All judged dimensions failed the kappa ≥ 0.4 gate: guidance kappa=0.000, actionability kappa=0.302, icap kappa=0.207. Phases 3–4 (verbalize/judge) did not run.
+
+The kappa ≥ 0.4 floor (Landis & Koch moderate-agreement threshold, pre-registered in scripts/validate_judge.py) was not met by any dimension. Without a validated judge, the LLM-judged scores on the holdout carry no agreed-upon reliability guarantee and cannot adjudicate the prediction.
+
+**Deterministic results (DID run — 49 holdout sessions):**
+
+- Invariant-gate v1→v2: exit 0 (PASS)
+  - no breaches
+
+**Path to future adjudication:**
+
+A better judge must be validated on FRESH labels before any judge iteration can adjudicate prediction #5. The 60 labels used in judge_validation.json must NOT be reused for a new judge — doing so would overfit the judge to its own validation set, undermining the independence of the kappa estimate. Collect a new annotation batch (≥ 30 per dimension), run scripts/validate_judge.py on those fresh labels, and re-run this holdout runner only if ≥ 1 dimension clears the kappa ≥ 0.4 gate.
+

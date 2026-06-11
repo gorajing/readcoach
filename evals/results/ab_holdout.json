@@ -1,0 +1,100 @@
+{
+  "ticket": "T5.4",
+  "what_this_is": "HOLDOUT A/B (v1 state-blind vs v2 mastery-conditioned) implementing docs/ab_holdout_plan.md verbatim. Deterministic metrics over all 49 holdout sessions; 60 seeded stratified judged turns per version; prediction-#5 adjudication.",
+  "split": "holdout",
+  "holdout_file": "persona_sessions_holdout.jsonl",
+  "date": "2026-06-11",
+  "live": true,
+  "sampling": {
+    "seed": 7331,
+    "per_persona": 20,
+    "n_per_version": 60,
+    "stratified_by": "persona (20/20/20)",
+    "depends_on": "replay only (no judged data)"
+  },
+  "judge_eligibility": {
+    "gate_eligible_dims": [],
+    "judged_dims": [],
+    "validation_file": "judge_validation.json",
+    "gate_conditions": {
+      "kappa_point_estimate_gte": 0.4,
+      "n_gte": 30
+    }
+  },
+  "deterministic": {
+    "n_sessions": 49,
+    "metrics": {
+      "v1": {
+        "invariants": {
+          "violations": 0
+        },
+        "wait_rate": 0.37326607818411095,
+        "wait_rate_ceiling": 0.37326607818411095,
+        "serve_violations": 0,
+        "targeted_next_items": 0,
+        "n_sessions": 49,
+        "n_turns": 2334,
+        "n_decision_turns": 793
+      },
+      "v2": {
+        "invariants": {
+          "violations": 0
+        },
+        "wait_rate": 0.37326607818411095,
+        "wait_rate_ceiling": 0.37326607818411095,
+        "serve_violations": 0,
+        "targeted_next_items": 101,
+        "n_sessions": 49,
+        "n_turns": 2334,
+        "n_decision_turns": 793
+      }
+    },
+    "tutor_gate_rules": [
+      {
+        "metric": "invariants.violations",
+        "direction": "min",
+        "threshold": 0
+      },
+      {
+        "metric": "wait_rate",
+        "direction": "max",
+        "threshold": 0.35
+      },
+      {
+        "metric": "wait_rate_ceiling",
+        "direction": "min",
+        "threshold": 0.5
+      },
+      {
+        "metric": "serve_violations",
+        "direction": "min",
+        "threshold": 0
+      },
+      {
+        "metric": "invariants.violations",
+        "direction": "min",
+        "threshold": null
+      }
+    ],
+    "gate_v1_to_v2": {
+      "passed": true,
+      "exit_code": 0,
+      "breaches": []
+    }
+  },
+  "judged": {
+    "per_dimension": {},
+    "pairing": "independent",
+    "pairing_note": "True turn-level pairing is IMPOSSIBLE: v1 and v2 are sampled from different action streams (the two policies make different moves), so there is no canonical 1:1 turn correspondence. The plan's 'paired bootstrap' is therefore implemented as an INDEPENDENT seeded bootstrap of the difference of means (each 60-turn sample resampled within itself; fixed seed). This is the closest correct construction; we do NOT silently pretend the samples are paired.",
+    "prediction_5": {
+      "verdict": "UNADJUDICABLE",
+      "adjudicated_dims": [
+        "guidance",
+        "actionability"
+      ],
+      "finding": "dimension(s) ['guidance', 'actionability'] failed judge validation (not gate_eligible), so prediction #5's claim on them cannot be adjudicated. Reported as a finding, not silently dropped.",
+      "mapping": "both eligible {guidance, actionability} positive-and-significant -> CONFIRMED; one of two -> PARTIAL; neither -> MISSED; any of the two ineligible -> that part UNADJUDICABLE (reported, not dropped)."
+    },
+    "zero_eligible_note": "All judged dimensions failed the kappa ≥ 0.4 gate: guidance kappa=0.000, actionability kappa=0.302, icap kappa=0.207. Phases 3–4 (verbalize/judge) did not run."
+  }
+}
