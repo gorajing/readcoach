@@ -7,9 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import io
-import os
 import tarfile
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -21,7 +19,7 @@ import pytest
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
-from fetch_benchmark import sha256_file, sha256_bytes, safe_extract  # noqa: E402
+from fetch_benchmark import sha256_file, sha256_bytes, safe_extract, classify_existing  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -279,6 +277,104 @@ class TestSafeExtractRootDirEntry:
 
         assert len(extracted) == 1
         assert (dest / "clips" / "p01-clean.wav").read_bytes() == data
+
+
+# ---------------------------------------------------------------------------
+# classify_existing tests (offline, pure logic — no network)
+# ---------------------------------------------------------------------------
+
+def _make_lock_artifacts(tmp_path: Path, items: list[tuple[str, bytes]]) -> dict[str, str]:
+    """Write files into tmp_path and return a lock artifacts dict."""
+    import hashlib
+    artifacts: dict[str, str] = {}
+    for rel, content in items:
+        abs_path = tmp_path / rel[len("data/benchmark/"):]
+        abs_path.parent.mkdir(parents=True, exist_ok=True)
+        abs_path.write_bytes(content)
+        artifacts[rel] = hashlib.sha256(content).hexdigest()
+    return artifacts
+
+
+class TestClassifyExisting:
+    """classify_existing(lock_artifacts, base_dir) returns {missing, mismatched, ok}."""
+
+    def test_all_present_and_correct_is_ok(self, tmp_path: Path) -> None:
+        items = [
+            ("data/benchmark/gold.jsonl", b'{"utt_id":"p01-clean"}\n'),
+            ("data/benchmark/clips/p01-clean.wav", b"RIFF-data"),
+        ]
+        artifacts = _make_lock_artifacts(tmp_path, items)
+        result = classify_existing(artifacts, tmp_path)
+        assert result["ok"] == sorted([k for k, _ in items])
+        assert result["missing"] == []
+        assert result["mismatched"] == []
+
+    def test_missing_only_is_missing_not_mismatched(self, tmp_path: Path) -> None:
+        """Files absent from disk → missing[], NOT mismatched[]. Download proceeds."""
+        # Write gold.jsonl but NOT the clip.
+        gold_content = b'{"utt_id":"p01-clean"}\n'
+        import hashlib
+        gold_path = tmp_path / "gold.jsonl"
+        gold_path.write_bytes(gold_content)
+        artifacts = {
+            "data/benchmark/gold.jsonl": hashlib.sha256(gold_content).hexdigest(),
+            "data/benchmark/clips/p01-clean.wav": "a" * 64,  # clip absent
+        }
+        result = classify_existing(artifacts, tmp_path)
+        assert "data/benchmark/clips/p01-clean.wav" in result["missing"]
+        assert "data/benchmark/gold.jsonl" in result["ok"]
+        assert result["mismatched"] == []
+
+    def test_hash_mismatch_is_mismatched_not_missing(self, tmp_path: Path) -> None:
+        """File present but wrong hash → mismatched[], NOT missing[]."""
+        clip_path = tmp_path / "clips" / "p01-clean.wav"
+        clip_path.parent.mkdir(parents=True, exist_ok=True)
+        clip_path.write_bytes(b"original bytes")
+        artifacts = {
+            "data/benchmark/clips/p01-clean.wav": "b" * 64,  # wrong hash
+        }
+        result = classify_existing(artifacts, tmp_path)
+        assert "data/benchmark/clips/p01-clean.wav" in result["mismatched"]
+        assert result["missing"] == []
+        assert result["ok"] == []
+
+    def test_mixed_missing_and_mismatched(self, tmp_path: Path) -> None:
+        """Some missing + some mismatched → both lists populated correctly."""
+        import hashlib
+        good_content = b"good file"
+        bad_content = b"tampered"
+
+        # Write the good file and the bad file (tampered hash).
+        (tmp_path / "gold.jsonl").write_bytes(good_content)
+        (tmp_path / "clips").mkdir()
+        (tmp_path / "clips" / "p01-clean.wav").write_bytes(bad_content)
+        # The clip for p02 is simply absent.
+
+        artifacts = {
+            "data/benchmark/gold.jsonl": hashlib.sha256(good_content).hexdigest(),
+            "data/benchmark/clips/p01-clean.wav": "c" * 64,  # wrong hash
+            "data/benchmark/clips/p02-clean.wav": "d" * 64,  # absent
+        }
+        result = classify_existing(artifacts, tmp_path)
+        assert result["ok"] == ["data/benchmark/gold.jsonl"]
+        assert result["mismatched"] == ["data/benchmark/clips/p01-clean.wav"]
+        assert result["missing"] == ["data/benchmark/clips/p02-clean.wav"]
+
+    def test_non_benchmark_prefix_artifacts_ignored(self, tmp_path: Path) -> None:
+        """Artifacts outside data/benchmark/ prefix are not checked."""
+        artifacts = {
+            "tests/fixtures/something.wav": "e" * 64,
+            "data/benchmark/gold.jsonl": "f" * 64,  # absent → missing
+        }
+        result = classify_existing(artifacts, tmp_path)
+        # only benchmark artifacts are checked; tests/fixtures key ignored
+        assert result["missing"] == ["data/benchmark/gold.jsonl"]
+        assert result["ok"] == []
+        assert result["mismatched"] == []
+
+    def test_empty_artifacts_returns_all_empty(self, tmp_path: Path) -> None:
+        result = classify_existing({}, tmp_path)
+        assert result == {"missing": [], "mismatched": [], "ok": []}
 
 
 # ---------------------------------------------------------------------------

@@ -26,7 +26,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import sys
 import tarfile
 import tempfile
@@ -145,6 +144,59 @@ def _load_lock() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Classify existing artifacts (pure function — importable for unit tests)
+# ---------------------------------------------------------------------------
+
+def classify_existing(
+    artifacts: dict[str, str],
+    base_dir: Path,
+) -> dict[str, list[str]]:
+    """Classify every lock artifact under ``data/benchmark/`` into one of three buckets.
+
+    Parameters
+    ----------
+    artifacts:
+        The ``artifacts`` dict from the lock — keys are paths relative to the
+        project root (e.g. ``"data/benchmark/clips/p01-clean.wav"``), values are
+        expected SHA-256 hex strings.
+    base_dir:
+        The local extraction directory (``data/benchmark/``).  The function
+        remaps each lock key to a path inside *base_dir* for the check.
+
+    Returns
+    -------
+    A dict with three sorted lists of lock-relative path strings:
+
+    ``"missing"``
+        Artifact whose file does not exist on disk at all.  *Nothing to clobber*
+        — downloading is safe without ``--force``.
+    ``"mismatched"``
+        Artifact that exists on disk but whose sha256 does not match the lock.
+        *Locally modified / corrupted* — requires ``--force`` to overwrite.
+    ``"ok"``
+        Artifact that exists and whose sha256 matches the lock exactly.
+    """
+    benchmark_prefix = "data/benchmark/"
+    missing: list[str] = []
+    mismatched: list[str] = []
+    ok: list[str] = []
+
+    for rel_path, expected in sorted(artifacts.items()):
+        if not rel_path.startswith(benchmark_prefix):
+            continue  # non-benchmark artifact (e.g. test fixtures) — skip
+        sub = rel_path[len(benchmark_prefix):]
+        abs_path = base_dir / sub
+        if not abs_path.exists():
+            missing.append(rel_path)
+        elif sha256_file(abs_path) != expected:
+            mismatched.append(rel_path)
+        else:
+            ok.append(rel_path)
+
+    return {"missing": missing, "mismatched": mismatched, "ok": ok}
+
+
+# ---------------------------------------------------------------------------
 # Verify all extracted artifacts against the lock
 # ---------------------------------------------------------------------------
 
@@ -153,26 +205,23 @@ def _verify_artifacts(dest: Path, artifacts: dict[str, str]) -> bool:
 
     Does not abort — returns False so the caller can decide.
     """
-    benchmark_prefix = "data/benchmark/"
+    classification = classify_existing(artifacts, dest)
     failures: list[str] = []
 
-    for rel_path, expected in sorted(artifacts.items()):
-        if not rel_path.startswith(benchmark_prefix):
-            continue  # fixture clips etc., not extracted here
-        # rel_path is relative to PROJECT_ROOT; remap to dest
-        # e.g. "data/benchmark/clips/p01-clean.wav" → dest / "clips/p01-clean.wav"
+    for rel_path in classification["missing"]:
+        failures.append(f"MISSING   {rel_path}")
+    for rel_path in classification["mismatched"]:
+        # Reconstruct verbose mismatch message.
+        benchmark_prefix = "data/benchmark/"
         sub = rel_path[len(benchmark_prefix):]
         abs_path = dest / sub
-        if not abs_path.exists():
-            failures.append(f"MISSING   {rel_path}")
-            continue
         actual = sha256_file(abs_path)
-        if actual != expected:
-            failures.append(
-                f"MISMATCH  {rel_path}\n"
-                f"  expected: {expected}\n"
-                f"  actual  : {actual}"
-            )
+        expected = artifacts[rel_path]
+        failures.append(
+            f"MISMATCH  {rel_path}\n"
+            f"  expected: {expected}\n"
+            f"  actual  : {actual}"
+        )
 
     if failures:
         print("\nERROR: artifact verification FAILED:", file=sys.stderr)
@@ -234,27 +283,49 @@ def fetch(dest: Path = DEFAULT_DEST, force: bool = False) -> None:
         sys.exit(1)
 
     # ------------------------------------------------------------------
-    # Fast path: if dest already exists and everything verifies, done.
+    # Classify what is already on disk (when dest exists and --force is off).
+    # Three outcomes:
+    #
+    #   all ok          → already complete; skip download, exit 0.
+    #   missing only    → normal incomplete install; proceed to download.
+    #                     (gold.jsonl + manifest.json are committed, so
+    #                     data/benchmark/ always exists on a fresh clone even
+    #                     though the 88 clips are absent — nothing to clobber.)
+    #   any mismatched  → locally modified / corrupted; refuse without --force.
     # ------------------------------------------------------------------
     if dest.exists() and not force:
-        print(f"data/benchmark/ already exists; verifying against lock …")
-        ok = _verify_artifacts(dest, artifacts)
-        if ok:
-            n_checked = sum(
-                1 for k in artifacts if k.startswith("data/benchmark/")
-            )
+        classification = classify_existing(artifacts, dest)
+        n_ok = len(classification["ok"])
+        n_missing = len(classification["missing"])
+        n_mismatched = len(classification["mismatched"])
+        n_checked = sum(1 for k in artifacts if k.startswith("data/benchmark/"))
+
+        if n_mismatched == 0 and n_missing == 0:
+            # All present and verified — nothing to do.
             print(
-                f"  All {n_checked} artifact(s) verified. "
+                f"data/benchmark/ already complete: {n_ok}/{n_checked} artifact(s) verified. "
                 "Use --force to re-download."
             )
             return
-        else:
+
+        if n_mismatched > 0:
+            # Some files exist but have the wrong hash — protect them.
+            msg_parts = [f"{n_mismatched} artifact(s) present but hash-MISMATCHED"]
+            if n_missing > 0:
+                msg_parts.append(f"{n_missing} artifact(s) missing")
             print(
-                "Existing data/benchmark/ failed verification. "
-                "Re-run with --force to re-download.",
+                "ERROR: " + "; ".join(msg_parts) + ".\n"
+                "Re-run with --force to overwrite.",
                 file=sys.stderr,
             )
             sys.exit(1)
+
+        # n_mismatched == 0 and n_missing > 0 — fall through to download.
+        print(
+            f"data/benchmark/ exists but {n_missing}/{n_checked} artifact(s) are missing "
+            "(normal on a fresh clone). Downloading …",
+            file=sys.stderr,
+        )
 
     # ------------------------------------------------------------------
     # Download to a temp file, verify tarball sha256.
