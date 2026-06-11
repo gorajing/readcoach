@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "commit": "b73eb01778ae0fe4071062859e21a1c29ca4927c",
+    "date": "2026-06-10",
+    "golden_path": "/Users/jinchoi/Code/readcoach/evals/golden/persona_sessions_dev.jsonl",
+    "golden_sha256": "6fb70c75ead685c571ac018fd2d3818a35bf3427863c1d059e2e029cf61d4f10",
+    "weave": "disabled:no_wandb_api_key"
+  },
+  "metrics": {
+    "invariants": {
+      "violations": 30
+    },
+    "latency": {
+      "decision_ms_p50": null,
+      "decision_ms_p95": null,
+      "rtf_offline_proxy": null
+    },
+    "n_decision_turns": 779,
+    "n_sessions": 49,
+    "n_turns": 2328,
+    "serve_violations": 0,
+    "targeted_next_items": 0,
+    "wait_rate": 0.0,
+    "wait_rate_ceiling": 0.0
+  },
+  "version": "tutor-v3"
+}

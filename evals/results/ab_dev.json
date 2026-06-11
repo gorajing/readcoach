@@ -1,0 +1,227 @@
+{
+  "ticket": "T5.4",
+  "what_this_is": "DETERMINISTIC dev-split A/B (v1 state-blind vs v2 mastery-conditioned), deliberately-worse v3 blocked by the gate, promote_failure flywheel, and ±30% sensitivity.",
+  "pre_registration": {
+    "adjudicates_a_prediction": false,
+    "note": "docs/predictions.md #5 covers JUDGED guidance/actionability on the HELD-OUT split, adjudicated LATER after judge validation. This artifact REPORTS deterministic diffs only; it adjudicates NO prediction. Judged scoring is DEFERRED (judge dims not yet human-validated)."
+  },
+  "split": "dev",
+  "dev_file": "persona_sessions_dev.jsonl",
+  "holdout_read": false,
+  "n_sessions": 49,
+  "date": "2026-06-10",
+  "tutor_gate_rules": [
+    {
+      "metric": "invariants.violations",
+      "direction": "min",
+      "threshold": 0,
+      "report_only": false
+    },
+    {
+      "metric": "wait_rate",
+      "direction": "max",
+      "threshold": 0.35,
+      "report_only": false
+    },
+    {
+      "metric": "wait_rate_ceiling",
+      "direction": "min",
+      "threshold": 0.5,
+      "report_only": false
+    },
+    {
+      "metric": "serve_violations",
+      "direction": "min",
+      "threshold": 0,
+      "report_only": false
+    },
+    {
+      "metric": "invariants.violations",
+      "direction": "min",
+      "threshold": null,
+      "report_only": false
+    }
+  ],
+  "metrics": {
+    "v1": {
+      "invariants": {
+        "violations": 0
+      },
+      "wait_rate": 0.3607188703465982,
+      "wait_rate_ceiling": 0.3607188703465982,
+      "serve_violations": 0,
+      "targeted_next_items": 0,
+      "n_sessions": 49,
+      "n_turns": 2328,
+      "n_decision_turns": 779
+    },
+    "v2": {
+      "invariants": {
+        "violations": 0
+      },
+      "wait_rate": 0.3607188703465982,
+      "wait_rate_ceiling": 0.3607188703465982,
+      "serve_violations": 0,
+      "targeted_next_items": 102,
+      "n_sessions": 49,
+      "n_turns": 2328,
+      "n_decision_turns": 779
+    },
+    "v3": {
+      "invariants": {
+        "violations": 30
+      },
+      "wait_rate": 0.0,
+      "wait_rate_ceiling": 0.0,
+      "serve_violations": 0,
+      "targeted_next_items": 0,
+      "n_sessions": 49,
+      "n_turns": 2328,
+      "n_decision_turns": 779
+    }
+  },
+  "comparison_table": [
+    {
+      "metric": "invariants.violations",
+      "v1": 0,
+      "v2": 0,
+      "v3": 30
+    },
+    {
+      "metric": "wait_rate",
+      "v1": 0.3607,
+      "v2": 0.3607,
+      "v3": 0.0
+    },
+    {
+      "metric": "targeted_next_items",
+      "v1": 0,
+      "v2": 102,
+      "v3": 0
+    },
+    {
+      "metric": "serve_violations",
+      "v1": 0,
+      "v2": 0,
+      "v3": 0
+    },
+    {
+      "metric": "n_sessions",
+      "v1": 49,
+      "v2": 49,
+      "v3": 49
+    },
+    {
+      "metric": "n_turns",
+      "v1": 2328,
+      "v2": 2328,
+      "v3": 2328
+    }
+  ],
+  "gate_outcomes": {
+    "v1_vs_v2": {
+      "passed": true,
+      "exit_code": 0,
+      "breaches": []
+    },
+    "v2_vs_v3": {
+      "passed": false,
+      "exit_code": 1,
+      "breaches": [
+        "BREACH 'invariants.violations' direction=min: new=30, threshold=0",
+        "BREACH 'wait_rate' direction=max: new=0.0, threshold=0.35",
+        "BREACH 'invariants.violations' direction=min: new=30, prev=0"
+      ]
+    }
+  },
+  "receipt_2_gate_blocks_bad_tutor": {
+    "claim": "the gate BLOCKS the deliberately-worse tutor (v3 always-intervene)",
+    "comparison": "v2 (prev) vs v3 (new)",
+    "gate_passed": false,
+    "exit_code": 1,
+    "breaches": [
+      "BREACH 'invariants.violations' direction=min: new=30, threshold=0",
+      "BREACH 'wait_rate' direction=max: new=0.0, threshold=0.35",
+      "BREACH 'invariants.violations' direction=min: new=30, prev=0"
+    ],
+    "evidence": "v3 produced 30 invariant violations (never_corrects_self_correction: modeled self-corrections mid-page); v2 produced 0. The gate's invariants.violations rule (min/0) is breached -> exit 1."
+  },
+  "improvement_curve_v1_to_v2": {
+    "invariants.violations": {
+      "v1": 0,
+      "v2": 0,
+      "delta": 0
+    },
+    "wait_rate": {
+      "v1": 0.3607188703465982,
+      "v2": 0.3607188703465982,
+      "delta": 0.0
+    },
+    "targeted_next_items": {
+      "v1": 0,
+      "v2": 102,
+      "delta": 102
+    },
+    "serve_violations": {
+      "v1": 0,
+      "v2": 0,
+      "delta": 0
+    },
+    "n_turns": {
+      "v1": 2328,
+      "v2": 2328,
+      "delta": 0
+    }
+  },
+  "promote_growth": {
+    "golden_file": "tutor_failures.jsonl",
+    "batches": [
+      {
+        "batch": "v1",
+        "promoted": 0,
+        "cumulative_golden_size": 0
+      },
+      {
+        "batch": "v2",
+        "promoted": 0,
+        "cumulative_golden_size": 0
+      },
+      {
+        "batch": "v3",
+        "promoted": 30,
+        "cumulative_golden_size": 30
+      }
+    ],
+    "idempotent_on_rerun": true,
+    "chart": "promote_growth.png"
+  },
+  "sensitivity": {
+    "perturbation": "±30% persona-rate",
+    "conclusion_holds": true,
+    "note": "Slip-cut allowed per plan: ±30% only. Out-of-band seeded sessions, frozen files untouched.",
+    "runs": {
+      "minus30": {
+        "scale": 0.7,
+        "n_sessions": 14,
+        "v1_wait_rate": 0.35135135135135137,
+        "v2_wait_rate": 0.35135135135135137,
+        "v1_violations": 0,
+        "v2_violations": 0,
+        "gate_passed": true,
+        "gate_exit_code": 0,
+        "breaches": []
+      },
+      "plus30": {
+        "scale": 1.3,
+        "n_sessions": 14,
+        "v1_wait_rate": 0.45692883895131087,
+        "v2_wait_rate": 0.45692883895131087,
+        "v1_violations": 0,
+        "v2_violations": 0,
+        "gate_passed": true,
+        "gate_exit_code": 0,
+        "breaches": []
+      }
+    }
+  }
+}
