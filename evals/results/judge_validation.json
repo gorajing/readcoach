@@ -1,0 +1,73 @@
+{
+  "kappa_floor": 0.4,
+  "kappa_floor_reference": "Landis & Koch (1977) banding \u2014 0.41\u20130.60 = moderate",
+  "gate_conditions": {
+    "kappa_point_estimate_gte": 0.4,
+    "n_gte": 30
+  },
+  "dimensions": [
+    {
+      "dimension": "actionability",
+      "n": 60,
+      "tpr": 0.4878048780487805,
+      "tnr": 0.8947368421052632,
+      "tpr_ci_95": [
+        0.3333333333333333,
+        0.6428571428571429
+      ],
+      "tnr_ci_95": [
+        0.7272727272727273,
+        1.0
+      ],
+      "kappa": 0.30161943319838064,
+      "kappa_ci_95": [
+        0.1091954022988506,
+        0.4920929858429856
+      ],
+      "gate_eligible": false,
+      "gate_reason": "kappa=0.302 < floor=0.4"
+    },
+    {
+      "dimension": "guidance",
+      "n": 60,
+      "tpr": 1.0,
+      "tnr": 0.0,
+      "tpr_ci_95": [
+        1.0,
+        1.0
+      ],
+      "tnr_ci_95": [
+        0.0,
+        0.0
+      ],
+      "kappa": 0.0,
+      "kappa_ci_95": [
+        0.0,
+        0.0
+      ],
+      "gate_eligible": false,
+      "gate_reason": "kappa=0.000 < floor=0.4"
+    },
+    {
+      "dimension": "icap",
+      "n": 60,
+      "tpr": 0.6666666666666666,
+      "tnr": 0.5416666666666666,
+      "tpr_ci_95": [
+        0.5151515151515151,
+        0.8236554621848732
+      ],
+      "tnr_ci_95": [
+        0.3333333333333333,
+        0.7409722222222209
+      ],
+      "kappa": 0.2068965517241379,
+      "kappa_ci_95": [
+        -0.043165467625899075,
+        0.46127946127946107
+      ],
+      "gate_eligible": false,
+      "gate_reason": "kappa=0.207 < floor=0.4"
+    }
+  ]
+}
