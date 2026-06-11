@@ -352,12 +352,14 @@ class TestValidateJudgeScript:
         """Run validate_judge.py as a subprocess and return (returncode, combined_output)."""
         import subprocess
         import sys
+        from pathlib import Path
 
+        repo_root = Path(__file__).resolve().parent.parent
         result = subprocess.run(
             [sys.executable, "scripts/validate_judge.py"] + args,
             capture_output=True,
             text=True,
-            cwd="/Users/jinchoi/Code/readcoach",
+            cwd=repo_root,
         )
         combined = result.stdout + result.stderr
         return result.returncode, combined
