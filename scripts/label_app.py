@@ -276,16 +276,18 @@ turn_id = current_turn["turn_id"]
 
 with st.container(border=True):
     st.markdown("### Context")
+    # Markdown rows, not st.metric: metric tiles truncate long values ("Fluent ...").
     c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        st.metric("Profile", _fmt_profile(current_turn.get("profile", "?")))
-    with c2:
-        st.metric("Page position", "End of page" if current_turn.get("at_page_end") else "Mid-page")
-    with c3:
-        st.metric("Miscue type", _fmt_miscue(current_turn.get("miscue_type")))
-    with c4:
-        struggle_count = current_turn.get("struggle_count", current_turn.get("hint_level", "n/a"))
-        st.metric("Hint / struggle", str(struggle_count) if struggle_count is not None else "n/a")
+    struggle_count = current_turn.get("struggle_count", current_turn.get("hint_level", "n/a"))
+    for col, name, value in (
+        (c1, "Profile", _fmt_profile(current_turn.get("profile", "?"))),
+        (c2, "Page position", "End of page" if current_turn.get("at_page_end") else "Mid-page"),
+        (c3, "Miscue type", _fmt_miscue(current_turn.get("miscue_type"))),
+        (c4, "Hint / struggle", str(struggle_count) if struggle_count is not None else "n/a"),
+    ):
+        with col:
+            st.caption(name)
+            st.markdown(f"**{value}**")
 
     st.caption(
         f"**Move:** `{current_turn.get('action_move', '?')}`"
