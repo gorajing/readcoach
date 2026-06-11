@@ -1,5 +1,11 @@
 # ReadCoach — Human Labeling Rubric (judged dimensions)
 
+## How to run the session
+
+    uv run python scripts/label_turns.py --init --n 60 --seed 42   # one-time: build the queue
+    uv run python scripts/label_turns.py                             # label turns (resumable)
+    uv run python scripts/label_turns.py --report                   # summary stats when done
+
 > **Why this exists.** Deterministic scorers cover everything ground truth can
 > reach (miscue identification/location, the policy's discrete move, the
 > invariant checks). Three things ground truth *cannot* reach — whether a turn's

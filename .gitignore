@@ -30,5 +30,9 @@ evals/results/blind_verify_queue.json
 evals/results/blind_verify_ratings.csv
 evals/results/blind_verify_report.json
 
+# Label-turns session artifacts (per-session; not committed)
+evals/results/label_queue.json
+evals/results/turn_labels.csv
+
 # committed test fixtures are re-included
 !tests/fixtures/**
